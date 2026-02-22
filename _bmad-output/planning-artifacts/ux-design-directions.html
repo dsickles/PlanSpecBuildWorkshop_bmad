@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Design Directions - Builder's Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Direction 1: Linear Purist (Dark) */
+        .theme-linear { background-color: #09090b; color: #fafafa; }
+        .theme-linear .panel { background-color: #09090b; border: 1px solid #27272a; }
+        .theme-linear .card { background-color: #121214; border: 1px solid #27272a; border-radius: 6px; }
+        .theme-linear .card:hover { border-color: #3f3f46; background-color: #18181b; }
+        .theme-linear .text-muted { color: #a1a1aa; }
+        .theme-linear .pill-live { background-color: rgba(16, 185, 129, 0.1); color: #34d399; }
+        .theme-linear .pill-progress { background-color: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+        
+        /* Direction 2: Notion Minimalist (Light) */
+        .theme-notion { background-color: #ffffff; color: #37352f; }
+        .theme-notion .panel { background-color: #ffffff; }
+        .theme-notion .card { background-color: #ffffff; border: 1px solid #e1dfdd; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .theme-notion .card:hover { background-color: #f7f7f5; }
+        .theme-notion .text-muted { color: #787774; }
+        .theme-notion .pill-live { background-color: #dbeddb; color: #1c3829; }
+        .theme-notion .pill-progress { background-color: #fcebeb; color: #4c2326; }
+
+        /* Direction 3: Apple Cinematic (Light) */
+        .theme-apple { background-color: #fbfbfd; color: #1d1d1f; }
+        .theme-apple .panel { background-color: #fbfbfd; }
+        .theme-apple .card { background-color: #ffffff; border: none; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.04); padding: 16px; }
+        .theme-apple .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); transform: translateY(-1px); transition: all 0.2s ease; }
+        .theme-apple .text-muted { color: #86868b; }
+        .theme-apple .pill-live { background-color: #e3f5eb; color: #147942; }
+        .theme-apple .pill-progress { background-color: #fef0d8; color: #9c5a04; }
+
+        /* Direction 4: Developer High Contrast (Dark) */
+        .theme-dev { background-color: #000000; color: #ffffff; }
+        .theme-dev .panel { background-color: #000000; }
+        .theme-dev .card { background-color: #0a0a0a; border: 1px solid #333333; border-radius: 0px; }
+        .theme-dev .card:hover { border-color: #666666; }
+        .theme-dev .text-muted { color: #888888; }
+        .theme-dev .pill-live { border: 1px solid #00ff00; color: #00ff00; background: transparent; }
+        .theme-dev .pill-progress { border: 1px solid #ffcc00; color: #ffcc00; background: transparent; }
+
+        .app-container { transition: all 0.3s ease; min-height: 100vh;}
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Controller -->
+<div class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 p-4 z-50 flex justify-between items-center shadow-sm">
+    <div>
+        <h1 class="font-bold text-lg">UX Design Directions</h1>
+        <p class="text-sm text-gray-500">Select a theme to preview the Command Center UI.</p>
+    </div>
+    <div class="flex gap-2">
+        <button onclick="setTheme('linear')" class="px-4 py-2 text-sm bg-zinc-900 text-white rounded-md hover:bg-zinc-800">1. Linear Purist (Dark)</button>
+        <button onclick="setTheme('notion')" class="px-4 py-2 text-sm bg-gray-100 text-gray-900 border border-gray-300 rounded-md hover:bg-gray-200">2. Notion Minimal (Light)</button>
+        <button onclick="setTheme('apple')" class="px-4 py-2 text-sm bg-white text-blue-600 border border-blue-200 shadow-sm rounded-md hover:bg-blue-50">3. Apple Cinematic (Light)</button>
+        <button onclick="setTheme('dev')" class="px-4 py-2 text-sm bg-black text-green-400 border border-green-900 rounded-md hover:bg-zinc-900">4. High Contrast (Dark)</button>
+    </div>
+</div>
+
+<!-- Preview Area -->
+<div id="preview" class="app-container theme-linear pt-24 px-8 pb-12">
+    
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-semibold mb-2">Builder's Workshop</h2>
+            <p class="text-muted text-base max-w-2xl">A collection of prototypes, architectures, and the messy middle of software development.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-2 mb-10">
+            <span class="px-3 py-1.5 rounded-full text-sm border panel cursor-pointer opacity-50 hover:opacity-100">Meta-Blueprint</span>
+            <span class="px-3 py-1.5 rounded-full text-sm border panel cursor-pointer bg-blue-600 border-blue-600 !text-white !opacity-100 hover:opacity-90">AI Task Assistant</span>
+            <span class="px-3 py-1.5 rounded-full text-sm border panel cursor-pointer opacity-50 hover:opacity-100">Design Token Generator</span>
+        </div>
+
+        <!-- 3 Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Col 1: Agent Studio -->
+            <div class="flex flex-col gap-4">
+                <h3 class="font-medium text-sm text-muted uppercase tracking-wider mb-2">Agent Studio</h3>
+                
+                <div class="card p-4 transition-all">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs text-muted">2025-02-01</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h4 class="font-semibold">Chat Interface Gen</h4>
+                    </div>
+                    <p class="text-sm text-muted mb-4">React + Supabase code generation scaffolding rules.</p>
+                    <div class="flex gap-2">
+                        <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">Rules</span>
+                        <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">React</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Col 2: Blueprints -->
+            <div class="flex flex-col gap-4">
+                <h3 class="font-medium text-sm text-muted uppercase tracking-wider mb-2">Blueprints</h3>
+                
+                <!-- Project Group -->
+                <div class="mb-2">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-medium text-sm">AI Task Assistant</h4>
+                        <button class="text-xs text-muted hover:underline">Collapse All ▴</button>
+                    </div>
+
+                    <!-- Doc Card Expanded -->
+                    <div class="card p-4 mb-3 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs text-muted">2025-02-01</span>
+                            <div class="flex gap-2 text-muted">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12l4-4m-4 4l4 4"/></svg>
+                                <span>🚀</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <h4 class="font-semibold group-hover:underline">Product Requirements</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full pill-live">Live</span>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-sm mb-1">Requirements for an AI-powered task management prototype.</p>
+                            <p class="text-sm text-muted italic">Explore how AI can reduce friction in personal productivity workflows.</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex gap-2">
+                                <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">PRD</span>
+                                <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">Task Mgt</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">React</span>
+                                <span class="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/5">Supabase</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doc Card Compact -->
+                    <div class="card p-4 transition-all cursor-pointer">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-muted">2025-01-20</span>
+                                <h4 class="font-semibold text-sm">Decision Matrix</h4>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full pill-progress">Draft</span>
+                            </div>
+                            <div class="flex gap-2 text-muted opacity-50">
+                                <span>🚀</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Col 3: Build Lab -->
+            <div class="flex flex-col gap-4">
+                <h3 class="font-medium text-sm text-muted uppercase tracking-wider mb-2">Build Lab</h3>
+                
+                <div class="card p-4 transition-all">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs text-muted">v1.0</span>
+                        <div class="flex gap-2 text-muted">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12l4-4m-4 4l4 4"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h4 class="font-semibold text-lg text-blue-500 hover:underline cursor-pointer">AI Task Assistant</h4>
+                    </div>
+                    <p class="text-sm text-muted mb-4">Conversational UI for adding and managing tasks seamlessly.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function setTheme(themeName) {
+        const preview = document.getElementById('preview');
+        preview.className = `app-container theme-${themeName} pt-24 px-8 pb-12`;
+    }
+</script>
+</body>
+</html>

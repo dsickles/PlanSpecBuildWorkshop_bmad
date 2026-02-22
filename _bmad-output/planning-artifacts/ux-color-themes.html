@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Color Themes - Builder's Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+            color: #fafafa;
+        }
+
+        .swatch-container {
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .swatch {
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+            font-size: 12px;
+            font-family: monospace;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .text-swatch {
+            color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+
+<body class="p-12">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12">
+            <h1 class="text-3xl font-bold mb-2">Color System: Tinted Neutrality</h1>
+            <p class="text-zinc-400">The "Linear Purist" dark mode palette for the Builder's Workshop.</p>
+        </header>
+
+        <section class="mb-16">
+            <h2 class="text-xl font-semibold mb-6 border-b border-zinc-800 pb-2">1. Structural Grayscale (The Canvas)
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="swatch-container">
+                    <div class="swatch" style="background-color: #09090b;">#09090b (Bg)</div>
+                </div>
+                <div class="swatch-container">
+                    <div class="swatch" style="background-color: #18181b;">#18181b (Card)</div>
+                </div>
+                <div class="swatch-container">
+                    <div class="swatch" style="background-color: #27272a;">#27272a (Border)</div>
+                </div>
+                <div class="swatch-container">
+                    <div class="swatch" style="background-color: #71717a;">#71717a (Muted Text)</div>
+                </div>
+                <div class="swatch-container text-zinc-900">
+                    <div class="swatch text-swatch" style="background-color: #fafafa;">#fafafa (Text)</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-xl font-semibold mb-6 border-b border-zinc-800 pb-2">2. Status Pills (10% Opacity + Solid
+                Border/Text)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Live -->
+                <div
+                    class="p-6 rounded-lg border border-zinc-800 flex flex-col items-center justify-center gap-4 bg-zinc-950">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                        style="background-color: rgba(16, 185, 129, 0.1); color: #34d399; border-color: rgba(16, 185, 129, 0.2);">
+                        [Live] Emerald
+                    </span>
+                    <div class="text-xs text-zinc-500 font-mono text-center">
+                        bg: emerald-500/10<br>
+                        text: emerald-400
+                    </div>
+                </div>
+                <!-- In Progress -->
+                <div
+                    class="p-6 rounded-lg border border-zinc-800 flex flex-col items-center justify-center gap-4 bg-zinc-950">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                        style="background-color: rgba(245, 158, 11, 0.1); color: #fbbf24; border-color: rgba(245, 158, 11, 0.2);">
+                        [In Progress] Amber
+                    </span>
+                    <div class="text-xs text-zinc-500 font-mono text-center">
+                        bg: amber-500/10<br>
+                        text: amber-400
+                    </div>
+                </div>
+                <!-- Concept -->
+                <div
+                    class="p-6 rounded-lg border border-zinc-800 flex flex-col items-center justify-center gap-4 bg-zinc-950">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                        style="background-color: rgba(148, 163, 184, 0.1); color: #94a3b8; border-color: rgba(148, 163, 184, 0.2);">
+                        [Concept] Slate
+                    </span>
+                    <div class="text-xs text-zinc-500 font-mono text-center">
+                        bg: slate-500/10<br>
+                        text: slate-400
+                    </div>
+                </div>
+                <!-- Archived -->
+                <div
+                    class="p-6 rounded-lg border border-zinc-800 flex flex-col items-center justify-center gap-4 bg-zinc-950">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium border"
+                        style="background-color: rgba(244, 63, 94, 0.1); color: #fb7185; border-color: rgba(244, 63, 94, 0.2);">
+                        [Archived] Rose
+                    </span>
+                    <div class="text-xs text-zinc-500 font-mono text-center">
+                        bg: rose-500/10<br>
+                        text: rose-400
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-6 border-b border-zinc-800 pb-2">3. Call-To-Action (CTA) Hierarchy</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-8 rounded-lg border border-zinc-800 bg-zinc-950">
+                    <h3 class="text-sm font-medium text-zinc-400 mb-4">Primary: Launch Prototype</h3>
+                    <button
+                        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors font-medium">
+                        Launch Prototype
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </button>
+                    <p class="text-xs text-zinc-500 mt-4 text-center border-t border-zinc-800/50 pt-4">Strictly limited
+                        to 1 per project. Highest visual priority.</p>
+                </div>
+
+                <div class="p-8 rounded-lg border border-zinc-800 bg-zinc-950">
+                    <h3 class="text-sm font-medium text-zinc-400 mb-4">Secondary: Ghost Button</h3>
+                    <button
+                        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-transparent border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-md transition-all font-medium">
+                        GitHub Repository
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </button>
+                    <p class="text-xs text-zinc-500 mt-4 text-center border-t border-zinc-800/50 pt-4">Used for
+                        secondary actions or alternative deployments.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+
+</html>
