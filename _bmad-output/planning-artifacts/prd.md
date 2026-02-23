@@ -1,19 +1,19 @@
 ---
-title: "Plan. Spec. Build." Builder's Workshop
+title: "Plan. Spec. Build." Agentic Builder's Workshop
 author: Dan
 date: 2026-02-22
 version: 1.0
 status: Complete
 ---
 
-# Product Requirements Document - AgenticWorkshop_bmad
+# Product Requirements Document - "Plan. Spec. Build." Agentic Builder's Workshop
 
 **Author:** Dan
 **Date:** 2026-02-22
 
 ## Executive Summary
 
-The "Plan. Spec. Build." Builder's Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
+The "Plan. Spec. Build." Agentic Builder's Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
 
 ### What Makes This Special
 

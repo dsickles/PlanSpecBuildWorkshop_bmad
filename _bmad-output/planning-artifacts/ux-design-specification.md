@@ -1,5 +1,5 @@
 
-# UX Design Specification - "Plan. Spec. Build." Builder's Workshop
+# UX Design Specification - "Plan. Spec. Build." Agentic Builder's Workshop
 
 **Author:** Dan
 **Date:** 2026-02-22
