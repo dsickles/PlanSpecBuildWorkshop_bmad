@@ -1,7 +1,3 @@
----
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-inputDocuments: ['_bmad-output/planning-artifacts/prd.md', '_bmad-output/brainstorming/brainstorming-session-2026-02-22.md', '_bmad-output/brainstorming/brainstorming-session-2026-02-22-phase1.md', '_bmad-output/brainstorming/brainstorming-session-2026-02-22-phase2.md', '_bmad-output/brainstorming/brainstorming-session-2026-02-22-phase3.md', '_bmad-output/brainstorming/brainstorming-session-2026-02-22-phase4.md']
----
 
 # UX Design Specification - "Plan. Spec. Build." Builder's Workshop
 
