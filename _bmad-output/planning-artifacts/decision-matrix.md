@@ -46,6 +46,15 @@ This document outlines key decisions made during the planning and specification 
 *   **The Decision:** We selected **Option C (Linear Purist Dark Mode)**.
 *   **Rationale & Trade-offs:** Options A and B failed to visually organize the high density of metadata tags required across the 3 columns, often feeling cluttered. The "Linear Purist" dark mode, utilizing our "Tinted Neutrality" grayscale system, allows status pills and the primary "Launch Prototype" CTA to pop without making the dashboard look chaotic. The trade-off is that dark mode can sometimes feel overly technical, so we mitigated this by using softer Notion-style layouts when opening the actual text documents in modals.
 
+### 2.3 Mobile Layout Strategy: Sticky Tab Bar vs. Vertical Stacking
+*   **The Problem:** The core identity of the product is the 3-column "Command Center." On mobile screens (under 768px), stacking three dense columns vertically creates severe scroll fatigue and breaks the spatial mental model of moving between tools, documents, and prototypes.
+*   **Options Considered:**
+    *   *Option A:* Deeply nested vertical accordions.
+    *   *Option B:* A single long vertical scroll (default CSS flex-col).
+    *   *Option C:* A horizontal "Sticky Top Tab Bar" that swaps the visible column container.
+*   **The Decision:** We selected **Option C (Sticky Top Tab Bar)**.
+*   **Rationale & Trade-offs:** Stacking (Option B) destroys the "Command Center" feel, turning the portfolio into a generic list. A sticky tab bar preserves the user's mental model of "switching categories" (`[Studio] | [Blueprints] | [Lab]`) without losing their place. The trade-off is slightly more complex mobile layout logic rather than relying on browser-default stacking.
+
 ---
 
 ## 3. Technical & Architectural Decisions
@@ -57,3 +66,19 @@ This document outlines key decisions made during the planning and specification 
     *   *Option B:* Use a Git-based headless approach, utilizing static site generation (SSG) to parse markdown files directly from the repository.
 *   **The Decision:** We selected **Option B (Git-based SSG parsing Markdown)**.
 *   **Rationale & Trade-offs:** Setting up a traditional CMS (Option A) introduces unnecessary infrastructure overhead for a solo developer/PM. Since the *input* from the AI agents is already cleanly formatted Markdown, it is far more efficient to treat the GitHub repository itself as the database. Furthermore, this decision intentionally forces the Peer PM persona (the "Forker") to become comfortable and familiar with using Git, a critical threshold skill for modern technical product management. The trade-off is that updating the site requires a `git push` rather than a user-friendly CMS dashboard, but this aligns perfectly with both the Author's workflow and the educational goals of the Meta-Blueprint.
+
+### 3.2 State Management Strategy: URL Parameters vs. React Context
+*   **The Problem:** The 3-column grid must update instantly when a user selects a specific project, domain, or tech stack filter without forcing a full page reload, and it must support shareable URLs.
+*   **Options Considered:**
+    *   *Option A:* Global state management libraries (Redux or React Context).
+    *   *Option B:* Next.js App Router URL Query Parameters (`useSearchParams`).
+*   **The Decision:** We selected **Option B (URL Query Parameters)**.
+*   **Rationale & Trade-offs:** Using standard state libraries (Option A) creates brittle, localized states that break when a user shares a link or hits the browser back button. By making the URL the single source of truth (Option B), we natively support "deep linking" (e.g., `?project=bmad&tab=docs`). The server parses the markdown into a JSON array, and the client simply filters that array based on the URL string, resulting in 0ms interface transitions. The trade-off is that complex interactive states require explicit routing pushes rather than simple state variable updates.
+
+### 3.3 Core Framework Selection: Next.js & shadcn/ui vs. Heavy Templates
+*   **The Problem:** We need a foundation that supports static markdown parsing, instantaneous client-side filtering, and the premium "Linear Purist" aesthetic without battling unnecessary boilerplate code.
+*   **Options Considered:**
+    *   *Option A:* Pre-built portfolio templates designed for agencies (often heavy with animations and database/CMS integrations).
+    *   *Option B:* "Zero-Bloat" official Next.js App Router + Tailwind CSS + shadcn/ui initialization.
+*   **The Decision:** We selected **Option B (Zero-Bloat Next.js + shadcn/ui)**.
+*   **Rationale & Trade-offs:** Third-party templates (Option A) almost always include unnecessary abstractions, authentication layers, or rigid theme logic that conflicts with our Git-CMS requirement and our precise "Command Center" grid layout. By initializing directly with Next.js and unstyled Radix primitives via shadcn (Option B), we guarantee absolute control over the DOM markup and Tailwind configuration. The trade-off is that we have to build our own specific UI components (like the `UniversalCompoundCard` and `ProjectSidebar`) from scratch rather than relying on pre-built template blocks.
