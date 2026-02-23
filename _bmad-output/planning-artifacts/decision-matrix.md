@@ -46,14 +46,14 @@ This document outlines key decisions made during the planning and specification 
 *   **The Decision:** We selected **Option C (Linear Purist Dark Mode)**.
 *   **Rationale & Trade-offs:** Options A and B failed to visually organize the high density of metadata tags required across the 3 columns, often feeling cluttered. The "Linear Purist" dark mode, utilizing our "Tinted Neutrality" grayscale system, allows status pills and the primary "Launch Prototype" CTA to pop without making the dashboard look chaotic. The trade-off is that dark mode can sometimes feel overly technical, so we mitigated this by using softer Notion-style layouts when opening the actual text documents in modals.
 
-### 2.3 Mobile Layout Strategy: Sticky Tab Bar vs. Vertical Stacking
-*   **The Problem:** The core identity of the product is the 3-column "Command Center." On mobile screens (under 768px), stacking three dense columns vertically creates severe scroll fatigue and breaks the spatial mental model of moving between tools, documents, and prototypes.
+### 2.3 Mobile Layout Strategy: Desktop-Only MVP (Mobile Deferred to v2)
+*   **The Problem:** The core identity of the product is the 3-column "Command Center." On mobile screens (under 768px), stacking three dense columns vertically creates severe scroll fatigue and breaks the spatial mental model. The original spec called for a responsive mobile layout in Phase 1.
 *   **Options Considered:**
-    *   *Option A:* Deeply nested vertical accordions.
-    *   *Option B:* A single long vertical scroll (default CSS flex-col).
-    *   *Option C:* A horizontal "Sticky Top Tab Bar" that swaps the visible column container.
-*   **The Decision:** We selected **Option C (Sticky Top Tab Bar)**.
-*   **Rationale & Trade-offs:** Stacking (Option B) destroys the "Command Center" feel, turning the portfolio into a generic list. A sticky tab bar preserves the user's mental model of "switching categories" (`[Studio] | [Blueprints] | [Lab]`) without losing their place. The trade-off is slightly more complex mobile layout logic rather than relying on browser-default stacking.
+    *   *Option A:* Build responsive mobile layout in MVP using vertical accordions or flex-col stacking.
+    *   *Option B:* Build responsive mobile layout in MVP using a horizontal "Sticky Top Tab Bar" that swaps the visible column container.
+    *   *Option C:* Defer mobile/tablet responsive design entirely to v2. Ship a desktop-only MVP (≥1024px).
+*   **The Decision:** We selected **Option C (Desktop-Only MVP, Mobile Deferred to v2)**.
+*   **Rationale & Trade-offs:** The primary audience — Hiring Managers evaluating candidates — overwhelmingly reviews portfolios on desktop monitors during work hours. Investing in responsive CSS breakpoints, tab-bar column switching, and mobile-specific interaction patterns during Phase 1 adds significant implementation complexity without serving the core user journey. By deferring mobile to v2, we keep the MVP focused on perfecting the desktop Command Center experience (the "wow" moment) and avoid the risk of a mediocre responsive implementation that dilutes the premium feel. The trade-off is that recruiters who share links via mobile messaging apps will see a desktop-optimized layout, but this is acceptable for an MVP. The v2 design phase will revisit the "Sticky Top Tab Bar" pattern (Option B) as the preferred mobile approach.
 
 ---
 
