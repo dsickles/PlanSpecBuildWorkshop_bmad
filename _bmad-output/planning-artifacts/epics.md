@@ -101,6 +101,7 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 *   **Epic 2:** The "Command Center" Grid & Core Navigation
 *   **Epic 3:** Tri-Modal Discovery & Instant Filtering
 *   **Epic 4:** Deep Linking, Education, & Open Sourcing
+*   **Epic 5:** Deployment & Go-Live
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -337,5 +338,21 @@ So that I can quickly fork the project to start building my own portfolio.
 *   **When** viewing the interface,
 *   **Then** a designated GitHub/Open Source icon is visible in the utility navigation area.
 *   **And** clicking the link explicitly opens the project's source GitHub repository in a new tab (`target="_blank"`).
+
+## Epic 5: Deployment & Go-Live
+The User has successfully tested the application locally and is now ready to deploy it to the public internet using a static edge host.
+**FRs covered:** None (Infrastructure/NFR6, NFR7)
+
+### Story 5.1: Deploy to Vercel
+As a Developer,
+I want to connect the GitHub repository to Vercel and trigger a production build,
+So that the Next.js application is publicly accessible and automatically deploys on future Git pushes.
+
+**Acceptance Criteria:**
+*   **Given** a complete, locally tested Next.js application (Epics 0-4),
+*   **When** connecting the repository to Vercel,
+*   **Then** the Vercel CI/CD pipeline correctly executes `npm run build` without failing on Zod or TypeScript errors.
+*   **And** the application is successfully deployed to a public `.vercel.app` domain (or custom domain).
+*   **And** navigating to the deployed URL proves that the SSG routing and Markdown parsing work on the edge network identically to the local environment.
 
 <!-- Epic Definitions End -->
