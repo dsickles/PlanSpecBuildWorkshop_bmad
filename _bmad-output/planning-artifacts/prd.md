@@ -77,6 +77,8 @@ The core differentiator is the platform's **interlocking 3-column architecture**
 - **SEO Optimization:** Basic technical SEO (meta tags, descriptive URLs, structured data where appropriate) must be implemented to ensure the portfolio is discoverable if the user chooses to index it.
 
 ### Risk Mitigations & Future Enhancements
+- **Fluid Grid Transitions (Growth Feature):** Upgrade the core Phase 1 0ms instant filter transition to a 200ms fluid, spatial CSS animation. This will require a custom React component wrapper (Grid Transition Controller) utilizing `useEffect` to delay unmounting, allowing for smooth CSS `transform` and `opacity` animations without heavy external libraries.
+- **Full-Text Search (Growth Feature):** Implementing robust full-text search across the parsed markdown (utilizing a lightweight client-side index like FlexSearch if the artifact count grows substantially).
 - **Link Rot Mitigation (Growth Feature):** Future versions will require a fallback strategy (e.g., archived screenshots or read-only states) for "Build Lab" prototype links that may go offline or break due to external API changes.
 - **Offline Mode (Future Vision):** Future consideration for PWA (Progressive Web App) capabilities to allow the portfolio to be presented natively in unreliable network conditions (e.g., during live interviews).
 
