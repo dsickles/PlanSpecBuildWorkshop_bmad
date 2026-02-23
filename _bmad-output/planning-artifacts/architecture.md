@@ -162,6 +162,7 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
 **Component Boundaries:**
 - Primitive UI components installed by shadcn/ui go in `src/components/ui/` and **MUST NOT** be modified directly by AI agents to achieve custom designs.
 - All custom composed components (e.g., `UniversalCompoundCard`, `ProjectSidebar`) must be placed in `src/components/custom/`.
+- **The Compound Component Mandate:** The 3-column grid must be populated by a single `UniversalCompoundCard` architecture, not distinct card components. This component must expose a strict compound pattern (`<ProjectCard.Root>`, `<ProjectCard.Header>`, `<ProjectCard.Metadata>`, `<ProjectCard.Body>`) to ensure identical border, padding, and hover-state behavior across all columns, regardless of the internal data rendered.
 - **Markdown Mapping Boundary:** A dedicated `MarkdownRenderer.tsx` wrapper must exist in `/src/components/custom/`. This acts as the *exclusive* dictionary mapping raw markdown syntax to styled shadcn primitives (e.g., converting `<a>` to `<Link>`).
 
 ### Process Patterns
@@ -169,11 +170,11 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
 **Routing & Application Behavior:**
 - **Mobile Degradation (FR7):** The 3-column layout must NOT degrade into a single long vertical scroll. It must utilize a **Sticky Top Tab Bar** (`[Studio] | [Blueprints] | [Lab]`) on mobile (320px-767px) that swaps the visible column container, preserving the spatial mental model without scroll fatigue.
 - **Missing Content:** If a requested markdown file does not exist, the Next.js server component must use the native `notFound()` function to gracefully trigger the 404 UI boundary.
-- **Zod Schema Catch-All:** The `parser.ts` utility MUST wrap `gray-matter` parsing in a try/catch block. If Zod validation fails for a file, the build MUST NOT crash; it must log the validation error and safely skip rendering that specific card.
-- **Card Actions:** The UI behavior of a document card is controlled entirely by the `actionType` frontmatter string:
+- **Card Actions:** The UI behavior of a document or project card is controlled entirely by the `actionType` frontmatter string (or inferred by its column type / specific icon interactons):
+    - `filter-view`: Updates the global URL parameter (e.g., `?project=x`) to filter the entire dashboard view. Triggered by the global Project Filter dropdowns at the top of the page, OR the local 'Layers' icon shortcut on a Blueprint or Prototype Card.
     - `document-view`: Updates URL parameters (e.g., `?project=x&document=y`) to open the markdown file in the internal reading pane.
-    - `external-link`: Renders a standard `<a target="_blank">` tag using the accompanying `actionUrl` frontmatter string.
-    - `none`: Renders a disabled/dimmed card.
+    - `external-link`: Renders a standard `<a target="_blank">` tag using the accompanying `actionUrl` frontmatter string (used by the Prototype Rocket CTA).
+    - `none`: The card body is strictly informational and does not trigger routing (e.g., Agent Studio and Prototype card bodies).
 
 ### Enforcement Guidelines
 

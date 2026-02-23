@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Component Prototypes – Plan. Spec. Build.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body {
+            background-color: #09090b;
+            color: #fafafa;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .universal-card {
+            background-color: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 0.75rem;
+            transition: border-color .2s;
+        }
+
+        .universal-card:hover {
+            border-color: #3f3f46;
+        }
+
+        .pill-live {
+            background-color: rgba(16, 185, 129, .1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, .2);
+        }
+
+        .pill-concept {
+            background-color: rgba(161, 161, 170, .08);
+            color: #a1a1aa;
+            border: 1px solid #3f3f46;
+        }
+
+        .pill-progress {
+            background-color: rgba(59, 130, 246, .1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, .2);
+        }
+
+        .tag-fn {
+            background-color: #27272a;
+            color: #e4e4e7;
+        }
+
+        .tag-tc {
+            background-color: transparent;
+            border: 1px solid #27272a;
+            color: #a1a1aa;
+        }
+
+        .doc-row-header {
+            cursor: pointer;
+            transition: background-color .15s;
+        }
+
+        .doc-row-header:hover {
+            background-color: rgba(255, 255, 255, .03);
+        }
+
+        /* pb-4 only applied when open — prevents phantom space in collapsed state */
+        .doc-body {
+            overflow: hidden;
+            transition: max-height .25s ease, opacity .2s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .doc-body.open {
+            max-height: 400px;
+            opacity: 1;
+            padding-bottom: 1rem;
+        }
+
+        .chevron {
+            transition: transform .2s ease;
+        }
+
+        .chevron.open {
+            transform: rotate(180deg);
+        }
+
+        .col-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #52525b;
+            margin-bottom: .75rem;
+            padding-bottom: .5rem;
+            border-bottom: 1px solid #27272a;
+        }
+    </style>
+</head>
+
+<body class="p-8 min-h-screen">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-10">
+            <h1 class="text-2xl font-semibold mb-1">Component Visualization</h1>
+            <p class="text-sm text-zinc-400">"Plan. Spec. Build." Builder's Workshop — Applied UX Specification</p>
+        </header>
+
+        <section class="mb-16">
+            <h2 class="text-base font-medium mb-1">The 3-Column Command Center</h2>
+            <p class="text-sm text-zinc-500 mb-6">Single project shown across all three columns, as a builder would see
+                it.</p>
+
+            <div class="grid grid-cols-3 gap-4 items-start">
+
+                <!-- ── AGENT STUDIO ── -->
+                <div>
+                    <div class="col-label">Agent Studio</div>
+                    <div class="universal-card p-6 flex flex-col gap-4">
+                        <!-- Title then pill -->
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <h3 class="text-lg font-semibold tracking-tight text-white">BMad Master</h3>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide uppercase pill-live">Live</span>
+                        </div>
+                        <p class="text-sm text-zinc-400 leading-relaxed">
+                            The principal architect and facilitator of the Builder's Workshop methodology. Orchestrates
+                            planning phases and coordinates cross-functional agent teams to deliver production-ready
+                            specifications.
+                        </p>
+                        <div class="flex flex-col gap-2 pt-1 mt-auto">
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Facilitation</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-1 rounded-md text-xs tag-tc">Party Mode</span>
+                                <span class="px-2 py-1 rounded-md text-xs tag-tc">Methodology</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── BLUEPRINTS ── -->
+                <div>
+                    <div class="col-label">Blueprints</div>
+                    <div class="universal-card overflow-hidden">
+                        <!-- Project header -->
+                        <div class="px-5 py-4 border-b border-zinc-800 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold tracking-tight">Plan. Spec. Build.</h3>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-zinc-500">4 Documents</span>
+                                    <button onclick="toggleAllDocs(this)"
+                                        class="text-xs text-zinc-400 hover:text-white transition-colors"
+                                        data-state="collapsed">[Expand All]</button>
+                                </div>
+                            </div>
+                            <button class="p-2 text-zinc-500 hover:text-white rounded-md transition-colors"
+                                title="Filter dashboard by this project">
+                                <i data-feather="layers" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <!-- Doc list -->
+                        <div class="flex flex-col divide-y divide-zinc-800/50">
+
+                            <!-- Row 1: EXPANDED -->
+                            <div>
+                                <div class="doc-row-header px-5 py-3 flex items-center justify-between"
+                                    onclick="toggleDoc(this)">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <a href="#" onclick="event.stopPropagation()"
+                                            class="text-base font-semibold text-white hover:text-blue-400 hover:underline truncate">PRD</a>
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide pill-live shrink-0">Live</span>
+                                    </div>
+                                    <div class="shrink-0 ml-2 flex items-center gap-1">
+                                        <a href="#" onclick="event.stopPropagation()" title="View Document"
+                                            class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors">
+                                            <i data-feather="file-text" class="w-4 h-4"></i>
+                                        </a>
+                                        <i data-feather="chevron-down" class="w-4 h-4 text-zinc-500 chevron open"></i>
+                                    </div>
+                                </div>
+                                <div class="doc-body open px-5">
+                                    <p class="text-sm text-zinc-400 mb-3 leading-relaxed">Defines the core "Command
+                                        Center" mechanic — exposing AI planning artifacts alongside working prototypes
+                                        to create a compelling engineering portfolio.</p>
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Requirements</span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">User Journeys</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 2: COLLAPSED -->
+                            <div>
+                                <div class="doc-row-header px-5 py-3 flex items-center justify-between"
+                                    onclick="toggleDoc(this)">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <a href="#" onclick="event.stopPropagation()"
+                                            class="text-base font-semibold text-zinc-300 hover:text-blue-400 hover:underline truncate">UX
+                                            Design Spec</a>
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide pill-live shrink-0">Live</span>
+                                    </div>
+                                    <div class="shrink-0 ml-2 flex items-center gap-1">
+                                        <a href="#" onclick="event.stopPropagation()" title="View Document"
+                                            class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors">
+                                            <i data-feather="file-text" class="w-4 h-4"></i>
+                                        </a>
+                                        <i data-feather="chevron-down" class="w-4 h-4 text-zinc-500 chevron"></i>
+                                    </div>
+                                </div>
+                                <div class="doc-body px-5">
+                                    <p class="text-sm text-zinc-400 mb-3 leading-relaxed">Establishes the "Linear
+                                        Purist" aesthetic — typography-first, dark mode, Tinted Neutrality palette.</p>
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Design</span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">Tailwind</span><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">shadcn/ui</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 3: COLLAPSED -->
+                            <div>
+                                <div class="doc-row-header px-5 py-3 flex items-center justify-between"
+                                    onclick="toggleDoc(this)">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <a href="#" onclick="event.stopPropagation()"
+                                            class="text-base font-semibold text-zinc-300 hover:text-blue-400 hover:underline truncate">Architecture</a>
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide pill-live shrink-0">Live</span>
+                                    </div>
+                                    <div class="shrink-0 ml-2 flex items-center gap-1">
+                                        <a href="#" onclick="event.stopPropagation()" title="View Document"
+                                            class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors">
+                                            <i data-feather="file-text" class="w-4 h-4"></i>
+                                        </a>
+                                        <i data-feather="chevron-down" class="w-4 h-4 text-zinc-500 chevron"></i>
+                                    </div>
+                                </div>
+                                <div class="doc-body px-5">
+                                    <p class="text-sm text-zinc-400 mb-3 leading-relaxed">Next.js 15 App Router,
+                                        file-based CMS via /content/, compound component mandate.</p>
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Architecture</span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">Next.js</span><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">Vercel</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 4: COLLAPSED -->
+                            <div>
+                                <div class="doc-row-header px-5 py-3 flex items-center justify-between rounded-b-xl"
+                                    onclick="toggleDoc(this)">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <a href="#" onclick="event.stopPropagation()"
+                                            class="text-base font-semibold text-zinc-300 hover:text-blue-400 hover:underline truncate">Epics
+                                            &amp; Stories</a>
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide pill-progress shrink-0">WIP</span>
+                                    </div>
+                                    <div class="shrink-0 ml-2 flex items-center gap-1">
+                                        <a href="#" onclick="event.stopPropagation()" title="View Document"
+                                            class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors">
+                                            <i data-feather="file-text" class="w-4 h-4"></i>
+                                        </a>
+                                        <i data-feather="chevron-down" class="w-4 h-4 text-zinc-500 chevron"></i>
+                                    </div>
+                                </div>
+                                <div class="doc-body px-5 rounded-b-xl">
+                                    <p class="text-sm text-zinc-400 mb-3 leading-relaxed">Full breakdown of epics and
+                                        development-ready user stories for implementation.</p>
+                                    <div class="flex flex-col gap-1.5">
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Planning</span>
+                                        </div>
+                                        <div class="flex flex-wrap gap-1.5"><span
+                                                class="px-2 py-1 rounded-md text-xs tag-tc">BMAD</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── BUILD LAB ── -->
+                <div>
+                    <div class="col-label">Build Lab</div>
+                    <div class="universal-card p-6 flex flex-col gap-4">
+                        <!-- Actions row: top-right, separate from title -->
+                        <div class="flex items-center justify-between">
+                            <!-- Title then pill -->
+                            <div class="flex items-center gap-2.5 min-w-0 flex-wrap">
+                                <h3 class="text-lg font-semibold tracking-tight text-white">Plan. Spec. Build.
+                                </h3>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide uppercase pill-progress shrink-0">WIP</span>
+                            </div>
+                            <!-- Actions cluster -->
+                            <div class="flex items-center gap-1.5 shrink-0 ml-3">
+                                <button
+                                    class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                                    title="Filter Dashboard">
+                                    <i data-feather="layers" class="w-4 h-4"></i>
+                                </button>
+                                <button
+                                    class="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                                    title="View Source on GitHub">
+                                    <i data-feather="github" class="w-4 h-4"></i>
+                                </button>
+                                <button
+                                    class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors text-base leading-none"
+                                    title="Launch">
+                                    🚀
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm text-zinc-400 leading-relaxed">
+                            A fully responsive statically-generated web application demonstrating the complete lifecycle
+                            of AI-assisted software development through transparent artifact exposure.
+                        </p>
+                        <div class="flex flex-col gap-2 pt-1 mt-auto">
+                            <div class="flex flex-wrap gap-1.5"><span
+                                    class="px-2 py-1 rounded-md text-xs font-medium tag-fn">Web App</span></div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-1 rounded-md text-xs tag-tc">Next.js 15</span>
+                                <span class="px-2 py-1 rounded-md text-xs tag-tc">Tailwind</span>
+                                <span class="px-2 py-1 rounded-md text-xs tag-tc">Vercel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /3-col grid -->
+        </section>
+
+    </div><!-- /max-w -->
+
+    <script>
+        feather.replace();
+
+        function toggleDoc(headerEl) {
+            const body = headerEl.nextElementSibling;
+            const chevron = headerEl.querySelector('.chevron');
+            const textTitle = headerEl.querySelector('a.text-base');
+            const isOpen = body.classList.contains('open');
+
+            body.classList.toggle('open', !isOpen);
+            chevron.classList.toggle('open', !isOpen);
+
+            if (!isOpen) {
+                textTitle.classList.remove('text-zinc-300');
+                textTitle.classList.add('text-white');
+            } else {
+                textTitle.classList.add('text-zinc-300');
+                textTitle.classList.remove('text-white');
+            }
+        }
+
+        function toggleAllDocs(btn) {
+            const isCollapsed = btn.getAttribute('data-state') === 'collapsed';
+            const container = btn.closest('.universal-card');
+            const headers = container.querySelectorAll('.doc-row-header');
+
+            headers.forEach(header => {
+                const body = header.nextElementSibling;
+                const chevron = header.querySelector('.chevron');
+                const textTitle = header.querySelector('a.text-base');
+
+                if (isCollapsed) {
+                    body.classList.add('open');
+                    chevron.classList.add('open');
+                    textTitle.classList.remove('text-zinc-300');
+                    textTitle.classList.add('text-white');
+                } else {
+                    body.classList.remove('open');
+                    chevron.classList.remove('open');
+                    textTitle.classList.add('text-zinc-300');
+                    textTitle.classList.remove('text-white');
+                }
+            });
+
+            if (isCollapsed) {
+                btn.setAttribute('data-state', 'expanded');
+                btn.innerText = '[Collapse All]';
+            } else {
+                btn.setAttribute('data-state', 'collapsed');
+                btn.innerText = '[Expand All]';
+            }
+        }
+    </script>
+</body>
+
+</html>

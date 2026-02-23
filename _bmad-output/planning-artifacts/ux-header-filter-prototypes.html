@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Header &amp; Filter Prototypes – Plan. Spec. Build.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body {
+            background-color: #09090b;
+            color: #fafafa;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Filter pill (project selector) ── */
+        .filter-pill {
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid #27272a;
+            color: #a1a1aa;
+            background: transparent;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            color: #e4e4e7;
+            border-color: #3f3f46;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .filter-pill.active {
+            color: #ffffff;
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .filter-pill.active:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        /* ── Chip toggle (domain & tech tags) ── */
+        .chip-toggle {
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid #27272a;
+            color: #71717a;
+            background: transparent;
+        }
+
+        .chip-toggle:hover {
+            color: #a1a1aa;
+            border-color: #3f3f46;
+        }
+
+        .chip-toggle.active {
+            color: #e4e4e7;
+            background-color: #27272a;
+            border-color: #3f3f46;
+        }
+
+        /* ── Section dividers ── */
+        .section-divider {
+            border-top: 1px solid #27272a;
+            margin: 3rem 0 2rem;
+        }
+
+        .prototype-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #3f3f46;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #18181b;
+        }
+
+        .filter-row-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #52525b;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body class="p-8 min-h-screen">
+
+    <div class="max-w-7xl mx-auto">
+
+        <!-- ============================================================
+         META: Page title for the prototype doc itself
+         ============================================================ -->
+        <div class="mb-12">
+            <h1 class="text-xl font-semibold mb-1 text-zinc-400">Header &amp; Filter Prototypes</h1>
+            <p class="text-sm text-zinc-600">"Plan. Spec. Build." Builder's Workshop — Applied UX Specification</p>
+        </div>
+
+        <!-- ============================================================
+         PROTOTYPE 1: Header + Filters — Browse Mode (default)
+         ============================================================ -->
+        <div class="prototype-label">1 · Browse Mode — No project selected (default)</div>
+
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex items-end justify-between mb-2">
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight text-white mb-1">Builder's Workshop</h2>
+                    <p class="text-base text-zinc-400 max-w-2xl leading-relaxed">A collection of prototypes,
+                        architectures, and the messy middle of software development.</p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 ml-8">
+                    <button class="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                        title="Toggle Light/Dark Mode">
+                        <i data-feather="moon" class="w-4 h-4"></i>
+                    </button>
+                    <a href="#"
+                        class="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                        title="About">
+                        <i data-feather="info" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter bar: 3 rows — Projects, Domain, Tech -->
+        <div class="flex flex-col gap-3 mb-10">
+            <!-- Row 1: Project filter -->
+            <div class="flex items-center gap-2">
+                <span class="filter-row-label w-16">Projects</span>
+                <button class="filter-pill active">All</button>
+                <button class="filter-pill">Plan. Spec. Build.</button>
+                <button class="filter-pill">AI Task Assistant</button>
+                <button class="filter-pill">Design Token Generator</button>
+            </div>
+            <!-- Row 2: Functional / Domain tags -->
+            <div class="flex items-center gap-1.5">
+                <span class="filter-row-label w-16">Domain</span>
+                <button class="chip-toggle">Requirements</button>
+                <button class="chip-toggle">Design</button>
+                <button class="chip-toggle">Architecture</button>
+                <button class="chip-toggle">Planning</button>
+                <button class="chip-toggle">Facilitation</button>
+            </div>
+            <!-- Row 3: Technical tags -->
+            <div class="flex items-center gap-1.5">
+                <span class="filter-row-label w-16">Tech</span>
+                <button class="chip-toggle">Next.js</button>
+                <button class="chip-toggle">React</button>
+                <button class="chip-toggle">Tailwind</button>
+                <button class="chip-toggle">Vercel</button>
+                <button class="chip-toggle">Supabase</button>
+            </div>
+        </div>
+
+        <!-- Placeholder 3-col grid (ghosted) -->
+        <div class="grid grid-cols-3 gap-4 mb-4">
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Agent Studio</div>
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Blueprints</div>
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Build Lab</div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+        </div>
+
+
+        <div class="section-divider"></div>
+
+
+        <!-- ============================================================
+         PROTOTYPE 2: Header + Filters — Focus Mode (project selected)
+         ============================================================ -->
+        <div class="prototype-label">2 · Focus Mode — Project selected (cards filtered, header unchanged)</div>
+
+        <!-- Header — IDENTICAL to browse mode -->
+        <div class="mb-6">
+            <div class="flex items-end justify-between mb-2">
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight text-white mb-1">Builder's Workshop</h2>
+                    <p class="text-base text-zinc-400 max-w-2xl leading-relaxed">A collection of prototypes,
+                        architectures, and the messy middle of software development.</p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 ml-8">
+                    <button class="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                        title="Toggle Light/Dark Mode">
+                        <i data-feather="moon" class="w-4 h-4"></i>
+                    </button>
+                    <a href="#"
+                        class="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+                        title="About">
+                        <i data-feather="info" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter bar: project selected, domain active -->
+        <div class="flex flex-col gap-3 mb-10">
+            <!-- Row 1: Project filter — a specific project is active -->
+            <div class="flex items-center gap-2">
+                <span class="filter-row-label w-16">Projects</span>
+                <button class="filter-pill">All</button>
+                <button class="filter-pill active">Plan. Spec. Build.</button>
+                <button class="filter-pill">AI Task Assistant</button>
+                <button class="filter-pill">Design Token Generator</button>
+            </div>
+            <!-- Row 2: Domain — some active -->
+            <div class="flex items-center gap-1.5">
+                <span class="filter-row-label w-16">Domain</span>
+                <button class="chip-toggle active">Requirements</button>
+                <button class="chip-toggle">Design</button>
+                <button class="chip-toggle active">Architecture</button>
+                <button class="chip-toggle">Planning</button>
+                <button class="chip-toggle">Facilitation</button>
+            </div>
+            <!-- Row 3: Tech — none active -->
+            <div class="flex items-center gap-1.5">
+                <span class="filter-row-label w-16">Tech</span>
+                <button class="chip-toggle">Next.js</button>
+                <button class="chip-toggle">React</button>
+                <button class="chip-toggle">Tailwind</button>
+                <button class="chip-toggle">Vercel</button>
+                <button class="chip-toggle">Supabase</button>
+            </div>
+        </div>
+
+        <!-- Placeholder 3-col grid (ghosted) -->
+        <div class="grid grid-cols-3 gap-4 mb-4">
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Agent Studio</div>
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Blueprints</div>
+            <div
+                class="h-8 rounded-lg bg-zinc-900/50 border border-zinc-800/50 flex items-center justify-center text-[10px] text-zinc-600 uppercase tracking-widest font-semibold">
+                Build Lab</div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+            <div class="h-48 rounded-xl bg-zinc-900/30 border border-dashed border-zinc-800/50"></div>
+        </div>
+
+
+        <div class="section-divider"></div>
+
+
+        <!-- ============================================================
+         PROTOTYPE 3: Filter State Reference
+         ============================================================ -->
+        <div class="prototype-label">3 · Filter States Reference</div>
+
+        <!-- State A: No filters -->
+        <div class="mb-8">
+            <p class="text-xs text-zinc-500 mb-3 font-medium">State A · No filters active — all cards visible (Browse
+                Mode)</p>
+            <div class="flex flex-col gap-2.5 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/20">
+                <div class="flex items-center gap-2">
+                    <span class="filter-row-label w-16">Projects</span>
+                    <button class="filter-pill active">All</button>
+                    <button class="filter-pill">Plan. Spec. Build.</button>
+                    <button class="filter-pill">AI Task Assistant</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Domain</span>
+                    <button class="chip-toggle">Requirements</button>
+                    <button class="chip-toggle">Design</button>
+                    <button class="chip-toggle">Architecture</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Tech</span>
+                    <button class="chip-toggle">Next.js</button>
+                    <button class="chip-toggle">Tailwind</button>
+                    <button class="chip-toggle">Vercel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- State B: Project filter only -->
+        <div class="mb-8">
+            <p class="text-xs text-zinc-500 mb-3 font-medium">State B · Project selected → non-matching projects hidden,
+                blueprints auto-expanded</p>
+            <div class="flex flex-col gap-2.5 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/20">
+                <div class="flex items-center gap-2">
+                    <span class="filter-row-label w-16">Projects</span>
+                    <button class="filter-pill">All</button>
+                    <button class="filter-pill active">Plan. Spec. Build.</button>
+                    <button class="filter-pill">AI Task Assistant</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Domain</span>
+                    <button class="chip-toggle">Requirements</button>
+                    <button class="chip-toggle">Design</button>
+                    <button class="chip-toggle">Architecture</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Tech</span>
+                    <button class="chip-toggle">Next.js</button>
+                    <button class="chip-toggle">Tailwind</button>
+                    <button class="chip-toggle">Vercel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- State C: Project + domain/tech filters -->
+        <div class="mb-8">
+            <p class="text-xs text-zinc-500 mb-3 font-medium">State C · Project + domain/tech filters → further narrows
+                visible documents within project</p>
+            <div class="flex flex-col gap-2.5 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/20">
+                <div class="flex items-center gap-2">
+                    <span class="filter-row-label w-16">Projects</span>
+                    <button class="filter-pill">All</button>
+                    <button class="filter-pill active">Plan. Spec. Build.</button>
+                    <button class="filter-pill">AI Task Assistant</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Domain</span>
+                    <button class="chip-toggle active">Requirements</button>
+                    <button class="chip-toggle">Design</button>
+                    <button class="chip-toggle active">Architecture</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="filter-row-label w-16">Tech</span>
+                    <button class="chip-toggle">Next.js</button>
+                    <button class="chip-toggle active">Tailwind</button>
+                    <button class="chip-toggle">Vercel</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /max-w -->
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>

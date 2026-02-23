@@ -35,13 +35,19 @@ A professional, effortless, and authoritative "Command Center" portfolio that in
 ### Defining Experience
 The core interaction is the transition from **Browse Mode** (unfiltered scanning of all projects) to **Focus Mode** (filtering by a specific project). The defining action is the user clicking a Document Title to open the "Messy Middle" documentation in a focused overlay, validating the PM's strategic rigor.
 
+> **Visual Reference:** See [`ux-full-page-mockup.html`](./ux-full-page-mockup.html) for the approved, implementation-ready mockup showing both Browse Mode and Focus Mode states.
+
 ### Platform Strategy
 - **Primary:** Desktop web application (SPA/SSG). Hiring Managers typically review portfolios on desktop monitors during work hours.
 - **Secondary:** Mobile web. The mobile experience must preserve the 3-column mental model through a customized interaction pattern (e.g., swipeable views or horizontal tab navigation) rather than degrading to a generic vertical stack.
 
 ### Effortless Interactions
 - **Instantaneous Context Switching:** Clicking a project, domain, or tech stack filter must update the entire UI instantly (<100ms) without page reloads.
-- **Explicit Filtering Behavior:** Non-matching projects are completely hidden when a Project filter is applied. When Domain/Tech Stack filters are applied, non-matching projects are collapsed but their headers remain visible to preserve spatial awareness without clutter.
+- **Explicit Filtering Behavior:**
+  - **Project filter (Browse Mode):** Selecting a specific project pill hides all non-matching project rows across all three columns. A "✕ Clear Filter" button appears inline in the filter bar to return to Browse Mode. Selecting "All" is equivalent to no filter.
+  - **Domain/Tech filters (Browse Mode):** Cross-project filtering. Cards that do not contain the selected tag are hidden across all projects. Multiple tags are OR-filtered (cards matching any selected tag remain visible).
+  - **Domain/Tech filters (Focus Mode):** When a project is already selected, Domain/Tech filters narrow results within that project only — showing only the Blueprint documents or cards that match the selected tags.
+  - **Focus Mode entry:** Can be triggered either by clicking a project pill in the filter bar or by clicking the Layers icon on any Blueprint or Build Lab card. Both methods produce identical state.
 - **Barrier-Free Exploration:** Zero authentication required. All content, including external prototype links, must be accessible in one click.
 - **Metadata Expansion (Documents Only):** For Blueprint documents, clicking a card's chevron (or expanding the whole project group) reveals the "What/Why/Tags" instantly without leaving the Command Center context. Agent Studio and Build Lab cards remain fully visible at all times.
 
@@ -152,9 +158,9 @@ To achieve the "premium studio" aesthetic without becoming a confusing rainbow o
 - **Structural UI (90%):** Backgrounds, borders, and typography borrow strictly from a Slate or Zinc grayscale palette.
 - **Informational Accents (Statuses/Tags):** Status pills and filter tags use "tints" rather than solid colors (e.g., 10% opacity background with 80% opacity text). This provides visual distinction without breaking the premium feel.
   - `[Live]`: Muted Emerald / Mint
-  - `[In Progress]`: Muted Amber / Yellow
-  - `[Concept]`: Muted Violet or Slate
-- **The "Pop" (CTAs):** A single, strong primary color (e.g., a deep indigo or premium blue) is reserved *exclusively* for primary actions like the "Launch Prototype" icon.
+  - `[WIP]`: Muted Amber / Yellow (label is "WIP" not "In Progress" — concise by design)
+  - `[Concept]`: Muted Zinc / Gray (PRD exists, no code yet — no color)
+- **The "Pop" (CTAs):** A single, strong primary color (`bg-blue-600`) is reserved *exclusively* for primary actions like the "Launch Prototype" rocket button. Blue must not appear on any status pills or informational elements.
 
 ### Typography System
 **Primary Typeface: Inter**
@@ -241,15 +247,76 @@ While shadcn/ui provides the foundational atoms (Dialogs, Buttons, Badges, Scrol
 - `Button`: Primary CTAs (e.g., "Launch Prototype") and icon buttons.
 - `Tabs`: Potential layout tool for mobile-responsive breakpoint handling.
 
+### Global Header
+The global header sits above the filter bar and is **identical in Browse and Focus Mode** (it does not change when a project is selected).
+
+- **Left side:** Page title (H2, `text-3xl font-semibold text-white`) + one-line subtitle (`text-base text-zinc-400`)
+- **Right side (icon group, top-aligned):**
+  - **Moon icon** — Light/Dark mode toggle (`text-zinc-500`, brightens to `text-white` on hover with `bg-zinc-800` background)
+  - **Info icon** — Opens the "About" modal overlay (`text-zinc-500`, same hover behavior). Links to the project's About page / GitHub template; replaces a direct GitHub link in the header.
+- **Alignment:** Icon group uses `items-start` (top-aligned with the title line, not baseline-aligned to the subtitle).
+- **Spacing:** `max-w-7xl mx-auto`, `mb-6` below header before filter bar.
+
+### Three-Row Filter Bar
+The filter bar is organized into three distinct horizontal rows with consistent left-side labels.
+
+- **Row 1 — Projects:** Full-pill buttons (`.filter-pill`, rounded-full). One pill per project + "All" pill. Active project uses blue fill (`bg-blue-600`). When a project is active, a `✕ Clear Filter` button appears at the end of the row.
+- **Row 2 — Domain:** Chip toggles (`.chip-toggle`, rounded-md, smaller than project pills). Tags represent functional domain categories (e.g., Requirements, Design, Architecture, Planning, Facilitation). Active chip uses `bg-zinc-800` fill.
+- **Row 3 — Tech:** Chip toggles, same style as Domain row. Tags represent technology stack entries (e.g., Next.js, React, Tailwind, Vercel, Supabase).
+- **Row labels:** 10px uppercase, `text-zinc-600`, fixed width (`w-16`) to align all filter rows. Labels: "Projects", "Domain", "Tech".
+- **Gap:** `gap-3` between rows; `mb-10` below filter bar before the 3-column grid.
+
 ### Custom Components
-**1. The Universal Compound Card**
-- **Purpose:** A unified, single architectural card pattern that handles vastly different datasets depending on the column it resides in. Instead of different components for Tools, Documents, and Prototypes, all columns use this identical base to guarantee perfect visual alignment across the grid without becoming a tangled mess of React conditionally-rendered logic.
+
+
+**1. The Universal Compound Card (Base Architecture)**
+- **Purpose:** All data in the 3 columns utilizes a single underlying compound component architecture. Instead of building three rigid components (`AgentCard`, `BlueprintCard`, `PrototypeCard`), all columns must use this identical structural base to guarantee perfect visual alignment across the grid.
 - **Anatomy (`Compound Component Pattern`):** 
-  - `<ProjectCard.Root>` handles outermost border processing and interaction mapping.
-  - `<ProjectCard.Header>` renders Date, Title, and status pills.
-  - `<ProjectCard.Metadata>` renders the Auto-Expanding Context (What/Why/Tags). E.g., This is heavily utilized by Blueprints, but completely omitted when rendering an Agent Studio tool card.
-  - `<ProjectCard.Body>` renders raw paragraph descriptions.
-- **Interaction:** Automatically toggles `isExpanded` prop on the `Root` based on the global UI Filter state.
+  - `<ProjectCard.Root>` handles outermost border processing, hover states, and padding.
+  - `<ProjectCard.Header>` renders Top Bar elements (Date, Status Pills) and the H2 Title.
+  - `<ProjectCard.Metadata>` renders the Auto-Expanding Context (Functional/Tech Tags).
+  - `<ProjectCard.Body>` renders paragraph descriptions or complex nested arrays (like the Blueprint document list).
+- **Empty State Handing:** 
+  - *Blueprints & Prototypes:* Handled via the `[Concept]` pill and dashed borders.
+  - *Agents:* There is **no empty state** for Agent cards. Every project in the portfolio is inherently driven by an AI Agent. If a project exists, it will have an Agent card.
+
+These building blocks are conditionally populated to create the three distinct card layouts based on column context:
+
+**A. The Agent Card (Agent Studio Column)**
+- **Header (inline):** Agent name (H3, `text-lg font-semibold text-white`) + Status Pill inline to the right
+- **Body:** 2-sentence executive summary (`text-sm text-zinc-400`)
+- **Functional Tags:** Domain tag row (`tag-fn` — solid `bg-zinc-800` background)
+- **Tech Stack Tags:** Technology tag row (`tag-tc` — transparent with `border-zinc-800`)
+- **Actions:** None. No Layers icon. Agent cards are purely informational; project-level filtering is handled by the Project filter pills in the filter bar.
+
+**B. The Prototype Card (Build Lab Column)**
+- **Card Header row:** Left side: Project Title (H3, `text-lg font-semibold text-white`) + Status Pill inline. Right side: Layers icon (filter shortcut), GitHub icon, Rocket CTA button.
+- **Body:** One-sentence description of the prototype (`text-sm text-zinc-400`)
+- **Functional Tags:** Domain tag row (`tag-fn`)
+- **Tech Stack Tags:** Technology tag row (`tag-tc`)
+- **Actions:**
+  - **Rocket 🚀 button** (`bg-blue-600`) — Primary CTA. Launches the live prototype. Maximum one per project.
+  - **GitHub icon** — Secondary action (`text-zinc-500`, brightens on hover). Links to source repo.
+  - **Layers icon** — Quaternary shortcut. Clicking filters the entire dashboard to show only this project (Focus Mode). Restores the user to Focus Mode if they arrived via Browse.
+- **Concept state:** When no prototype exists yet, render with `border-dashed`, no Rocket CTA, and `[Concept]` pill. GitHub icon also hidden.
+
+**C. The Blueprint Card (Blueprints Column)**
+This card uses a compound layout: a project-level header card wrapping a 1-to-many document list.
+
+- **Project Header** (sticky top of card):
+  - *Left:* Project Name (H3, `text-lg`) + document count (`text-xs text-zinc-500`) + `[Expand All]` / `[Collapse All]` text toggle
+  - *Right:* Layers icon (Focus Mode shortcut). Clicking filters the entire dashboard to show only this project.
+- **Document Row (Collapsed):**
+  - *Left:* Document Title (text link — underline on hover to open Markdown modal) + Status Pill inline to the right
+  - *Right:* File icon (opens Markdown modal) + Chevron icon (expands this row)
+  - Title text is `text-zinc-300` when collapsed, `text-white` when expanded
+- **Document Row (Expanded — via click or Focus Mode auto-expand):**
+  - Same header as above, chevron rotated 180°
+  - *Body:* 1-2 sentence description (`text-sm text-zinc-400`)
+  - *Functional Tags:* `tag-fn` row
+  - *Tech Stack Tags:* `tag-tc` row
+- **Auto-expand behavior:** Entering Focus Mode (via project pill or Layers icon) automatically expands all document rows in that project's Blueprint card.
+- **Concept/Empty state:** If a project has no documents yet, render the project header only (no document rows) with a `border-dashed` card style.
 
 **2. The Markdown Document Modal**
 - **Purpose:** Provide a calm, "Notion-like" reading experience for highly technical markdown artifacts (like PRDs) within an overlay inside the Command Center.
@@ -274,19 +341,27 @@ The following patterns establish the "Linear Purist" visual discipline across th
 With the complex data generated by BMAD, tags must be strictly controlled to prevent the UI from becoming chaotic.
 *   **Tech Stack Tags (e.g., React, Supabase):** Always strict grayscale (`bg-zinc-800/50` with contrasting text).
 *   **Status Pills:** The *only* tags allowed to use color, utilizing a 10-20% opacity background with a matching solid border or text. To prevent a "rainbow UI," these are strictly locked to 4 values:
-    *   `[Live]`: Muted Emerald / Green (The prototype is deployed).
-    *   `[In Progress]`: Muted Amber / Yellow (Actively being built).
-    *   `[Concept]`: Muted Slate / Blue-Gray (PRD exists, no code yet).
-    *   `[Archived]`: Muted Red / Rose (Project abandoned or deprecated).
+    *   `[Live]`: Muted Emerald / Green — `rgba(16,185,129,.1)` bg, `#34d399` text, `rgba(16,185,129,.2)` border. The prototype is deployed.
+    *   `[WIP]`: Muted Amber / Yellow — `rgba(245,158,11,.1)` bg, `#fbbf24` text, `rgba(245,158,11,.2)` border. Actively being built. Label is "WIP" (not "In Progress") for brevity.
+    *   `[Concept]`: Muted Zinc / Gray — `rgba(161,161,170,.08)` bg, `#a1a1aa` text, `#3f3f46` border. PRD exists, no prototype code yet. Intentionally colorless to signal early stage.
+    *   `[Archived]`: Muted Red / Rose — reserved for projects abandoned or deprecated.
 
 ### 3. Interactive Feedback (Focus & Hover States)
 *   **Mouse Hover Rule:** Because the application relies on the "Linear Purist" strict grid, we **do not use drop-shadows on hover**. Interactive cards simply lighten their background color slightly (e.g., from `bg-zinc-950` to `bg-zinc-900`) and brighten their borders.
 *   **Keyboard Focus Rule (WCAG):** To ensure accessibility without muddying the mouse-hover state, keyboard navigation must trigger an explicit high-contrast ring (e.g., Tailwind's `focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2`).
 
 ### 4. The Empty State Pattern
-When the Author publishes a PRD but hasn't built the Prototype yet, the UI must maintain the column integrity.
-*   **Visual:** The "Build Lab" card still renders, but uses a dashed border (`border-dashed border-zinc-700/50`) instead of a solid border. It must enforce a minimum height so grid rows do not collapse unevenly.
-*   **Communication:** No italicized text is used. Instead, the card simply lacks the Primary CTA button and utilizes a specific Status Pill (e.g., `[Concept]`) in the header. The dashed border and status pill combined communicate the missing state without cluttering the UI with explicit apologies or explanation text.
+When a project exists in planning phase only (no prototype code yet), the UI must maintain column structural integrity across all three columns.
+*   **Blueprint column:** If a project has zero documents, render only the project-level card header (name + "0 Documents") with a dashed border. No document rows.
+*   **Build Lab column:** Render the card with a dashed border (`border-dashed`), the `[Concept]` pill, and no Rocket CTA or GitHub icon. The Layers icon is still present.
+*   **Agent column:** Always renders a full card (no empty state — every project has an agent).
+*   **Communication rule:** Never use italicized placeholder text. The `[Concept]` pill + dashed border is the complete signal — no additional explanation needed.
+
+### 5. The "Clear Filter" Pattern
+When any project is selected (Focus Mode), a "✕ Clear Filter" button must appear inline in the Projects filter row, positioned after the last project pill.
+*   **Visual:** Small, muted-red ghost button — `border-red-500/30`, `text-red-400`, `bg-red-500/5`. Subtle but clearly dismissive.
+*   **Behavior:** Clicking returns to Browse Mode ("All" pill active, all cards visible, blueprint docs return to their prior collapsed/expanded state).
+*   **Absence:** Button is NOT shown when "All" is selected or no project filter is active.
 
 ## Responsive Design & Accessibility
 
@@ -298,9 +373,8 @@ The "Command Center" identity relies on the interplay of three distinct columns.
 *   **Layout:** The full 3-column grid (`grid-cols-3`), constrained to a `max-w-7xl` container.
 *   **Interaction:** Full hover states enabled. Global filters and search are persistent in the header.
 
-**Tablet (768px - 1023px)**
-*   **Layout:** 2-column grid (`grid-cols-2`). The "Agent Studio" (tooling context) is moved into a collapsible, horizontal accordion at the top of the page, dedicating the primary visual space to the "Blueprints" and "Build Lab" side-by-side.
-*   **Interaction:** Hover states are disabled (touch targets only). Actionable areas must maintain a minimum 44x44px touch target area.
+**Tablet (768px - 1023px) & Mobile (320px - 767px)**
+*   **Layout (The "Sticky Top Tab Bar"):** Stacking 3 high-density columns vertically results in unacceptable scroll fatigue, and dropping to a 2-column layout forces the user to learn a confusing new interaction pattern. Therefore, any screen smaller than a desktop (`<1024px`) displays *only one column at a time* taking up the full viewport width.
 
 **Mobile (320px - 767px)**
 *   **Layout (The "Sticky Top Tab Bar"):** Stacking 3 high-density columns vertically results in unacceptable scroll fatigue. Therefore, the mobile layout displays *only one column at a time* taking up the full viewport width.
