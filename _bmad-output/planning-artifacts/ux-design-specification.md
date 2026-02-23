@@ -39,14 +39,14 @@ The core interaction is the transition from **Browse Mode** (unfiltered scanning
 
 ### Platform Strategy
 - **Primary:** Desktop web application (SPA/SSG). Hiring Managers typically review portfolios on desktop monitors during work hours.
-- **Secondary:** Mobile web. The mobile experience must preserve the 3-column mental model through a customized interaction pattern (e.g., swipeable views or horizontal tab navigation) rather than degrading to a generic vertical stack.
+- **Secondary:** Mobile web is deferred to v2. The MVP targets desktop only (≥1024px). Mobile/tablet responsive design will be addressed in a future phase.
 
 ### Effortless Interactions
 - **Instantaneous Context Switching:** Clicking a project, domain, or tech stack filter must update the entire UI instantly (<100ms) without page reloads.
 - **Explicit Filtering Behavior:**
   - **Project filter (Browse Mode):** Selecting a specific project pill hides all non-matching project rows across all three columns. A "✕ Clear Filter" button appears inline in the filter bar to return to Browse Mode. Selecting "All" is equivalent to no filter.
-  - **Domain/Tech filters (Browse Mode):** Cross-project filtering. Cards that do not contain the selected tag are hidden across all projects. Multiple tags are OR-filtered (cards matching any selected tag remain visible).
-  - **Domain/Tech filters (Focus Mode):** When a project is already selected, Domain/Tech filters narrow results within that project only — showing only the Blueprint documents or cards that match the selected tags.
+  - **Domain/Tech filters (Browse Mode):** Cross-project, cross-column filtering. Cards in ALL three columns (Agent Studio, Blueprints, Build Lab) that do not contain the selected tag are hidden. Any card lacking the selected tag is removed from view. Multiple tags are OR-filtered (cards matching any selected tag remain visible).
+  - **Domain/Tech filters (Focus Mode):** When a project is already selected, Domain/Tech filters narrow results within that project only — hiding cards or document rows across all three columns that lack the selected tag.
   - **Focus Mode entry:** Can be triggered either by clicking a project pill in the filter bar or by clicking the Layers icon on any Blueprint or Build Lab card. Both methods produce identical state.
 - **Barrier-Free Exploration:** Zero authentication required. All content, including external prototype links, must be accessible in one click.
 - **Metadata Expansion (Documents Only):** For Blueprint documents, clicking a card's chevron (or expanding the whole project group) reveals the "What/Why/Tags" instantly without leaving the Command Center context. Agent Studio and Build Lab cards remain fully visible at all times.
@@ -304,7 +304,7 @@ These building blocks are conditionally populated to create the three distinct c
 This card uses a compound layout: a project-level header card wrapping a 1-to-many document list.
 
 - **Project Header** (sticky top of card):
-  - *Left:* Project Name (H3, `text-lg`) + document count (`text-xs text-zinc-500`) + `[Expand All]` / `[Collapse All]` text toggle
+  - *Left:* Project Name (H3, `text-lg`) + document count (`text-xs text-zinc-500`) + `[Expand All]` / `[Collapse All]` text toggle (per-card scope — only affects documents within this specific Blueprint card, not other project cards)
   - *Right:* Layers icon (Focus Mode shortcut). Clicking filters the entire dashboard to show only this project.
 - **Document Row (Collapsed):**
   - *Left:* Document Title (text link — underline on hover to open Markdown modal) + Status Pill inline to the right
@@ -356,6 +356,7 @@ When a project exists in planning phase only (no prototype code yet), the UI mus
 *   **Build Lab column:** Render the card with a dashed border (`border-dashed`), the `[Concept]` pill, and no Rocket CTA or GitHub icon. The Layers icon is still present.
 *   **Agent column:** Always renders a full card (no empty state — every project has an agent).
 *   **Communication rule:** Never use italicized placeholder text. The `[Concept]` pill + dashed border is the complete signal — no additional explanation needed.
+*   **Error/Fallback state:** If a content file has malformed frontmatter or cannot be parsed, the affected card renders with a dashed border and an `[Error]` pill (same visual pattern as `[Concept]` but using muted Red/Rose tints). Text reads "Content unavailable." All other cards render normally — the site never crashes entirely due to one bad content file.
 
 ### 5. The "Clear Filter" Pattern
 When any project is selected (Focus Mode), a "✕ Clear Filter" button must appear inline in the Projects filter row, positioned after the last project pill.
@@ -365,20 +366,12 @@ When any project is selected (Focus Mode), a "✕ Clear Filter" button must appe
 
 ## Responsive Design & Accessibility
 
-The "Command Center" identity relies on the interplay of three distinct columns. Preserving this spatial relationship across screen sizes is the primary responsive challenge.
+> **Mobile/tablet responsive design is deferred to v2.** The MVP targets desktop only (≥1024px). The 3-column Command Center grid is designed for desktop monitors; mobile adaptation will be addressed in a future phase. All responsive breakpoint strategy decisions (tab bars, column switching, etc.) are out of scope for Phase 1.
 
-### Responsive Breakpoint Strategy
-
-**Desktop (1024px and above)**
+### Desktop Layout (MVP — Phase 1)
 *   **Layout:** The full 3-column grid (`grid-cols-3`), constrained to a `max-w-7xl` container.
 *   **Interaction:** Full hover states enabled. Global filters and search are persistent in the header.
-
-**Tablet (768px - 1023px) & Mobile (320px - 767px)**
-*   **Layout (The "Sticky Top Tab Bar"):** Stacking 3 high-density columns vertically results in unacceptable scroll fatigue, and dropping to a 2-column layout forces the user to learn a confusing new interaction pattern. Therefore, any screen smaller than a desktop (`<1024px`) displays *only one column at a time* taking up the full viewport width.
-
-**Mobile (320px - 767px)**
-*   **Layout (The "Sticky Top Tab Bar"):** Stacking 3 high-density columns vertically results in unacceptable scroll fatigue. Therefore, the mobile layout displays *only one column at a time* taking up the full viewport width.
-*   **Interaction:** A sticky Tab Bar is fixed to the **top** of the screen (just under the global header) with three distinct tabs: `[Studio] | [Blueprints] | [Lab]`. Tapping a tab instantly swaps the visible content container. This preserves the user's mental model of "switching categories" rather than endlessly scrolling a list.
+*   **Minimum viewport:** 1024px. No tablet/mobile breakpoints in Phase 1.
 
 ### Accessibility (A11y) Strategy
 The portfolio targets WCAG 2.1 Level AA compliance, ensuring a professional and inclusive experience.

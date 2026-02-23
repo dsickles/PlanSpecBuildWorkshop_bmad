@@ -72,7 +72,7 @@ The core differentiator is the platform's **interlocking 3-column architecture**
 - **WCAG 2.1 AA Compliance:** Inclusive design is a core requirement to demonstrate professional standards to hiring managers. Formal conformance targets are defined in NFR4-NFR5.
 
 ### Technical Constraints (Portfolio Domain)
-- **Responsive Design:** The layout must be fully responsive, degrading gracefully from the 3-column desktop view (Command Center) to an intuitive, stacked mobile experience, as recruiters frequently review links on mobile devices.
+- **Responsive Design:** The MVP (Phase 1) targets desktop only (≥1024px). The 3-column "Command Center" layout is designed for desktop monitors. Mobile/tablet responsive design — including the column-switching tab bar pattern — is deferred to v2. Cross-browser compatibility on desktop remains required.
 - **Cross-Browser Compatibility:** Must function flawlessly across modern versions of Chrome, Safari, Firefox, and Edge.
 - **SEO Optimization:** Basic technical SEO (meta tags, descriptive URLs, structured data where appropriate) must be implemented to ensure the portfolio is discoverable if the user chooses to index it.
 
@@ -125,20 +125,23 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - Journey 2: The Inspired Peer PM (Forking the Meta-Blueprint template)
 
 **Must-Have Capabilities:**
-- Responsive 3-column UI layout (Agent Studio, Blueprints, Build Lab)
+- Desktop-only 3-column UI layout (Agent Studio, Blueprints, Build Lab) — mobile/tablet responsive design deferred to v2
 - Tri-modal filtering system (Project, Domain, Tech Stack)
 - The complete "Meta-Blueprint" content (The portfolio documentation itself)
 - Global navigation header with "About this Project" and "Fork a Workshop" links
 - Dark/Light mode toggle
 - **Card UX & Navigation:** Individual cards within the columns must be thoughtfully optimized for scannability, featuring contextually appropriate "at a glance" information for personas. The cards must support explicit intra-linking (e.g., clicking directly from a prototype card to its specific PRD or Decision Matrix). Note: Phase 1 prioritizes a 0ms instant transition when filtering to guarantee core layout stability and Markdown parsing capabilities.
+- **Tri-modal filtering:** Domain and Tech Stack filters apply across ALL three columns (Agent Studio, Blueprints, Build Lab). Any card in any column that lacks the selected tag is hidden from view. This cross-column filtering behavior is consistent in both Browse Mode and Focus Mode.
 
 ### Post-MVP Features
 **Phase 2 (Growth):**
 - **Fluid Grid Transitions:** Upgrade the core Phase 1 0ms instant filter transition to a 200ms fluid, spatial CSS animation (The "Command Center Collapse") to elevate the "premium studio" feel.
 - Integration of live, embedded iframes for prototypes (instead of external links)
+- Mobile/tablet responsive layout — the 3-column Command Center must adapt to smaller screens while preserving the mental model of three distinct content lanes (e.g., sticky tab bar for column switching)
 - An interactive graph or visualization showing connections between tools and artifacts
 - A "How to build your own Agent" tutorial section
 - Support for Journey 3 (The Author) via more advanced automated deployment pipelines — *Note: Journey 3 is partially supported in Phase 1 via FR1-FR3 (basic markdown publishing). Phase 2 adds advanced CI/CD automation.*
+- Basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches)
 
 **Phase 3 (Expansion):**
 - Multi-tenant hosting (allowing other PMs to deploy their instances to a centralized domain) — *Note: This represents a non-trivial architectural pivot from a single static site and should not influence MVP architecture decisions.*
@@ -149,7 +152,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **Technical Risks:** *Markdown Parsing Complexity.* Mitigation: Build Phase 1 using established SSG tools (like Astro or Next.js) that have robust out-of-the-box markdown handling rather than rolling a custom parser.
 - **Market Risks:** *Lack of interest from Hiring Managers.* Mitigation: The MVP is inherently valuable as a personal historical record even if no one else looks at it, ensuring the build effort is never wasted.
 - **Resource Risks:** *UI build takes too long.* Mitigation: Start with a minimalist, brutalist "no-fluff" CSS framework to guarantee the routing and markdown parsing works before adding visual polish.
-- **UX Risks:** *Mobile Adaptation of 3-Column Layout.* The product's identity is the interlocking 3-column "Command Center." Degrading this to a single-column mobile layout risks losing the visual metaphor. Mitigation: UX Design phase must define a mobile navigation pattern that preserves the sense of column interconnection (e.g., swipeable panels or a tab-based column switcher) rather than a generic vertical stack.
+- **UX Risks:** *Mobile Adaptation of 3-Column Layout.* The product's identity is the interlocking 3-column "Command Center." Mitigation: Mobile responsive design is deferred to v2 to keep the MVP focused on the desktop experience where hiring managers primarily evaluate portfolios. The v2 UX design phase will define a mobile navigation pattern (e.g., tab-based column switcher) that preserves the sense of column interconnection.
 
 ## Functional Requirements 
 
@@ -162,7 +165,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 ### Navigation & Layout (The "Command Center")
 - **FR5:** The System must display projects and their artifacts in a 3-column layout (Agent Studio, Blueprints, Build Lab).
 - **FR6:** The User can navigate between a project's tools, documents, and prototypes instantly (0ms UI re-render) without triggering a full page reload.
-- **FR7:** The System must adapt the 3-column layout to a stacked, usable layout on mobile devices.
+- **FR7:** ~~The System must adapt the 3-column layout to a stacked, usable layout on mobile devices.~~ *Deferred to v2.* The MVP targets desktop only (≥1024px). Mobile/tablet responsive layout will be designed and implemented in Phase 2.
 - **FR8:** The User can toggle between Light and Dark interface modes.
 
 ### Discovery & Filtering
@@ -177,6 +180,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **FR15:** The User can access a "Fork a Workshop" link to copy the underlying repository template.
 - **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform.
+- **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 
 ## Non-Functional Requirements
 
