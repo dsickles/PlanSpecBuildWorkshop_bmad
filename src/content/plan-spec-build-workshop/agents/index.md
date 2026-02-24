@@ -1,5 +1,5 @@
 ---
-title: "BMAD AI Agent Suite"
+title: "BMAD Method"
 date: "2026-02-23"
 status: "Live"
 domain:

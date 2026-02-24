@@ -54,12 +54,12 @@ development_status:
   1-4-meta-blueprint-project-definition: done
   epic-1-retrospective: done
 
-  epic-2: backlog
-  2-1-build-universal-projectcard-component: backlog
-  2-2-implement-3-column-data-routing: backlog
-  2-3-implement-global-light-dark-theme-toggle: backlog
-  2-4-empty-state-fallback-ui: backlog
-  epic-2-retrospective: optional
+  epic-2: in-progress
+  2-1-build-universal-projectcard-component: done
+  2-2-implement-3-column-data-routing: done
+  2-3-implement-global-light-dark-theme-toggle: done
+  2-4-empty-state-fallback-ui: done
+  epic-2-retrospective: done
 
   epic-3: backlog
   3-1-build-interactive-filter-bar-component: backlog

@@ -24,11 +24,11 @@ const DIR_TO_ARTIFACT_TYPE: Record<string, ArtifactType> = {
 };
 
 /**
- * Represents a discovered `index.md` file and its structural metadata.
+ * Represents a discovered `.md` file and its structural metadata.
  * Metadata is derived purely from the directory structure — no file reading required.
  */
 export interface ContentFilePath {
-    /** Absolute path to the index.md file. */
+    /** Absolute path to the .md file. */
     filePath: string;
     /** Top-level folder name under /content (e.g. "plan-spec-build-workshop"). */
     projectSlug: string;
@@ -54,15 +54,15 @@ export function getProjectSlugs(): string[] {
 }
 
 /**
- * Discovers all `index.md` files under the structured content directory tree.
+ * Discovers all `.md` files under the structured content directory tree.
  *
  * Expected structure:
- *   src/content/<project-slug>/<agents|docs|prototypes>/index.md
+ *   src/content/<project-slug>/<agents|docs|prototypes>/<any-name>.md
  *
- * Only files matching this exact pattern are returned. Directories that don't
- * match the known artifact type folders are silently skipped.
+ * Any `.md` file inside a recognised artifact-type directory is included.
+ * Non-markdown files (e.g. `.gitkeep`) and hidden files are silently skipped.
  *
- * @returns Array of ContentFilePath objects, one per discovered index.md.
+ * @returns Array of ContentFilePath objects, one per discovered .md file.
  */
 export function getContentFilePaths(): ContentFilePath[] {
     const slugs = getProjectSlugs();
@@ -88,17 +88,29 @@ export function getContentFilePaths(): ContentFilePath[] {
             // Silently skip directories that don't match the known artifact types
             if (!artifactType) continue;
 
-            const indexPath = path.join(projectDir, artifactDir.name, "index.md");
+            const artifactDirPath = path.join(projectDir, artifactDir.name);
 
+            // Discover ALL .md files in the artifact directory
+            let files: fs.Dirent[];
             try {
-                fs.accessSync(indexPath, fs.constants.R_OK);
+                files = fs
+                    .readdirSync(artifactDirPath, { withFileTypes: true })
+                    .filter(
+                        (entry) =>
+                            entry.isFile() &&
+                            entry.name.endsWith(".md") &&
+                            !entry.name.startsWith(".")
+                    );
+            } catch {
+                continue;
+            }
+
+            for (const file of files) {
                 results.push({
-                    filePath: indexPath,
+                    filePath: path.join(artifactDirPath, file.name),
                     projectSlug,
                     artifactType,
                 });
-            } catch {
-                // index.md doesn't exist or isn't readable — skip silently
             }
         }
     }

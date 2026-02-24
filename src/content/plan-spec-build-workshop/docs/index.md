@@ -1,5 +1,5 @@
 ---
-title: "Plan. Spec. Build. — Portfolio Design System"
+title: "Overview"
 date: "2026-02-23"
 status: "WIP"
 domain:
