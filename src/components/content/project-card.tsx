@@ -129,7 +129,7 @@ function ProjectCardHeader({
     return (
         <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
                     <h3 className="text-lg font-semibold leading-tight line-clamp-2 text-zinc-900 dark:text-white">
                         {title}
                     </h3>

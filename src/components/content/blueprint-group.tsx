@@ -80,7 +80,7 @@ export function BlueprintGroup({ projectSlug, docs, onDocOpen }: BlueprintGroupP
                             <div className="flex items-center justify-between px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors duration-150">
                                 <button
                                     onClick={() => toggleDoc(key)}
-                                    className="flex-1 flex items-center gap-3 min-w-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-400 rounded-sm py-1"
+                                    className="flex-1 flex items-center gap-1.5 min-w-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-400 rounded-sm py-1"
                                     aria-expanded={isOpen}
                                 >
                                     <span className="text-lg font-semibold leading-tight text-zinc-900 dark:text-white truncate">
@@ -155,7 +155,7 @@ export function BlueprintErrorRow({ filePath }: { filePath: string }) {
     const name = filePath.split("/").slice(-2, -1)[0] ?? "Unknown";
     return (
         <div className="rounded-lg border border-dashed border-zinc-200 dark:border-zinc-700 px-4 py-3 mb-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
                 <span className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">{name}</span>
                 <StatusPill status="Concept" />
             </div>
