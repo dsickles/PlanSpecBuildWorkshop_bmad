@@ -14,7 +14,7 @@ tech_stack:
   - "shadcn/ui"
   - "Zod"
   - "React"
-description: "The complete design and planning documentation for the Plan. Spec. Build. AI-agent portfolio — PRD, Architecture, UX Specification, and Epics."
+description: "This project! The complete design and planning documentation for the Plan Spec Build Workshop — PRD, Architecture, UX Specification, and Epics."
 parent_project: "plan-spec-build-workshop"
 related_docs:
   - "plan-spec-build-workshop/agents"

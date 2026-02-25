@@ -54,17 +54,17 @@ development_status:
   1-4-meta-blueprint-project-definition: done
   epic-1-retrospective: done
 
-  epic-2: in-progress
+  epic-2: done
   2-1-build-universal-projectcard-component: done
   2-2-implement-3-column-data-routing: done
   2-3-implement-global-light-dark-theme-toggle: done
   2-4-empty-state-fallback-ui: done
   epic-2-retrospective: done
 
-  epic-3: backlog
-  3-1-build-interactive-filter-bar-component: backlog
-  3-2-implement-filter-state-architecture-via-url-params: backlog
-  3-3-wire-tri-modal-filtering-to-grid-data: backlog
+  epic-3: in-progress
+  3-1-build-interactive-filter-bar-component: done
+  3-2-implement-filter-state-architecture-via-url-params: done
+  3-3-wire-tri-modal-filtering-to-grid-data: done
   3-4-implement-clear-filter-mechanics: backlog
   epic-3-retrospective: optional
 

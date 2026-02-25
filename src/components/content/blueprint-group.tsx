@@ -10,10 +10,29 @@ interface BlueprintGroupProps {
     docs: ParsedArticle[];
     /** Called when the FileText icon is clicked — Epic 3 will wire up modal */
     onDocOpen?: (doc: ParsedArticle) => void;
+    /** If true, all rows are force-expanded (Focus Mode) */
+    isFocused?: boolean;
 }
 
-export function BlueprintGroup({ projectSlug, docs, onDocOpen }: BlueprintGroupProps) {
-    const [expandedDocs, setExpandedDocs] = useState<Set<string>>(new Set());
+export function BlueprintGroup({
+    projectSlug,
+    docs,
+    onDocOpen,
+    isFocused = false
+}: BlueprintGroupProps) {
+    const [expandedDocs, setExpandedDocs] = useState<Set<string>>(() => {
+        return isFocused ? new Set(docs.map(d => d.title)) : new Set();
+    });
+
+    // Sync state to prop change: When isFocused becomes true, auto-expand all.
+    // React allows setting state during render if gated by a condition (idiomatic for prop sync).
+    const [prevIsFocused, setPrevIsFocused] = useState(isFocused);
+    if (isFocused !== prevIsFocused) {
+        setPrevIsFocused(isFocused);
+        if (isFocused) {
+            setExpandedDocs(new Set(docs.map(d => d.title)));
+        }
+    }
 
     const allExpanded = expandedDocs.size === docs.length && docs.length > 0;
 

@@ -13,7 +13,7 @@ tech_stack:
   - "Tailwind CSS"
   - "shadcn/ui"
   - "Vercel"
-description: "This page! A live portfolio application — a \"Command Center\" UI showcasing AI-agent-driven product development from brief through deployed prototype."
+description: "This project! A live portfolio application — a \"Command Center\" UI showcasing AI-agent-driven product development from brief through deployed prototype."
 parent_project: "plan-spec-build-workshop"
 github_url: "https://github.com/dsickles/PlanSpecBuildWorkshop_bmad"
 external_url: "http://localhost:3000"

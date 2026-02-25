@@ -8,8 +8,8 @@ import { z } from "zod";
 
 /**
  * The canonical status values for all artifacts.
- * These MUST match the CSS token names from globals.css (Story 0.2):
- *   bg-status-live-bg, bg-status-wip-bg, bg-status-concept-bg, bg-status-archived-bg
+ * These are linked to CSS theme variables in globals.css (Story 0.2):
+ *   --color-status-live-bg, --color-status-wip-bg, etc.
  */
 export const STATUS_VALUES = ["Live", "WIP", "Concept", "Archived"] as const;
 export type Status = (typeof STATUS_VALUES)[number];

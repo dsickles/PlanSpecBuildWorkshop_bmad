@@ -11,7 +11,7 @@ tech_stack:
   - "Next.js"
   - "TypeScript"
   - "Tailwind CSS"
-description: "Full PRD for the Plan. Spec. Build. portfolio — user journeys, functional requirements, NFRs, and phased roadmap."
+description: "Full PRD for the Plan Spec Build Workshop — user journeys, functional requirements, NFRs, and phased roadmap."
 parent_project: "plan-spec-build-workshop"
 ---
 

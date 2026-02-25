@@ -17,24 +17,27 @@ const STATUS_STYLES: Record<
     { background: string; color: string; border: string }
 > = {
     Live: {
-        background: "rgba(16,185,129,.1)",
-        color: "#34d399",
-        border: "rgba(16,185,129,.2)",
+        background: "var(--color-status-live-bg)",
+        color: "var(--color-status-live-text)",
+        border: "var(--color-status-live-border)",
     },
+
     WIP: {
-        background: "rgba(245,158,11,.1)",
-        color: "#fbbf24",
-        border: "rgba(245,158,11,.2)",
+        background: "var(--color-status-wip-bg)",
+        color: "var(--color-status-wip-text)",
+        border: "var(--color-status-wip-border)",
     },
+
     Concept: {
-        background: "rgba(161,161,170,.08)",
-        color: "#a1a1aa",
-        border: "#3f3f46",
+        background: "var(--color-status-concept-bg)",
+        color: "var(--color-status-concept-text)",
+        border: "var(--color-status-concept-border)",
     },
+
     Archived: {
-        background: "rgba(244,63,94,.08)",
-        color: "#fb7185",
-        border: "rgba(244,63,94,.2)",
+        background: "var(--color-status-archived-bg)",
+        color: "var(--color-status-archived-text)",
+        border: "var(--color-status-archived-border)",
     },
 };
 

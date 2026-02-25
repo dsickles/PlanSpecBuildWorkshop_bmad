@@ -25,7 +25,7 @@ export function GlobalHeader() {
                         Plan Spec Build Workshop
                     </h1>
                     <p className="text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
-                        A collection of prototypes, architectures, and the messy middle of software development.
+                        A collection of agentic tooling, planning documents, working software, and everything in between.
                     </p>
                 </div>
 
