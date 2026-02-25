@@ -123,7 +123,7 @@ The application does not use a traditional database. The GitHub repository serve
 
 **Local UI State: Card Expand/Collapse (`useState`)**
 - *Rationale:* Blueprint card document rows have expand/collapse toggles and per-card `[Expand All]` / `[Collapse All]` controls. This is ephemeral presentation state that does not need to be deep-linkable or shareable.
-- *Behavior:* When the `?project=` parameter transitions from empty to a specific project (entering Focus Mode), all document rows in that project's Blueprint card auto-expand. When the filter is cleared (returning to Browse Mode), document rows return to their prior collapsed state.
+- *Behavior:* When the `?project=` parameter transitions from empty to a specific project (entering Focus Mode), all document rows in that project's Blueprint card auto-expand. When the filter is cleared (returning to Browse Mode), the document rows maintain their current expansion state, allowing the user to preserve their context. Users can manually tidy their view using the per-card [Collapse All] toggle.
 - *Implementation:* Managed via `useState` or `useReducer` within the Blueprint card component. This is the only exception to the URL-driven state strategy.
 - *Affects:* Blueprint card component only.
 

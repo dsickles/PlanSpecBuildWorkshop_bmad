@@ -2,6 +2,7 @@
 
 import { Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const iconButtonClass =
@@ -45,13 +46,13 @@ export function GlobalHeader() {
                         ) : (
                             <div className={`${iconButtonClass} opacity-0 pointer-events-none`} aria-hidden="true" />
                         )}
-                        <button
+                        <Link
+                            href="/about"
                             className={iconButtonClass}
-                            type="button"
                             aria-label="Information"
                         >
                             <Info className="h-4 w-4" />
-                        </button>
+                        </Link>
                     </nav>
                 </div>
             </div>

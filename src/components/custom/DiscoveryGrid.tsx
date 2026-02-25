@@ -14,7 +14,7 @@ interface DiscoveryGridProps {
 }
 
 export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGridProps) {
-    const { activeProject, activeDomains, activeTech } = useFilterState();
+    const { activeProject, activeDomains, activeTech, setProject } = useFilterState();
 
     const { agents, docsByProject, prototypes, errors } = useMemo(() => {
         const filtered = allContent.filter((item): item is ParsedArticle => {
@@ -108,8 +108,10 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                         <BlueprintGroup
                             key={slug}
                             projectSlug={slug}
+                            projectTitle={groupDocs[0]?.projectTitle}
                             docs={groupDocs}
                             isFocused={activeProject === slug}
+                            onLayersClick={() => setProject(slug)}
                         />
                     ))}
                     {errors
@@ -139,6 +141,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                 tech_stack={proto.tech_stack}
                                 externalUrl={proto.external_url}
                                 githubUrl={proto.github_url}
+                                onLayersClick={() => setProject(proto.projectSlug)}
                             />
                         </div>
                     ))}

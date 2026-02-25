@@ -61,18 +61,18 @@ development_status:
   2-4-empty-state-fallback-ui: done
   epic-2-retrospective: done
 
-  epic-3: in-progress
+  epic-3: done
   3-1-build-interactive-filter-bar-component: done
   3-2-implement-filter-state-architecture-via-url-params: done
   3-3-wire-tri-modal-filtering-to-grid-data: done
-  3-4-implement-clear-filter-mechanics: backlog
-  epic-3-retrospective: optional
+  3-4-implement-clear-filter-mechanics: done
+  epic-3-retrospective: done
 
-  epic-4: backlog
-  4-1-inter-artifact-deep-linking-view-project-state: backlog
-  4-2-build-comprehensive-about-this-project-educational-page: backlog
-  4-3-add-fork-a-workshop-repository-link: backlog
-  epic-4-retrospective: optional
+  epic-4: done
+  4-1-inter-artifact-deep-linking-view-project-state: done
+  4-2-build-comprehensive-about-this-project-educational-page: done
+  4-3-add-fork-a-workshop-repository-link: done # Cancelled/Deferred in favor of Story 4.2 link for minimalism
+  epic-4-retrospective: done
 
   epic-5: backlog
   5-1-deploy-to-vercel: backlog

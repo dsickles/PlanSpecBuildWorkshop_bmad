@@ -97,14 +97,14 @@ describe('useFilterState', () => {
     expect(mockPush).toHaveBeenCalledWith('/?domain=Design', { scroll: false });
   });
 
-  it('clears all filters when clearFilters is called', () => {
+  it('clears all filters when clearAllFilters is called', () => {
     (useSearchParams as jest.Mock).mockReturnValue(
       createMockSearchParams({ project: 'some-project' })
     );
     const { result } = renderHook(() => useFilterState());
 
     act(() => {
-      result.current.clearFilters();
+      result.current.clearAllFilters();
     });
 
     expect(mockPush).toHaveBeenCalledWith('/', { scroll: false });

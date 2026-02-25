@@ -82,3 +82,22 @@ This document outlines key decisions made during the planning and specification 
     *   *Option B:* "Zero-Bloat" official Next.js App Router + Tailwind CSS + shadcn/ui initialization.
 *   **The Decision:** We selected **Option B (Zero-Bloat Next.js + shadcn/ui)**.
 *   **Rationale & Trade-offs:** Third-party templates (Option A) almost always include unnecessary abstractions, authentication layers, or rigid theme logic that conflicts with our Git-CMS requirement and our precise "Command Center" grid layout. By initializing directly with Next.js and unstyled Radix primitives via shadcn (Option B), we guarantee absolute control over the DOM markup and Tailwind configuration. The trade-off is that we have to build our own specific UI components (like the `UniversalCompoundCard` and `ProjectSidebar`) from scratch rather than relying on pre-built template blocks.
+ 
+ ---
+ 
+ ## 4. Deferred Implementation & Design Refinements
+ 
+ This section captures architectural and design considerations that emerged during development but were intentionally deferred to prevent scope creep or to allow for deeper cross-functional alignment.
+ 
+ ### 4.1 Filter Reset UI Positioning (Design Debt)
+ *   **The Issue:** During the implementation of Story 3-4 (Clear Filter Mechanics), we identified a design tension regarding the positioning of the "Clear Filter" button.
+ *   **Context:** The button currently resides within the "Projects" row of the Filter Bar. However, because it resets *all* filter categories (Project, Domain, and Tech), it appears spatially isolated when a user has only filtered by "Tech" or "Domain" while the Projects row shows "All" as active.
+ *   **Deferred Decision:** Maintain current project-row positioning for the MVP.
+ *   **Sally's UX Insight:** Sally (UX Designer) noted that as filter complexity scales, the current row-specific reset logic will feel increasingly disjointed. She proposed a potential "Active Filters" region or a dedicated "Action Bar" that persists globally across the filtering UI, but we've deferred this to avoid scope creep for the initial release.
+ *   **Rationale for Deferral:** Re-positioning the button to a global or multi-row layout requires further UX discovery to ensure it doesn't break the "Command Center" density or introduce unnecessary vertical padding. Addressing this would involve complex implementation changes and a refactor of the `FilterBar` component that exceed the current scope of the filtering epic.
+ *   **Next Steps:** Revisit in v2 UX Refinement phase alongside mobile layout transitions. We will evaluate a dedicated "Active Filters" pill area to consolidate all global resets.
+
+### 4.2 Information Hierarchy in "How to Use" (Design Debt)
+*   **The Issue:** During the implementation of Story 4.2 (About Page), we noted that the "Browse Mode" and "Focus Mode" headers share similar visual weight with subordinate sections, potentially flattening the informational hierarchy.
+*   **Deferred Decision:** Maintain current Typography for Phase 1.
+*   **Rationale for Deferral:** While differentiating major usage modes from structural descriptions (Agent Studio, etc.) would improve scannability, changing the header levels or adding nested styling tokens requires a broader review of the "Linear Purist" typographic scale to avoid ad-hoc stylistic overrides. This will be addressed during the v2 Accessibility & Hierarchy audit.

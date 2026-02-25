@@ -329,6 +329,8 @@ So that I can comprehend the portfolio's purpose and instantly assess the volume
     3.  **Open Source:** An explicit CTA linking to the forkable GitHub repository template (FR15).
 
 ### Story 4.3: Add "Fork a Workshop" Repository Link
+**Status: Skipped/Deferred** (Integrated with Story 4.2 for minimalism)
+
 As a Peer PM or Developer,
 I want an easily accessible link to the underlying Git repository template,
 So that I can quickly fork the project to start building my own portfolio.

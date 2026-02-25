@@ -85,4 +85,14 @@ describe("BlueprintGroup", () => {
         expect(screen.queryByText("Description 2")).not.toBeInTheDocument();
         expect(screen.getByText("[Expand All]")).toBeInTheDocument();
     });
+
+    it("calls onLayersClick when Layers icon is clicked", () => {
+        const onLayersClick = jest.fn();
+        render(<BlueprintGroup projectSlug="project-a" docs={mockDocs} onLayersClick={onLayersClick} />);
+
+        const layersBtn = screen.getByLabelText("Focus on this project");
+        fireEvent.click(layersBtn);
+
+        expect(onLayersClick).toHaveBeenCalled();
+    });
 });

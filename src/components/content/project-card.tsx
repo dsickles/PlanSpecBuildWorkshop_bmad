@@ -221,7 +221,7 @@ function IconButton({
     href?: string;
 }) {
     const cls =
-        "flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400";
+        "flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400";
 
     if (href) {
         return (

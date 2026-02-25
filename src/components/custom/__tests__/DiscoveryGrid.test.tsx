@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { DiscoveryGrid } from "../DiscoveryGrid";
 import { useFilterState } from "../../../hooks/useFilterState";
 import { ParsedArticle } from "../../../lib/content-parser";
@@ -75,5 +75,41 @@ describe("DiscoveryGrid", () => {
         // Agent A matches Domain A, Agent B matches Tech B
         expect(screen.getByText("Agent A")).toBeInTheDocument();
         expect(screen.getByText("Agent B")).toBeInTheDocument();
+    });
+
+    it("calls setProject when Layers icon is clicked on a prototype", () => {
+        const setProject = jest.fn();
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: [],
+            setProject
+        });
+
+        const prototypeContent: ParsedArticle[] = [{
+            ...mockContent[0],
+            artifactType: "prototype",
+            title: "Proto 1"
+        }];
+
+        render(<DiscoveryGrid allContent={prototypeContent} errors={[]} />);
+
+        const layersBtn = screen.getByLabelText("Focus on this project");
+        fireEvent.click(layersBtn);
+
+        expect(setProject).toHaveBeenCalledWith("project-a");
+    });
+
+    it("does not render Layers icon for agent cards", () => {
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: []
+        });
+
+        render(<DiscoveryGrid allContent={mockContent} errors={[]} />);
+
+        // Screen should not have any elements with the Focus label for agents
+        expect(screen.queryByLabelText("Focus on this project")).not.toBeInTheDocument();
     });
 });

@@ -1,6 +1,7 @@
 // Server-only module — uses Node.js `fs`. Never import from a client component.
 
 import fs from "fs";
+import path from "path";
 import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
@@ -15,7 +16,7 @@ import {
     ArtifactType,
     isError,
 } from "./schema";
-import { getContentFilePaths } from "./content-utils";
+import { getContentFilePaths, CONTENT_ROOT } from "./content-utils";
 
 // =============================================================================
 // Content Parser — Metadata Ingestion Engine
@@ -35,6 +36,8 @@ export type ParsedArticle = FrontmatterData & {
     projectSlug: string;
     /** Artifact type derived from the directory structure. */
     artifactType: ArtifactType;
+    /** Human-readable project title from the project's index.md. */
+    projectTitle?: string;
 };
 
 /**
@@ -57,6 +60,21 @@ export async function parseMarkdownFile(
     projectSlug: string,
     artifactType: ArtifactType
 ): Promise<ParsedArticle | ErrorFrontmatter> {
+    // Step 0: Resolve project title from index.md if possible
+    let projectTitle: string | undefined;
+    try {
+        const projectDir = path.join(CONTENT_ROOT, projectSlug);
+        const projectIndexPath = path.join(projectDir, "index.md");
+        if (fs.existsSync(projectIndexPath)) {
+            const projectRaw = fs.readFileSync(projectIndexPath, "utf-8");
+            const projectMatter = matter(projectRaw);
+            projectTitle = projectMatter.data.title;
+        }
+    } catch (err) {
+        // Fallback to slug if title lookup fails
+        console.error(`Failed to resolve project title for ${projectSlug}:`, err);
+    }
+
     // Step 1: Read the file
     let raw: string;
     try {
@@ -117,7 +135,8 @@ export async function parseMarkdownFile(
         html,
         projectSlug,
         artifactType,
-    } satisfies ParsedArticle;
+        projectTitle,
+    } as ParsedArticle;
 }
 
 /**

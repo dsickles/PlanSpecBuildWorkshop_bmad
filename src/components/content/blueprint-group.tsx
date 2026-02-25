@@ -1,24 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, FileText } from "lucide-react";
+import { ChevronDown, FileText, Layers } from "lucide-react";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { ParsedArticle } from "@/lib/content-parser";
 
 interface BlueprintGroupProps {
     projectSlug: string;
+    projectTitle?: string;
     docs: ParsedArticle[];
     /** Called when the FileText icon is clicked — Epic 3 will wire up modal */
     onDocOpen?: (doc: ParsedArticle) => void;
     /** If true, all rows are force-expanded (Focus Mode) */
     isFocused?: boolean;
+    /** Called when the Layers icon is clicked to establish Focus Mode */
+    onLayersClick?: () => void;
 }
 
 export function BlueprintGroup({
     projectSlug,
+    projectTitle,
     docs,
     onDocOpen,
-    isFocused = false
+    isFocused = false,
+    onLayersClick
 }: BlueprintGroupProps) {
     const [expandedDocs, setExpandedDocs] = useState<Set<string>>(() => {
         return isFocused ? new Set(docs.map(d => d.title)) : new Set();
@@ -56,7 +61,7 @@ export function BlueprintGroup({
         });
     };
 
-    const displayName = projectSlug
+    const displayName = projectTitle || projectSlug
         .replace(/-/g, " ")
         .replace(/\b\w/g, (c) => c.toUpperCase());
 
@@ -85,6 +90,16 @@ export function BlueprintGroup({
                         )}
                     </div>
                 </div>
+
+                {onLayersClick && (
+                    <button
+                        onClick={onLayersClick}
+                        aria-label="Focus on this project"
+                        className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                    >
+                        <Layers size={14} />
+                    </button>
+                )}
             </div>
 
             {/* Document rows */}
@@ -114,7 +129,7 @@ export function BlueprintGroup({
                                         <button
                                             onClick={() => onDocOpen?.(doc)}
                                             aria-label={`Open ${doc.title}`}
-                                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
                                         >
                                             <FileText size={14} />
                                         </button>
@@ -122,7 +137,7 @@ export function BlueprintGroup({
                                         {/* Chevron moved to right side */}
                                         <button
                                             onClick={() => toggleDoc(key)}
-                                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
                                             aria-label={isOpen ? "Collapse details" : "Expand details"}
                                         >
                                             <ChevronDown

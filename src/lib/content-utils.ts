@@ -11,7 +11,7 @@ import { ArtifactType } from "./schema";
 // =============================================================================
 
 /** Absolute path to the content root directory. */
-const CONTENT_ROOT = path.join(process.cwd(), "src", "content");
+export const CONTENT_ROOT = path.join(process.cwd(), "src", "content");
 
 /**
  * Maps directory names to their canonical ArtifactType.

@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFilterState } from "@/hooks/useFilterState";
+import { RED_GHOST_BUTTON_STYLES } from "@/lib/constants";
 
 interface FilterBarProps {
     projects: string[];
@@ -18,7 +19,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
         setProject,
         toggleDomain,
         toggleTech,
-        clearFilters,
+        clearAllFilters,
     } = useFilterState();
 
     return (
@@ -57,11 +58,16 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                         </button>
                     ))}
 
-                    {activeProject && (
+                    {/* Clear Filter Button */}
+                    {(activeProject || activeDomains.length > 0 || activeTech.length > 0) && (
                         <button
-                            onClick={clearFilters}
-                            className="ml-2 px-3 py-1.5 text-sm rounded-full transition-colors border flex items-center gap-1 border-red-500/30 text-red-400 bg-red-500/5 hover:bg-red-500/10"
+                            onClick={clearAllFilters}
+                            className={cn(
+                                "ml-2 px-3 py-1.5 text-sm rounded-full transition-colors border flex items-center gap-1",
+                                RED_GHOST_BUTTON_STYLES
+                            )}
                             title="Clear Filter"
+                            aria-label="Clear all filters"
                         >
                             <X className="w-3.5 h-3.5" />
                             <span>Clear Filter</span>

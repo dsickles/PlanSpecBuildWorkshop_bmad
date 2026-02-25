@@ -58,7 +58,7 @@ export function useFilterState() {
         updateUrl({ [TECH_PARAM]: newTech });
     };
 
-    const clearFilters = () => {
+    const clearAllFilters = () => {
         router.push(pathname, { scroll: false });
     };
 
@@ -69,6 +69,6 @@ export function useFilterState() {
         setProject,
         toggleDomain,
         toggleTech,
-        clearFilters,
+        clearAllFilters,
     };
 }
