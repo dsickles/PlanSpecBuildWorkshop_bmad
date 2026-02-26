@@ -1,6 +1,6 @@
 import { getSortedParsedContent } from "@/lib/content-parser";
 import { calculateMetrics } from "@/lib/metrics";
-import { Rocket, ArrowLeft, Layers, Filter, Github, FileText } from "lucide-react";
+import { Rocket, ArrowLeft, Layers, Github, FileText } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BlueprintGroup } from "../blueprint-group";
-import { ParsedArticle } from "@/lib/content-parser";
+import { ParsedArticle } from "@/lib/schema";
 
 const mockDocs: ParsedArticle[] = [
     {
@@ -12,7 +12,9 @@ const mockDocs: ParsedArticle[] = [
         tech_stack: ["Tech A"],
         description: "Description 1",
         date: "2023-01-01",
-        html: "<p>1</p>"
+        html: "<p>1</p>",
+        projects: [],
+        _filePath: "content/project-a/docs/doc-1.md"
     },
     {
         title: "Doc 2",
@@ -23,7 +25,9 @@ const mockDocs: ParsedArticle[] = [
         tech_stack: ["Tech B"],
         description: "Description 2",
         date: "2023-01-02",
-        html: "<p>2</p>"
+        html: "<p>2</p>",
+        projects: [],
+        _filePath: "content/project-a/docs/doc-2.md"
     }
 ];
 

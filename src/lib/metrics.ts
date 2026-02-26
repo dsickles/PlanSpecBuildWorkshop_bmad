@@ -1,5 +1,4 @@
-import { ParsedArticle } from "./content-parser";
-import { isError, ParsedContent } from "./schema";
+import { isError, ParsedContent, ParsedArticle } from "./schema";
 
 export interface ProjectMetrics {
     totalProjects: number;

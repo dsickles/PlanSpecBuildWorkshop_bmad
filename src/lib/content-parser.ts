@@ -2,6 +2,7 @@
 
 import fs from "fs";
 import path from "path";
+import { z } from "zod";
 import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
@@ -10,13 +11,13 @@ import remarkRehype from "remark-rehype";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
 import {
-    FrontmatterSchema,
-    FrontmatterData,
     ErrorFrontmatter,
     ArtifactType,
-    isError,
+    ParsedArticle,
+    FrontmatterSchema,
 } from "./schema";
 import { getContentFilePaths, CONTENT_ROOT } from "./content-utils";
+import { loadSortConfig, applySortOrder } from "./sort-utils";
 
 // =============================================================================
 // Content Parser — Metadata Ingestion Engine
@@ -24,21 +25,7 @@ import { getContentFilePaths, CONTENT_ROOT } from "./content-utils";
 // See: Story 1.3 — Markdown Content and Metadata Ingestion Engine
 // =============================================================================
 
-/**
- * The fully resolved shape for a successfully parsed artifact.
- * Combines validated frontmatter with rendered HTML content and
- * structural metadata derived from the directory tree.
- */
-export type ParsedArticle = FrontmatterData & {
-    /** XSS-sanitized HTML string generated from the Markdown body. */
-    html: string;
-    /** Project slug derived from the directory structure. */
-    projectSlug: string;
-    /** Artifact type derived from the directory structure. */
-    artifactType: ArtifactType;
-    /** Human-readable project title from the project's index.md. */
-    projectTitle?: string;
-};
+// =============================================================================
 
 /**
  * Parses a single Markdown file into structured content.
@@ -108,7 +95,7 @@ export async function parseMarkdownFile(
     const result = FrontmatterSchema.safeParse(normalizedData);
     if (!result.success) {
         const message = result.error.issues
-            .map((issue) =>
+            .map((issue: z.ZodIssue) =>
                 `${issue.path.map(String).join(".") || "root"}: ${issue.message}`
             )
             .join("; ");
@@ -136,6 +123,7 @@ export async function parseMarkdownFile(
         projectSlug,
         artifactType,
         projectTitle,
+        _filePath: filePath,
     } as ParsedArticle;
 }
 
@@ -155,26 +143,14 @@ export async function getAllParsedContent(): Promise<(ParsedArticle | ErrorFront
 }
 
 /**
- * The project slug that must always appear first in the portfolio view.
- * This implements FR16: "Plan. Spec. Build." is always the first selectable item.
- */
-export const PINNED_PROJECT_SLUG = "plan-spec-build-workshop";
-
-/**
- * Returns all parsed content with the pinned project sorted to the front.
- * Sort is stable — all non-pinned items maintain their original relative order.
+ * Returns all parsed content pre-sorted according to the sort-config.yaml manifest.
  *
  * @returns Sorted array of ParsedArticle | ErrorFrontmatter.
  */
 export async function getSortedParsedContent(): Promise<(ParsedArticle | ErrorFrontmatter)[]> {
     const all = await getAllParsedContent();
-    return [...all].sort((a, b) => {
-        const aIsPinned = !isError(a) && a.projectSlug === PINNED_PROJECT_SLUG;
-        const bIsPinned = !isError(b) && b.projectSlug === PINNED_PROJECT_SLUG;
-        if (aIsPinned && !bIsPinned) return -1;
-        if (!aIsPinned && bIsPinned) return 1;
-        return 0;
-    });
+    const config = await loadSortConfig();
+    return applySortOrder(all, config);
 }
 
 // =============================================================================

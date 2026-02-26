@@ -1,5 +1,6 @@
-import { getSortedParsedContent, ParsedArticle } from "@/lib/content-parser";
-import { isError, ErrorFrontmatter } from "@/lib/schema";
+import { getSortedParsedContent } from "@/lib/content-parser";
+import { loadSortConfig, sortByList } from "@/lib/sort-utils";
+import { isError, ErrorFrontmatter, ParsedArticle } from "@/lib/schema";
 import { FilterBar } from "@/components/custom/FilterBar";
 import { DiscoveryGrid } from "@/components/custom/DiscoveryGrid";
 import { Suspense } from "react";
@@ -12,6 +13,7 @@ export default async function Home({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const resolvedParams = await searchParams;
   const allContent = await getSortedParsedContent();
+  const sortConfig = await loadSortConfig();
 
   const errors: ErrorFrontmatter[] = [];
   const validArticles: ParsedArticle[] = [];
@@ -29,7 +31,9 @@ export default async function Home({
   }
 
   // Extract unique filter options for the FilterBar (Server-side derived from all valid content)
-  const projects = Array.from(new Set(validArticles.map(item => item.projectSlug))).sort();
+  const projects = Array.from(new Set(validArticles.map(item => item.projectSlug)))
+    .filter(slug => slug !== "_shared")
+    .sort((a, b) => sortByList(a, b, sortConfig.projects));
   const domains = Array.from(new Set(validArticles.flatMap(item => item.domain))).sort();
   const techStacks = Array.from(new Set(validArticles.flatMap(item => item.tech_stack))).sort();
 

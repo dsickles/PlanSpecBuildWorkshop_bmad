@@ -81,14 +81,14 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 - **FR2:** Epic 1 - Frontmatter metadata parsing logic.
 - **FR3:** Epic 1 - Ingestion routes artifacts (agents, docs, prototypes) to columns.
 - **FR4:** Epic 1 - System parses standard and GitHub-flavored markdown.
-- **FR5:** Epic 2 - UI layout supports 3 columns using the project data.
+- **FR5:** Epic 2 & Epic 7 - UI layout supports 3 columns and document modals.
 - **FR6:** Epic 3 - URL state management enables instant client-side filtering without reloads.
 - **FR7:** (Deferred) - MVP targets desktop only; mobile deferred to Phase 2.
 - **FR8:** Epic 2 - Toggle between Light and Dark interface modes.
 - **FR9:** Epic 3 - Interactive filtering by "Project".
 - **FR10:** Epic 3 - Interactive filtering by "Functional Domain".
 - **FR11:** Epic 3 - Interactive filtering by "Tech Stack".
-- **FR12:** Epic 2 - Render summary metadata on project and artifact cards.
+- **FR12:** Epic 2 & Epic 7 - Render summary metadata and full document content.
 - **FR13:** Epic 4 - Support intra-linking between prototypes and docs.
 - **FR14:** Epic 4 - Add "About this Project" educational page in global nav.
 - **FR15:** Epic 4 - Add "Fork a Workshop" template repository link.
@@ -107,6 +107,7 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 *   **Epic 4:** Deep Linking, Education, & Open Sourcing
 *   **Epic 5:** Shared Agent Studio Items
 *   **Epic 6:** Central Sort Order Manifest
+*   **Epic 7:** Deep Document Discovery
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -255,20 +256,6 @@ So that I am not confused by jarring blank spaces in the structural grid.
 *   **When** the `DashboardGrid` attempts to render that column,
 *   **Then** a styled fallback component matching the `[Concept]` status (dashed border) is rendered in that specific slot to maintain the structural rhythm of the page, rather than collapsing the grid or showing unstyled text.
 
-### Story 2.5: Wire Blueprint Document Viewer Modal
-As a User,
-I want to click a Blueprint document title or its file icon to open the full markdown content in a focused reading modal,
-So that I can deep-dive into technical documentation without leaving the Command Center context.
-
-**Acceptance Criteria:**
-*   **Given** a Blueprint document row in the Blueprints column,
-*   **When** the user clicks the document title text link OR the FileText icon button,
-*   **Then** the URL updates to include `?document=<filename-stem>` (e.g., `?document=prd`) alongside the existing `?project=` parameter.
-*   **And** a `MarkdownDocumentModal` (shadcn `Dialog`) opens, rendering the full markdown body from the already-parsed `ParsedArticle.html` using the `MarkdownRenderer` component.
-*   **And** the chevron icon on the document row continues to toggle only the expand/collapse of that row's metadata — it does NOT open the modal.
-*   **And** closing the modal (via X button, Escape key, overlay backdrop click, or browser back button) removes only the `?document=` parameter from the URL, preserving all other filter state (`?project=`, `?domain=`, `?tech=`).
-*   **And** after closing the modal, the user remains in exactly the same filter/focus state they were in before opening the document.
-*   **And** if the requested document cannot be found or rendered, the modal displays a "This document could not be rendered" fallback message.
 
 ## Epic 3: Tri-Modal Discovery & Instant Filtering
 Users can instantly drill down into specific contexts using the Project, Domain, and Tech Stack filters, experiencing the premium, client-side re-rendering (<100ms) without page reloads.  
@@ -401,7 +388,7 @@ So that unrelated tools are hidden in Focus Mode and I see a clean, project-scop
 *   **And** Domain/Tech Stack filtering continues to apply on top of project filtering using the existing OR logic.
 
 ## Epic 6: Central Sort Order Manifest
-Display ordering across all UI sections (Agent Studio, Blueprints, Build Lab, project filter pills) is controlled by a central `sort-config.yaml` manifest file, replacing implicit or per-file ordering. The existing `order` frontmatter field is deprecated and removed.
+Display ordering across all UI sections (Agent Studio, Blueprints, Build Lab, project filter pills) is controlled by a central `sort-config.yaml` manifest file, replacing implicit or per-file ordering. The existing `order` frontmatter field is deprecated and removed. **Additionally, this epic will implement semantic test tokens (`data-testid`, `aria-label`) to resolve dashboard test collisions identified in the Epic 5 retrospective.**
 **FRs covered:** FR20
 
 ### Story 6.1: Create Sort Configuration Manifest
@@ -440,5 +427,56 @@ So that there is a single, unambiguous mechanism for controlling display order.
 *   **Then** the `order` field is removed from both `projectSchema` and `documentSchema`.
 *   **And** no content `.md` files reference an `order` frontmatter field.
 *   **And** the Architecture document reflects that `sort-config.yaml` is the exclusive ordering mechanism.
+
+## Epic 7: Deep Document Discovery
+Users can deep-dive into technical documentation (~350 lines) via a premium, URL-driven modal experience that maintains the "Command Center" context through glassmorphism and sticky navigation.
+**FRs covered:** FR5, FR12
+
+### Story 7.1: URL-Driven Modal Infrastructure
+As a Front-End Developer,
+I want the document modal state to be synchronized with the URL `?document=` parameter,
+So that users can bookmark, share, and navigate directly to specific documents with full state persistence.
+
+**Acceptance Criteria:**
+*   **Given** any project view,
+*   **When** the `?document=` parameter is present in the URL,
+*   **Then** the `MarkdownDocumentModal` automatically mounts and displays the requested document.
+*   **And** the parameter is validated against the active project's file list using Zod to prevent invalid file stems from triggering a UI crash.
+*   **And** closing the modal removes only the `document` parameter from the URL while preserving all other active project/domain/tech filters.
+
+### Story 7.2: Focused Markdown Reading Experience
+As a User,
+I want a large, readable modal (2/3 screen width) with optimized line lengths and a blurred background,
+So that I can focus on technical prose without losing my sense of place in the portfolio.
+
+**Acceptance Criteria:**
+*   **Given** the document modal is open,
+*   **When** viewing the content,
+*   **Then** the modal width is approximately 2/3 of the screen (`max-w-5xl`).
+*   **And** the background uses `backdrop-blur-md` with a semi-transparent `zinc-950` overlay to keep the grid visible but secondary.
+*   **And** the inner content column is constrained to `65-75ch` to maintain ideal typographic line lengths for long-form reading.
+
+### Story 7.3: Reading State & Navigation
+As a User,
+I want a sticky navigation header inside the modal and smooth scroll behavior,
+So that I can easily track my progress through long documents and exit effortlessly.
+
+**Acceptance Criteria:**
+*   **Given** a long document in the modal,
+*   **When** scrolling through the content,
+*   **Then** the modal header (containing the document icon and title) remains sticky at the top of the modal window.
+*   **And** use a custom thin scrollbar styling to maintain the "Linear Purist" aesthetic.
+*   **And** the exit action (X button or clicking the backdrop) triggers a smooth dismissal animation that returns focus to the corresponding row in the grid.
+
+### Story 7.4: Error & Fallback States
+As a User,
+I want to see a clear, themed error state if a document fails to load within the modal,
+So that I understand why content is missing without experiencing a broken interface.
+
+**Acceptance Criteria:**
+*   **Given** an invalid or missing `?document=` parameter,
+*   **When** the modal attempted to load the content,
+*   **Then** a themed fallback UI (using the dashed border [Concept] style) displays a "Document Not Found" message.
+*   **And** an explicit "Return to Command Center" button allows the user to clear the invalid URL parameter and reset the interface state.
 
 <!-- Epic Definitions End -->

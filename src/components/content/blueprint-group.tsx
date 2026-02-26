@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, FileText, Layers } from "lucide-react";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
-import { ParsedArticle } from "@/lib/content-parser";
+import { ParsedArticle } from "@/lib/schema";
 
 interface BlueprintGroupProps {
     projectSlug: string;
@@ -162,14 +162,14 @@ export function BlueprintGroup({
                                     )}
                                     {doc.domain.length > 0 && (
                                         <div className="flex flex-wrap gap-1 mb-1.5">
-                                            {doc.domain.map((tag) => (
+                                            {doc.domain.map((tag: string) => (
                                                 <FnTag key={tag} label={tag} />
                                             ))}
                                         </div>
                                     )}
                                     {doc.tech_stack.length > 0 && (
                                         <div className="flex flex-wrap gap-1">
-                                            {doc.tech_stack.map((tag) => (
+                                            {doc.tech_stack.map((tag: string) => (
                                                 <TechTag key={tag} label={tag} />
                                             ))}
                                         </div>
@@ -188,7 +188,11 @@ export function BlueprintGroup({
 export function BlueprintErrorRow({ filePath }: { filePath: string }) {
     const name = filePath.split("/").slice(-2, -1)[0] ?? "Unknown";
     return (
-        <div className="rounded-lg border border-dashed border-zinc-200 dark:border-zinc-700 px-4 py-3 mb-4">
+        <div
+            data-testid="doc-fallback"
+            aria-label="doc content unavailable"
+            className="rounded-lg border border-dashed border-zinc-200 dark:border-zinc-700 px-4 py-3 mb-4"
+        >
             <div className="flex items-center gap-1.5">
                 <span className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">{name}</span>
                 <StatusPill status="Concept" />

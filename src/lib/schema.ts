@@ -1,5 +1,26 @@
 import { z } from "zod";
 
+/**
+ * The fully resolved shape for a successfully parsed artifact.
+ * Combines validated frontmatter with rendered HTML content and
+ * structural metadata derived from the directory tree.
+ */
+export type ParsedArticle = FrontmatterData & {
+    /** XSS-sanitized HTML string generated from the Markdown body. */
+    html: string;
+    /** Project slug derived from the directory structure. */
+    projectSlug: string;
+    /** Artifact type derived from the directory structure. */
+    artifactType: ArtifactType;
+    /** Human-readable project title from the project's index.md. */
+    projectTitle?: string;
+    /** The original file path, used for unique React keys. */
+    _filePath: string;
+};
+
+/** Reserved directory for shared agents and cross-project items. */
+export const SHARED_DIR = "_shared";
+
 // =============================================================================
 // Frontmatter Schema
 // Single source of truth for all Markdown content shape across the application.
@@ -47,6 +68,7 @@ export const FrontmatterSchema = z.object({
     artifact_type: z.enum(ARTIFACT_TYPES).optional(),
     external_url: z.string().url("external_url must be a valid URL").optional(),
     github_url: z.string().url("github_url must be a valid URL").optional(),
+    projects: z.array(z.string()).nullish().transform(v => v ?? []),
 });
 
 /** Inferred TypeScript type for valid frontmatter data. */

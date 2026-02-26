@@ -13,6 +13,7 @@ tech_stack:
   - "React"
   - "Supabase"
 description: "A rapid product-building workflow using Lovable to go from prompt to production-ready full-stack applications through structured AI-driven iteration."
+projects:
 ---
 
 # Lovable Agent Workflow

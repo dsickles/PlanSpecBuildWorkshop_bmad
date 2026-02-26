@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Sort Configuration Manifest",
+    "description": "Defines the hierarchical display order for content in the portfolio.",
+    "type": "object",
+    "properties": {
+        "agent_studio": {
+            "type": "array",
+            "description": "Ordered list of agent filename stems (e.g., 'BMadMethod') for the first column.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "projects": {
+            "type": "array",
+            "description": "Global sort order for project slugs. Controls Filter Bar order and Blueprint group stacking.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "build_lab": {
+            "type": "array",
+            "description": "Ordered list of project slugs to sort Prototype cards in the third column.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "blueprints": {
+            "type": "object",
+            "description": "Collection of ordered lists for documents inside each project.",
+            "additionalProperties": {
+                "type": "array",
+                "description": "Ordered list of document filename stems (e.g., 'prd', 'architecture').",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

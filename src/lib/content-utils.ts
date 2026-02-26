@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import path from "path";
-import { ArtifactType } from "./schema";
+import { ArtifactType, SHARED_DIR } from "./schema";
 
 // =============================================================================
 // Content File System Utilities
@@ -46,7 +46,7 @@ export function getProjectSlugs(): string[] {
     try {
         return fs
             .readdirSync(CONTENT_ROOT, { withFileTypes: true })
-            .filter((entry) => entry.isDirectory())
+            .filter((entry) => entry.isDirectory() && entry.name !== SHARED_DIR)
             .map((entry) => entry.name);
     } catch {
         return [];
@@ -66,9 +66,11 @@ export function getProjectSlugs(): string[] {
  */
 export function getContentFilePaths(): ContentFilePath[] {
     const slugs = getProjectSlugs();
+    // Add SHARED_DIR to the list of paths to scan, even though it's not a "project"
+    const allPathsToScan = [...slugs, SHARED_DIR];
     const results: ContentFilePath[] = [];
 
-    for (const projectSlug of slugs) {
+    for (const projectSlug of allPathsToScan) {
         const projectDir = path.join(CONTENT_ROOT, projectSlug);
 
         // Read artifact type subdirectories (agents, docs, prototypes)

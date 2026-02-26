@@ -1,6 +1,5 @@
 import { calculateMetrics, ProjectMetrics } from "../metrics";
-import { ParsedArticle } from "../content-parser";
-import { ParsedContent } from "../schema";
+import { ParsedArticle, ParsedContent } from "../schema";
 
 describe("calculateMetrics", () => {
     const mockContent: Partial<ParsedArticle>[] = [

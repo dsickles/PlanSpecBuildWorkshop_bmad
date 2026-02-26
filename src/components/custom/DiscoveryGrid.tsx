@@ -4,8 +4,7 @@ import { useMemo } from "react";
 import { DashboardGrid } from "@/components/layout/dashboard-grid";
 import { ProjectCard, FallbackCard } from "@/components/content/project-card";
 import { BlueprintGroup, BlueprintErrorRow } from "@/components/content/blueprint-group";
-import { ParsedArticle } from "@/lib/content-parser";
-import { isError, ErrorFrontmatter } from "@/lib/schema";
+import { ParsedArticle, isError, ErrorFrontmatter } from "@/lib/schema";
 import { useFilterState } from "@/hooks/useFilterState";
 
 interface DiscoveryGridProps {
@@ -16,21 +15,27 @@ interface DiscoveryGridProps {
 export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGridProps) {
     const { activeProject, activeDomains, activeTech, setProject } = useFilterState();
 
-    const { agents, docsByProject, prototypes, errors } = useMemo(() => {
+    const memoizedData = useMemo(() => {
         const filtered = allContent.filter((item): item is ParsedArticle => {
             if (isError(item)) return false;
             const article = item as ParsedArticle;
 
-            // Project Filter (Exclusive)
-            if (activeProject && article.projectSlug !== activeProject) {
-                return false;
+            // Project Filter: Non-agents use projectSlug; Agents use projects array
+            if (activeProject) {
+                if (article.artifactType === "agent") {
+                    if (!article.projects?.includes(activeProject)) {
+                        return false;
+                    }
+                } else if (article.projectSlug !== activeProject) {
+                    return false;
+                }
             }
 
             // Domain/Tech Filter (OR logic across both)
             const hasActiveFilters = activeDomains.length > 0 || activeTech.length > 0;
             if (hasActiveFilters) {
-                const matchesDomain = article.domain.some((d: string) => activeDomains.includes(d));
-                const matchesTech = article.tech_stack.some((t: string) => activeTech.includes(t));
+                const matchesDomain = article.domain?.some((d: string) => activeDomains.includes(d)) ?? false;
+                const matchesTech = article.tech_stack?.some((t: string) => activeTech.includes(t)) ?? false;
 
                 if (!matchesDomain && !matchesTech) {
                     return false;
@@ -57,26 +62,33 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
             }
         });
 
-        // Combine server errors with any pass-through errors
+        // Memoize error filtering for performance (NFR2)
         const allErrors = [...serverErrors];
+        const studioErrors = allErrors.filter((e) => e._filePath.toLowerCase().includes('agents'));
+        const docErrors = allErrors.filter((e) => e._filePath.toLowerCase().includes('docs'));
+        const labErrors = allErrors.filter((e) => e._filePath.toLowerCase().includes('prototypes'));
 
-        return { agents, docsByProject, prototypes, errors: allErrors };
+        return { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors };
     }, [allContent, serverErrors, activeProject, activeDomains, activeTech]);
+
+    const { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors } = memoizedData;
 
     return (
         <DashboardGrid
             studioColumn={
                 <>
-                    {agents.length === 0 && !errors.some(e => e._filePath.includes("/agents/")) && (
+                    {agents.length === 0 && studioErrors.length === 0 && (
                         <FallbackCard
+                            context="agent"
                             title="No agents found"
                             description="No agents match the current filters."
                             className="mb-4"
                         />
                     )}
                     {agents.map((agent) => (
-                        <div key={agent.projectSlug + agent.title} className="mb-4">
+                        <div key={agent._filePath} className="mb-4">
                             <ProjectCard
+                                context="agent"
                                 artifactType="agent"
                                 title={agent.title}
                                 status={agent.status}
@@ -86,19 +98,18 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                             />
                         </div>
                     ))}
-                    {errors
-                        .filter((e) => e._filePath.includes('/agents/') || e._filePath.includes('\\agents\\'))
-                        .map((e) => (
-                            <div key={e._filePath} className="mb-4">
-                                <FallbackCard title="Content unavailable" />
-                            </div>
-                        ))}
+                    {studioErrors.map((e) => (
+                        <div key={e._filePath} className="mb-4">
+                            <FallbackCard context="agent" title="Content unavailable" />
+                        </div>
+                    ))}
                 </>
             }
             blueprintsColumn={
                 <>
-                    {docsByProject.size === 0 && !errors.some(e => e._filePath.includes("/docs/")) && (
+                    {docsByProject.size === 0 && docErrors.length === 0 && (
                         <FallbackCard
+                            context="doc"
                             title="No blueprints found"
                             description="No blueprints match the current filters."
                             className="mb-4"
@@ -114,25 +125,25 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                             onLayersClick={() => setProject(slug)}
                         />
                     ))}
-                    {errors
-                        .filter((e) => e._filePath.includes('/docs/') || e._filePath.includes('\\docs\\'))
-                        .map((e) => (
-                            <BlueprintErrorRow key={e._filePath} filePath={e._filePath} />
-                        ))}
+                    {docErrors.map((e) => (
+                        <BlueprintErrorRow key={e._filePath} filePath={e._filePath} />
+                    ))}
                 </>
             }
             labColumn={
                 <>
-                    {prototypes.length === 0 && !errors.some(e => e._filePath.includes("/prototypes/")) && (
+                    {prototypes.length === 0 && labErrors.length === 0 && (
                         <FallbackCard
+                            context="prototype"
                             title="No prototypes found"
                             description="No prototypes match the current filters."
                             className="mb-4"
                         />
                     )}
                     {prototypes.map((proto) => (
-                        <div key={proto.projectSlug + proto.title} className="mb-4">
+                        <div key={proto._filePath} className="mb-4">
                             <ProjectCard
+                                context="prototype"
                                 artifactType="prototype"
                                 title={proto.title}
                                 status={proto.status}
@@ -145,13 +156,11 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                             />
                         </div>
                     ))}
-                    {errors
-                        .filter((e) => e._filePath.includes('/prototypes/') || e._filePath.includes('\\prototypes\\'))
-                        .map((e) => (
-                            <div key={e._filePath} className="mb-4">
-                                <FallbackCard title="Content unavailable" />
-                            </div>
-                        ))}
+                    {labErrors.map((e) => (
+                        <div key={e._filePath} className="mb-4">
+                            <FallbackCard context="prototype" title="Content unavailable" />
+                        </div>
+                    ))}
                 </>
             }
         />

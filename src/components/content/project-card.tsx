@@ -86,15 +86,21 @@ interface ProjectCardRootProps {
     children: React.ReactNode;
     isDashed?: boolean;
     className?: string;
+    "data-testid"?: string;
+    "aria-label"?: string;
 }
 
 function ProjectCardRoot({
     children,
     isDashed = false,
     className = "",
+    "data-testid": testId,
+    "aria-label": ariaLabel,
 }: ProjectCardRootProps) {
     return (
         <div
+            data-testid={testId}
+            aria-label={ariaLabel}
             className={[
                 "rounded-lg border p-4",
                 "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900",
@@ -128,7 +134,7 @@ function ProjectCardHeader({
     title,
     status,
     actions,
-}: Omit<ProjectCardHeaderProps, 'date'> & { date?: string }) {
+}: ProjectCardHeaderProps) {
     return (
         <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex-1 min-w-0">
@@ -252,11 +258,12 @@ function IconButton({
 export interface ProjectCardProps {
     title: string;
     status: string;
-    date?: string;
     description?: string;
     domain?: string[];
     tech_stack?: string[];
     artifactType: ArtifactType;
+    /** Optional context for semantic ARIA labels: 'agent', 'doc', 'prototype' */
+    context?: "agent" | "doc" | "prototype";
     /** For prototype cards: the live launch URL. Maps from FrontmatterData.external_url (snake_case) */
     externalUrl?: string;
     /** For prototype cards: the GitHub repo URL */
@@ -270,24 +277,28 @@ export interface ProjectCardProps {
 export function ProjectCard({
     title,
     status,
-    date,
     description,
     domain,
     tech_stack,
     artifactType,
+    context,
     externalUrl,
     githubUrl,
     onLayersClick,
     onDocOpen,
 }: ProjectCardProps) {
+    const cardContext = context || (artifactType as "agent" | "doc" | "prototype");
+    const testId = `${cardContext}-card`;
+    const ariaLabel = `${title} ${cardContext} card`;
+
     // Concept or Archived prototypes hide the live launch CTA and GitHub link
     const isInactive = status === "Concept" || status === "Archived";
 
     // ---- Agent card — purely informational, no actions ----
     if (artifactType === "agent") {
         return (
-            <ProjectCardRoot>
-                <ProjectCardHeader title={title} status={status} date={date} />
+            <ProjectCardRoot data-testid={testId} aria-label={ariaLabel}>
+                <ProjectCardHeader title={title} status={status} />
                 <ProjectCardBody description={description} />
                 <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
             </ProjectCardRoot>
@@ -319,8 +330,8 @@ export function ProjectCard({
         );
 
         return (
-            <ProjectCardRoot isDashed={isInactive}>
-                <ProjectCardHeader title={title} status={status} date={date} actions={actions} />
+            <ProjectCardRoot isDashed={isInactive} data-testid={testId} aria-label={ariaLabel}>
+                <ProjectCardHeader title={title} status={status} actions={actions} />
                 <ProjectCardBody description={description} />
                 <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
             </ProjectCardRoot>
@@ -330,11 +341,10 @@ export function ProjectCard({
     // Doc card — file icon opens Document Modal (Epic 3)
     // Inline the fragment to avoid passing a truthy empty fragment when both callbacks are absent
     return (
-        <ProjectCardRoot>
+        <ProjectCardRoot data-testid={testId} aria-label={ariaLabel}>
             <ProjectCardHeader
                 title={title}
                 status={status}
-                date={date}
                 actions={
                     (onLayersClick || onDocOpen) ? (
                         <>
@@ -374,15 +384,25 @@ export function FallbackCard({
     title = "Content unavailable",
     description,
     className,
+    context,
     children
 }: {
     title?: string;
     description?: string;
     className?: string;
+    context?: "agent" | "doc" | "prototype";
     children?: React.ReactNode;
 }) {
+    const testId = context ? `${context}-fallback` : "content-fallback";
+    const ariaLabel = context ? `${context} content unavailable` : "content unavailable";
+
     return (
-        <ProjectCardRoot isDashed={true} className={className}>
+        <ProjectCardRoot
+            isDashed={true}
+            className={className}
+            data-testid={testId}
+            aria-label={ariaLabel}
+        >
             <ProjectCardHeader title={title} status="Concept" />
             <ProjectCardBody description={description}>
                 {children}

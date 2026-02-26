@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./sort-config.schema.json
 ## Central Display Ordering Manifest (FR20)
 ## Values are filename stems (without .md extension).
 ## Items not listed here appear after listed items, sorted alphabetically by title.

@@ -250,6 +250,7 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 - **`react-markdown` parse failure:** Same card-level fallback. The Document Modal displays a "This document could not be rendered" message rather than a raw error stack.
 - **Build-time vs Runtime:** During `next build`, Zod validation failures log warnings to the console but do **not** block the build. In `npm run dev`, failures throw errors to surface issues immediately to the author.
 - **Missing content folder:** If a project's `index.md` exists but a content subfolder (e.g., `agents/`) is empty or missing, that column renders the standard empty state pattern (dashed border, `[Concept]` pill) rather than an error.
+- **Semantic Test Tokens:** To ensure dashboard isolation and prevent selector collisions (e.g., "Content unavailable" appearing in multiple columns), all fallback and error rows must implement `data-testid` and context-specific `aria-label` props (e.g., `aria-label="agent content unavailable"`).
 
 ### Enforcement Guidelines
 
@@ -267,38 +268,22 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 **Canonical Frontmatter Schemas (Starting Point):**
 
 ```typescript
-// src/lib/schema.ts — Minimum viable schemas for content validation
+// src/lib/schema.ts — Minimum viable schema for content validation
 
-// Validates /content/[project-slug]/index.md
-const projectSchema = z.object({
+// Single canonical schema ensures consistency across all artifact types.
+const FrontmatterSchema = z.object({
   title: z.string(),
-  description: z.string(),
-  slug: z.string(),
+  description: z.string().optional(),
   status: z.enum(["Live", "WIP", "Concept", "Archived"]),
-  tags: z.object({
-    domain: z.array(z.string()),
-    tech: z.array(z.string()),
-  }),
-});
-
-// Validates all files in _shared/agents/, docs/, prototypes/ folders
-const documentSchema = z.object({
-  title: z.string(),
-  shortDescription: z.string(),
-  status: z.enum(["Live", "WIP", "Concept", "Archived"]),
-  actionType: z.enum(["filter-view", "document-view", "external-link", "none"]),
-  tags: z.object({
-    domain: z.array(z.string()),
-    tech: z.array(z.string()),
-  }),
-  actionUrl: z.string().url().optional(),
-  githubUrl: z.string().url().optional(),
-  publishDate: z.string().optional(),
-  projects: z.array(z.string()).optional(), // project slugs this item is associated with (FR19)
+  domain: z.array(z.string()).nullish().transform(v => v ?? []),
+  tech_stack: z.array(z.string()).nullish().transform(v => v ?? []),
+  parent_project: z.string().optional(),
+  related_docs: z.array(z.string()).optional(),
+  artifact_type: z.enum(["agent", "doc", "prototype"]).optional(),
 });
 ```
 
-> _These schemas are a starting point. Implementation stories may refine or extend them, but all changes must be reflected back in this document. Agent markdown files use `documentSchema` with `actionType` always set to `"none"`. The `order` field has been removed from both schemas — display ordering is controlled exclusively via the central `sort-config.yaml` manifest (FR20)._
+> _This schema is the single source of truth for all content parsing. The `order` field has been removed — display ordering is controlled exclusively via the central `sort-config.yaml` manifest (FR20)._
 
 ## Project Structure & Boundaries
 

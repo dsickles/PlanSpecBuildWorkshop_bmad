@@ -74,6 +74,21 @@ development_status:
   4-3-add-fork-a-workshop-repository-link: done # Cancelled/Deferred in favor of Story 4.2 link for minimalism
   epic-4-retrospective: done
 
-  epic-5: backlog
-  5-1-deploy-to-vercel: backlog
-  epic-5-retrospective: optional
+  epic-5: done
+  5-1-migrate-agent-content-to-shared-directory: done
+  5-2-update-content-parser-for-shared-agents: done
+  5-3-wire-agent-project-filtering-in-discovery-grid: done
+  epic-5-retrospective: done
+
+  epic-6: backlog
+  6-1-create-sort-configuration-manifest: done
+  6-2-implement-sort-manifest-parser: done
+  6-3-deprecate-per-file-order-field: done
+  epic-6-retrospective: done
+
+  epic-7: backlog
+  7-1-url-driven-modal-infrastructure: backlog
+  7-2-focused-markdown-reading-experience: backlog
+  7-3-reading-state-navigation: backlog
+  7-4-error-fallback-states: backlog
+  epic-7-retrospective: optional
