@@ -12,7 +12,6 @@ tech_stack:
   - "Unity / Unreal / Godot"
   - "Sprint Management"
 description: "The high-velocity execution engine for complex projects — integrating Game Design, Architecture, and QA agents into a seamless development lifecycle."
-parent_project: "plan-spec-build-workshop"
 ---
 
 # Get Shit Done (GSD)

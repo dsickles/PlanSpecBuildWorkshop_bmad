@@ -1,0 +1,23 @@
+## Central Display Ordering Manifest (FR20)
+## Values are filename stems (without .md extension).
+## Items not listed here appear after listed items, sorted alphabetically by title.
+
+agent_studio:
+  - BMadMethod
+  - Lovable
+  - SpecKit
+  - GetShitDone
+
+blueprints:
+  plan-spec-build-workshop:
+    - prd
+    - architecture
+    - ux-design-specification
+    - epics
+    - index
+
+build_lab:
+  - plan-spec-build-workshop
+
+projects:
+  - plan-spec-build-workshop

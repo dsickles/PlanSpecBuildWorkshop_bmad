@@ -66,14 +66,14 @@ The core differentiator is the platform's **interlocking 3-column architecture**
 
 ### Journey 3: The Author / Admin (The Content Creator)
 - **Opening Scene:** You have just finished a grueling two-week sprint building a new side project. The code is pushed, and you have a folder full of rich BMAD markdown output files. You want to update your portfolio but are dreading formatting HTML.
-- **Rising Action:** Instead of opening a CMS or writing UI code, you simply copy the markdown files into a new `/_projects/project-x` directory in your portfolio repo. You update a single YAML configuration file to link the new project's metadata and tags.
+- **Rising Action:** Instead of opening a CMS or writing UI code, you simply copy the markdown files into a new `/_projects/project-x` directory in your portfolio repo. If this project used an AI agent already tracked in the shared `_shared/agents/` folder, you add the project slug to that agent's `projects` frontmatter array. If it's a brand-new agent, you drop a new `.md` file into `_shared/agents/`. You update `sort-config.yaml` to set the display order of the new project's documents.
 - **Climax:** You commit and push the folder. You don't write a single line of React or CSS.
 - **Resolution:** Your CI/CD pipeline runs. Within 2 minutes, the live portfolio site automatically parses the new markdown, assigns the correct UI cards based on your thoughtful UX design, and updates the Tri-Modal filtering system. The project is live effortlessly.
 
 ### Journey Requirements Summary
 - **For the Hiring Manager:** Clean, highly scannable UI cards; clear visual distinction between artifacts; extremely fast, interlocking navigation to maintain the "Command Center" feel.
 - **For the Peer PM:** Prominent placement of the "Meta-Blueprint" (Project #1); clear educational copy; a seamless link out to a well-documented GitHub template repository in the "About this Project" page.
-- **For the Author:** A file-system-based CMS driven entirely by Markdown and Frontmatter/YAML configuration; robust markdown parsing with support for tables/code blocks; automated CI/CD deployment.
+- **For the Author:** A file-system-based CMS driven entirely by Markdown and Frontmatter/YAML configuration; robust markdown parsing with support for tables/code blocks; automated CI/CD deployment. Shared Agent Studio items managed in a central folder with project association via frontmatter, and a central sort manifest for controlling display order.
 
 ## Domain-Specific Requirements
 
@@ -144,6 +144,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 
 ### Post-MVP Features
 **Phase 2 (Growth):**
+- **Deployment & Go-Live:** Connect the GitHub repository to Vercel (or equivalent edge host) and trigger a production build. The CI/CD pipeline must correctly execute `npm run build` without failing on Zod or TypeScript errors, deploying the application to a public domain with SSG routing and Markdown parsing working identically to the local environment. (NFR6, NFR7)
 - **Fluid Grid Transitions:** Upgrade the core Phase 1 0ms instant filter transition to a 200ms fluid, spatial CSS animation (The "Command Center Collapse") to elevate the "premium studio" feel.
 - Integration of live, embedded iframes for prototypes (instead of external links)
 - Mobile/tablet responsive layout — the 3-column Command Center must adapt to smaller screens while preserving the mental model of three distinct content lanes (e.g., sticky tab bar for column switching)
@@ -190,6 +191,10 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
+
+### Shared Content & Display Ordering
+- **FR19:** The System must support shared Agent Studio items that can be associated with zero or more projects via a `projects` frontmatter array, without requiring file duplication across project folders. Agents without a `projects` field (or with an empty array) are displayed only in Browse Mode and hidden when a project filter is active. Agents with a `projects` array are displayed when any of their listed projects match the active project filter.
+- **FR20:** The Author can define the display order of Agent Studio cards, Blueprint documents (per project), Build Lab cards, and project filter pills via a central `sort-config.yaml` manifest file. Items not listed in the manifest appear after listed items, sorted alphabetically by title.
 
 ## Non-Functional Requirements
 

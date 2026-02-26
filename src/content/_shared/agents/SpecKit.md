@@ -12,7 +12,6 @@ tech_stack:
   - "Design Thinking"
   - "Strategic Foresight"
 description: "A precision-engineered toolkit for defining, designing, and validating product concepts through structured Design Thinking and Innovation Strategy agents."
-parent_project: "plan-spec-build-workshop"
 ---
 
 # Spec Kit (CIS)

@@ -112,18 +112,55 @@ The application does not use a traditional database. The GitHub repository serve
 - *Benefit:* Ensures that the portfolio markdown is fully portable to other stacks in the future. Total control over mapping plain markdown rules to specific Shadcn UI components.
 - *Affects:* Core data fetching logic for the grid and document display.
 
+### Sort Order Configuration (FR20)
+
+Display ordering across all UI sections is controlled by a central manifest file rather than per-file frontmatter fields. This provides a single location to view and rearrange content ordering without opening multiple markdown files.
+
+**Manifest Location:** `/content/sort-config.yaml`
+
+**Format:**
+
+```yaml
+agent_studio:
+  - BMadMethod        # filename stems (without .md)
+  - Lovable
+  - SpecKit
+  - GetShitDone
+
+blueprints:
+  plan-spec-build-workshop:  # per-project document ordering
+    - prd
+    - architecture
+    - ux-design-specification
+    - epics
+
+build_lab:
+  - plan-spec-build-workshop
+
+projects:              # filter bar pill order and Blueprint group order
+  - plan-spec-build-workshop
+```
+
+**Parsing Rules:**
+- The manifest is read at build time alongside content parsing.
+- Each section's array defines display priority. The first item in the array is displayed first.
+- Identifiers are filename stems (the `.md` filename without the extension).
+- Items not listed in the manifest appear after all listed items, sorted alphabetically by title.
+- If the manifest file is missing or malformed, all items fall back to alphabetical ordering.
+- The `projects` key controls both the order of project pills in the Filter Bar and the order of Blueprint card groups in the Blueprints column.
+
 ### Frontend Architecture
 
 **Global State Management: URL Query Parameters**
 - *Rationale:* The UX Spec requires <100ms filtering (per NFR2) across a 3-column layout. URL query parameters natively align with Next.js App Router capabilities.
 - *Rendering Model:* The Next.js `page.tsx` is a **Server Component** that receives `searchParams` as an async prop — it does NOT use the `useSearchParams` hook. Filter state is read server-side and passed down. **Client Components** (e.g., `FilterBar.tsx`) use the `useSearchParams` hook for interactive filter updates without full page re-renders.
 - *Benefit:* Provides deep-linkable, shareable URLs for specific portfolio states (e.g., `?project=plan-spec-build&domain=Requirements,Design`) without relying on brittle localized React state propagating across complex layouts.
-- *URL Parameters:* `?project=` (project slug), `?domain=` (functional domain filter), `?tech=` (technology stack filter), `?document=` (opens a specific markdown document in the modal viewer). Multi-select filters use **comma-separated values** (e.g., `?domain=Requirements,Design`).
+- *URL Parameters:* `?project=` (project slug), `?domain=` (functional domain filter), `?tech=` (technology stack filter), `?document=` (opens a specific markdown document in the modal viewer — value is the filename stem, e.g., `?document=prd`, scoped to the active `?project=` parameter). Multi-select filters use **comma-separated values** (e.g., `?domain=Requirements,Design`).
 - *Affects:* The 3-Column UI Grid, Filter Bar, and routing layer.
 
 **Local UI State: Card Expand/Collapse (`useState`)**
 - *Rationale:* Blueprint card document rows have expand/collapse toggles and per-card `[Expand All]` / `[Collapse All]` controls. This is ephemeral presentation state that does not need to be deep-linkable or shareable.
-- *Behavior:* When the `?project=` parameter transitions from empty to a specific project (entering Focus Mode), all document rows in that project's Blueprint card auto-expand. When the filter is cleared (returning to Browse Mode), the document rows maintain their current expansion state, allowing the user to preserve their context. Users can manually tidy their view using the per-card [Collapse All] toggle.
+- *Behavior:* When the `?project=` parameter transitions from empty to a specific project (entering Focus Mode), all document rows in that project's Blueprint card auto-expand. When the filter is cleared (returning to Browse Mode), document rows return to their prior collapsed state.
 - *Implementation:* Managed via `useState` or `useReducer` within the Blueprint card component. This is the only exception to the URL-driven state strategy.
 - *Affects:* Blueprint card component only.
 
@@ -163,18 +200,30 @@ All markdown files must use strictly `camelCase` for YAML frontmatter keys (e.g.
 Markdown content is strictly decoupled from the Next.js `src` directory.
 - All content lives in a root `/content/` directory.
 - Projects are organized hierarchically: `/content/[project-slug]/[folder]/document.md`.
+- **Shared content** lives in a reserved `/content/_shared/` directory (see Shared Agent Studio Items below).
 - **Canonical content folder names** (mapping content folder → UI column):
 
   | Content Folder | UI Column | Example |
   |---|---|---|
-  | `agents/` | Agent Studio | `/content/plan-spec-build/agents/bmad-master.md` |
+  | `_shared/agents/` | Agent Studio | `/content/_shared/agents/BMadMethod.md` |
   | `docs/` | Blueprints | `/content/plan-spec-build/docs/prd.md` |
   | `prototypes/` | Build Lab | `/content/plan-spec-build/prototypes/portfolio.md` |
-- A project's UI display metadata is controlled via a `/content/[project-slug]/index.md` file (using the `title` and `order` frontmatter).
+- A project's UI display metadata is controlled via a `/content/[project-slug]/index.md` file (using the `title` frontmatter).
+- Display ordering across all sections is controlled via a central `/content/sort-config.yaml` manifest (see Sort Order Configuration below).
+
+**Shared Agent Studio Items (FR19):**
+Agent Studio content lives in a single shared folder (`/content/_shared/agents/`) rather than per-project `agents/` subfolders. This prevents file duplication when the same agent (e.g., Lovable) is used across multiple projects.
+
+- Each agent `.md` file has an optional `projects` frontmatter array listing the project slugs it is associated with (e.g., `projects: ["plan-spec-build-workshop"]`).
+- **Filtering rules:**
+  - **Browse Mode (no project filter):** All agents display regardless of their `projects` field.
+  - **Focus Mode (project filter active):** Only agents whose `projects` array includes the active project slug are displayed. Agents with no `projects` field or an empty `projects` array are hidden.
+- Domain and Tech Stack filters continue to apply on top of project filtering using the same OR logic as other columns.
+- The `_shared` directory is a reserved prefix. The content parser must exclude it from `getProjectSlugs()` — it is not a project.
 
 **Content Model by Folder:**
-- **`agents/`**: Each `.md` file represents one AI agent card. Uses `documentSchema` with `actionType` always set to `"none"` (agent cards have no interactive actions). Body contains a 2-sentence executive summary.
-- **`docs/`**: Each `.md` file represents one Blueprint document (PRD, Architecture, Decision Matrix, etc.). Uses `documentSchema` with `actionType` set to `"document-view"`. Body contains the full markdown document rendered in the Document Modal.
+- **`_shared/agents/`**: Each `.md` file represents one AI agent card. Uses `documentSchema` with `actionType` always set to `"none"` (agent cards have no interactive actions). Body contains a 2-sentence executive summary. The optional `projects` frontmatter array controls project association.
+- **`docs/`**: Each `.md` file represents one Blueprint document (PRD, Architecture, Decision Matrix, etc.). Uses `documentSchema` with `actionType` set to `"document-view"`. Body contains the full markdown document rendered in the Document Modal. Clicking the document title or the FileText icon opens the Markdown Document Modal by updating the URL to `?project=x&document=y`.
 - **`prototypes/`**: Each `.md` file represents one Build Lab prototype card. Uses `documentSchema` with `actionType` set to `"external-link"` and `actionUrl` pointing to the live deployment. Optional `githubUrl` field for the GitHub icon link. Body is optional (extended description or changelog).
 
 **Component Boundaries:**
@@ -191,7 +240,7 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
 - **Missing Content:** If a requested markdown file does not exist, the Next.js server component must use the native `notFound()` function to gracefully trigger the 404 UI boundary.
 - **Card Actions:** The UI behavior of a document or project card is controlled entirely by the `actionType` frontmatter string (or inferred by its column type / specific icon interactons):
     - `filter-view`: Updates the global URL parameter (e.g., `?project=x`) to filter the entire dashboard view. Triggered by the Project filter pills in the Filter Bar, OR the local 'Layers' icon shortcut on a Blueprint or Prototype Card.
-    - `document-view`: Updates URL parameters (e.g., `?project=x&document=y`) to open the markdown file in a modal overlay (shadcn `Dialog`). Browser back-button navigation closes the document modal and preserves the current filter state.
+    - `document-view`: Updates URL parameters (e.g., `?project=x&document=y`) to open the markdown file in a modal overlay (shadcn `Dialog`). The `?document=` value is the filename stem (e.g., `prd`, `architecture`). Both the document title text link and the FileText icon trigger this action. Closing the modal (via X button, Escape key, overlay click, or browser back button) removes only the `?document=` parameter from the URL, preserving all other filter state (`?project=`, `?domain=`, `?tech=`).
     - `external-link`: Renders a standard `<a target="_blank">` tag using the accompanying `actionUrl` frontmatter string (used by the Prototype Rocket CTA).
     - `none`: The card body is strictly informational and does not trigger routing (e.g., Agent Studio and Prototype card bodies).
 - **Clear Filter Behavior:** When any project is selected (Focus Mode), a `✕ Clear Filter` button appears inline in the Projects filter row (after the last project pill). Clicking it resets the `?project=` URL parameter to its default empty state, returning to Browse Mode. The button is not rendered when "All" is selected or no project filter is active.
@@ -207,7 +256,9 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
 **All AI Agents MUST:**
 - Never modify shadcn primitive components in `/ui/`.
 - Always use `camelCase` for frontmatter schemas.
-- Place all content in the root `/content/` directory following the strict hierarchical path.
+- Place all project content in the root `/content/` directory following the strict hierarchical path.
+- Place all Agent Studio content in `/content/_shared/agents/` — never in per-project `agents/` subfolders.
+- Never use a per-file `order` field to control display ordering — use `sort-config.yaml` exclusively.
 
 **Documentation Enforcement:**
 - A dedicated **`/content/README.md`** (or `README-CONTENT.md` at root) file MUST be created. This file will explicitly document the Content Creator (Product Manager) end-to-end flow, including the folder structure rules, the copy-pasteable YAML frontmatter schema, and the definitions of how `actionType` controls routing behavior. 
@@ -224,14 +275,13 @@ const projectSchema = z.object({
   description: z.string(),
   slug: z.string(),
   status: z.enum(["Live", "WIP", "Concept", "Archived"]),
-  order: z.number(),
   tags: z.object({
     domain: z.array(z.string()),
     tech: z.array(z.string()),
   }),
 });
 
-// Validates all files in agents/, docs/, prototypes/ folders
+// Validates all files in _shared/agents/, docs/, prototypes/ folders
 const documentSchema = z.object({
   title: z.string(),
   shortDescription: z.string(),
@@ -244,11 +294,11 @@ const documentSchema = z.object({
   actionUrl: z.string().url().optional(),
   githubUrl: z.string().url().optional(),
   publishDate: z.string().optional(),
-  order: z.number().optional(),
+  projects: z.array(z.string()).optional(), // project slugs this item is associated with (FR19)
 });
 ```
 
-> _These schemas are a starting point. Implementation stories may refine or extend them, but all changes must be reflected back in this document. Agent markdown files use `documentSchema` with `actionType` always set to `"none"`._
+> _These schemas are a starting point. Implementation stories may refine or extend them, but all changes must be reflected back in this document. Agent markdown files use `documentSchema` with `actionType` always set to `"none"`. The `order` field has been removed from both schemas — display ordering is controlled exclusively via the central `sort-config.yaml` manifest (FR20)._
 
 ## Project Structure & Boundaries
 
@@ -258,9 +308,12 @@ const documentSchema = z.object({
 plan-spec-build-portfolio/
 ├── content/                     # 🔴 CONTENT BOUNDARY (Markdown Only)
 │   ├── README-CONTENT.md        # The E2E PM guide + Frontmatter schemas
+│   ├── sort-config.yaml         # Central display ordering manifest (FR20)
+│   ├── _shared/                 # 🟡 SHARED CONTENT (not a project)
+│   │   └── agents/              # → Agent Studio column (all agents live here)
+│   │       └── [agent].md       # Optional `projects` frontmatter for association
 │   └── [project-slug]/          # e.g., plan-spec-build/
 │       ├── index.md             # UI Display Metadata
-│       ├── agents/              # → Agent Studio column
 │       ├── docs/                # → Blueprints column
 │       │   └── [document].md    # Target markdown file
 │       └── prototypes/          # → Build Lab column
@@ -278,7 +331,8 @@ plan-spec-build-portfolio/
 │   │       ├── UniversalCompoundCard.tsx
 │   │       ├── DashboardGrid.tsx
 │   │       ├── AboutModal.tsx
-│   │       └── MarkdownRenderer.tsx
+│   │       ├── MarkdownRenderer.tsx
+│   │       └── MarkdownDocumentModal.tsx
 │   └── lib/                     # Utilities & Parsers
 │       ├── parser.ts            # Parses /content/ using gray-matter
 │       ├── schema.ts            # Zod validation for Frontmatter

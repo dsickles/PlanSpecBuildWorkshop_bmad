@@ -50,6 +50,8 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 - **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
+- **FR19:** The System must support shared Agent Studio items associated with zero or more projects via a `projects` frontmatter array, without file duplication. Agents without a `projects` field are hidden when a project filter is active.
+- **FR20:** The Author can define display order of Agent Studio cards, Blueprint documents, Build Lab cards, and project filter pills via a central `sort-config.yaml` manifest.
 
 ### NonFunctional Requirements
 
@@ -72,7 +74,7 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 
 #### Structural Integrity Constraints
 
-- **Directory Boundaries:** Markdown parsed exclusively from root `/content/` utilizing `<project>/agents|docs|prototypes` folders with `index.md`. No logic inside content.
+- **Directory Boundaries:** Markdown parsed from root `/content/` utilizing `<project>/docs|prototypes` folders and `_shared/agents/` for shared Agent Studio items. No logic inside content.
 - **Architecture Validation:** Strict reliance on Zod validation for Frontmatter fields defined in `schema.ts`.
 - **Missing Content Fallbacks:** Next.js `notFound()` boundaries and Zod partial failures map to customized `[Error]` fallback states instead of 500 crashes. Empty rows use standard `[Concept]` dashed borders instead of generic copy.
 
@@ -107,6 +109,8 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 - **FR16:** Epic 1 - Meta-Blueprint is hardcoded or prioritized as the first selectable project.
 - **FR17:** Epic 2 - All content is visible without authentication blocks.
 - **FR18:** (Deferred) - Usage telemetry (analytics) deferred to Phase 2.
+- **FR19:** Epic 5 - Shared Agent Studio items with project association via frontmatter.
+- **FR20:** Epic 6 - Central sort-config.yaml manifest for display ordering.
 
 ## Epic List
 
@@ -115,7 +119,8 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 *   **Epic 2:** The "Command Center" Grid & Core Navigation
 *   **Epic 3:** Tri-Modal Discovery & Instant Filtering
 *   **Epic 4:** Deep Linking, Education, & Open Sourcing
-*   **Epic 5:** Deployment & Go-Live
+*   **Epic 5:** Shared Agent Studio Items
+*   **Epic 6:** Central Sort Order Manifest
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -264,6 +269,21 @@ So that I am not confused by jarring blank spaces in the structural grid.
 *   **When** the `DashboardGrid` attempts to render that column,
 *   **Then** a styled fallback component matching the `[Concept]` status (dashed border) is rendered in that specific slot to maintain the structural rhythm of the page, rather than collapsing the grid or showing unstyled text.
 
+### Story 2.5: Wire Blueprint Document Viewer Modal
+As a User,
+I want to click a Blueprint document title or its file icon to open the full markdown content in a focused reading modal,
+So that I can deep-dive into technical documentation without leaving the Command Center context.
+
+**Acceptance Criteria:**
+*   **Given** a Blueprint document row in the Blueprints column,
+*   **When** the user clicks the document title text link OR the FileText icon button,
+*   **Then** the URL updates to include `?document=<filename-stem>` (e.g., `?document=prd`) alongside the existing `?project=` parameter.
+*   **And** a `MarkdownDocumentModal` (shadcn `Dialog`) opens, rendering the full markdown body from the already-parsed `ParsedArticle.html` using the `MarkdownRenderer` component.
+*   **And** the chevron icon on the document row continues to toggle only the expand/collapse of that row's metadata — it does NOT open the modal.
+*   **And** closing the modal (via X button, Escape key, overlay backdrop click, or browser back button) removes only the `?document=` parameter from the URL, preserving all other filter state (`?project=`, `?domain=`, `?tech=`).
+*   **And** after closing the modal, the user remains in exactly the same filter/focus state they were in before opening the document.
+*   **And** if the requested document cannot be found or rendered, the modal displays a "This document could not be rendered" fallback message.
+
 ## Epic 3: Tri-Modal Discovery & Instant Filtering
 Users can instantly drill down into specific contexts using the Project, Domain, and Tech Stack filters, experiencing the premium, client-side re-rendering (<100ms) without page reloads.  
 *(Constraint: Implementation must rely strictly on Next.js `searchParams` and shallow routing to guarantee sub-100ms filter state changes without DOM thrashing or heavy React Context).*
@@ -353,20 +373,86 @@ So that I can quickly fork the project to start building my own portfolio.
 *   **Then** a designated GitHub/Open Source icon is visible in the utility navigation area.
 *   **And** clicking the link explicitly opens the project's source GitHub repository in a new tab (`target="_blank"`).
 
-## Epic 5: Deployment & Go-Live
-The User has successfully tested the application locally and is now ready to deploy it to the public internet using a static edge host.
-**FRs covered:** None (Infrastructure/NFR6, NFR7)
+## Epic 5: Shared Agent Studio Items
+Agent Studio content is decoupled from per-project folders and stored in a single shared location (`_shared/agents/`), enabling agents to be associated with multiple projects without file duplication. The content parser and filtering logic are updated to support the new `projects` frontmatter field.
+**FRs covered:** FR19
 
-### Story 5.1: Deploy to Vercel
-As a Developer,
-I want to connect the GitHub repository to Vercel and trigger a production build,
-So that the Next.js application is publicly accessible and automatically deploys on future Git pushes.
+### Story 5.1: Migrate Agent Content to Shared Directory
+As a Content Author,
+I want all Agent Studio markdown files to live in a single `_shared/agents/` directory,
+So that agents used across multiple projects are not duplicated in each project's folder.
 
 **Acceptance Criteria:**
-*   **Given** a complete, locally tested Next.js application (Epics 0-4),
-*   **When** connecting the repository to Vercel,
-*   **Then** the Vercel CI/CD pipeline correctly executes `npm run build` without failing on Zod or TypeScript errors.
-*   **And** the application is successfully deployed to a public `.vercel.app` domain (or custom domain).
-*   **And** navigating to the deployed URL proves that the SSG routing and Markdown parsing work on the edge network identically to the local environment.
+*   **Given** the content directory structure,
+*   **When** organizing Agent Studio content,
+*   **Then** all agent `.md` files exist in `/content/_shared/agents/` and per-project `agents/` subfolders are removed.
+*   **And** agents that are associated with specific projects have a `projects` frontmatter array listing the relevant project slugs (e.g., `projects: ["plan-spec-build-workshop"]`).
+*   **And** agents that are not associated with any specific project omit the `projects` field or have an empty array.
+
+### Story 5.2: Update Content Parser for Shared Agents
+As a Developer,
+I want the file system parser to discover agent files from `_shared/agents/` instead of per-project `agents/` folders,
+So that the ingestion pipeline correctly loads shared agents alongside project-specific content.
+
+**Acceptance Criteria:**
+*   **Given** the content parser utilities,
+*   **When** scanning the content directory,
+*   **Then** `getProjectSlugs()` excludes `_shared` from the list of project slugs (it is not a project).
+*   **And** `getContentFilePaths()` additionally scans `_shared/agents/` and returns those files with `artifactType: "agent"` and a synthetic `projectSlug` of `"_shared"`.
+*   **And** the Zod schema includes an optional `projects: z.array(z.string()).optional()` field.
+
+### Story 5.3: Wire Agent Project Filtering in Discovery Grid
+As a User,
+I want Agent Studio to show only relevant agents when I filter by a specific project,
+So that unrelated tools are hidden in Focus Mode and I see a clean, project-scoped view.
+
+**Acceptance Criteria:**
+*   **Given** the DiscoveryGrid filtering logic,
+*   **When** no project filter is active (Browse Mode),
+*   **Then** all agents display regardless of their `projects` field.
+*   **And** when a project filter is active (Focus Mode), only agents whose `projects` array includes the active project slug are displayed.
+*   **And** agents with no `projects` field or an empty `projects` array are hidden in Focus Mode.
+*   **And** Domain/Tech Stack filtering continues to apply on top of project filtering using the existing OR logic.
+
+## Epic 6: Central Sort Order Manifest
+Display ordering across all UI sections (Agent Studio, Blueprints, Build Lab, project filter pills) is controlled by a central `sort-config.yaml` manifest file, replacing implicit or per-file ordering. The existing `order` frontmatter field is deprecated and removed.
+**FRs covered:** FR20
+
+### Story 6.1: Create Sort Configuration Manifest
+As a Content Author,
+I want a single YAML file that defines the display order for all content sections,
+So that I can control presentation ordering from one place without editing multiple markdown files.
+
+**Acceptance Criteria:**
+*   **Given** the content directory,
+*   **When** a `sort-config.yaml` file exists at `/content/sort-config.yaml`,
+*   **Then** it defines ordering arrays for `agent_studio`, `blueprints` (per project), `build_lab`, and `projects`.
+*   **And** values in the arrays are filename stems (without `.md`).
+*   **And** the initial manifest includes all current content files in the desired display order.
+
+### Story 6.2: Implement Sort Manifest Parser
+As a Developer,
+I want the content parser to read `sort-config.yaml` and apply its ordering to all parsed content arrays,
+So that the UI displays items in the author-defined order.
+
+**Acceptance Criteria:**
+*   **Given** parsed content arrays from the ingestion engine,
+*   **When** sort-config.yaml exists and is valid YAML,
+*   **Then** items are sorted according to their position in the manifest arrays. Items listed first in the manifest appear first in the UI.
+*   **And** items not listed in the manifest appear after all listed items, sorted alphabetically by title.
+*   **And** the `projects` key in the manifest controls both filter bar pill order and Blueprint group order.
+*   **And** if the manifest is missing or malformed, all items fall back to alphabetical ordering by title.
+
+### Story 6.3: Deprecate Per-File Order Field
+As a Developer,
+I want the `order` frontmatter field removed from the Zod schema and all content files,
+So that there is a single, unambiguous mechanism for controlling display order.
+
+**Acceptance Criteria:**
+*   **Given** the Zod schema in `schema.ts`,
+*   **When** the deprecation is complete,
+*   **Then** the `order` field is removed from both `projectSchema` and `documentSchema`.
+*   **And** no content `.md` files reference an `order` frontmatter field.
+*   **And** the Architecture document reflects that `sort-config.yaml` is the exclusive ordering mechanism.
 
 <!-- Epic Definitions End -->

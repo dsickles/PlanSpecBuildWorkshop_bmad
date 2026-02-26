@@ -12,7 +12,8 @@ tech_stack:
   - "Markdown"
   - "YAML"
 description: "The full BMAD AI Agent Suite — Analyst, PM, Architect, Dev, QA, Scrum Master, and UX Designer agents used to plan, spec, and build this portfolio from scratch."
-parent_project: "plan-spec-build-workshop"
+projects:
+  - "plan-spec-build-workshop"
 ---
 
 # BMAD AI Agent Suite
