@@ -18,6 +18,7 @@ import {
 } from "./schema";
 import { getContentFilePaths, CONTENT_ROOT } from "./content-utils";
 import { loadSortConfig, applySortOrder } from "./sort-utils";
+import { extractToc, injectHeadingIds } from "./toc-engine";
 
 // =============================================================================
 // Content Parser — Metadata Ingestion Engine
@@ -104,6 +105,8 @@ export async function parseMarkdownFile(
 
     // Step 6: Convert Markdown body → XSS-safe HTML
     let html: string;
+    const toc = extractToc(content);
+
     try {
         const vfile = await unified()
             .use(remarkParse)
@@ -113,6 +116,9 @@ export async function parseMarkdownFile(
             .use(rehypeStringify)
             .process(content);
         html = String(vfile);
+
+        // Step 7: Inject IDs into headers for anchor linking
+        html = injectHeadingIds(html, toc);
     } catch (err) {
         return buildError(filePath, `Markdown rendering failed: ${String(err)}`);
     }
@@ -120,6 +126,7 @@ export async function parseMarkdownFile(
     return {
         ...result.data,
         html,
+        toc,
         projectSlug,
         artifactType,
         projectTitle,

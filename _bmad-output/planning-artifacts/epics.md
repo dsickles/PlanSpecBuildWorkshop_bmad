@@ -429,7 +429,7 @@ So that there is a single, unambiguous mechanism for controlling display order.
 *   **And** the Architecture document reflects that `sort-config.yaml` is the exclusive ordering mechanism.
 
 ## Epic 7: Deep Document Discovery
-Users can deep-dive into technical documentation (~350 lines) via a premium, URL-driven modal experience that maintains the "Command Center" context through glassmorphism and sticky navigation.
+Users can deep-dive into technical documentation (~350 lines) via a premium, URL-driven modal experience that maintains the "Command Center" context through glassmorphism and sticky navigation. **Implementation utilizes the `@tailwindcss/typography` plugin with bespoke configurations to ensure high-fidelity rendering of GitHub-flavored markdown.**
 **FRs covered:** FR5, FR12
 
 ### Story 7.1: URL-Driven Modal Infrastructure
@@ -478,5 +478,51 @@ So that I understand why content is missing without experiencing a broken interf
 *   **When** the modal attempted to load the content,
 *   **Then** a themed fallback UI (using the dashed border [Concept] style) displays a "Document Not Found" message.
 *   **And** an explicit "Return to Command Center" button allows the user to clear the invalid URL parameter and reset the interface state.
+
+### Story 7.5: Modal Shell & Reading Rhythm
+As a User,
+I want a document modal that provides immediate project context, clear navigation paths, and a comfortable reading rhythm,
+So that I can consume long-form technical content without visual fatigue or losing my place.
+
+**Acceptance Criteria:**
+*   **Given** the Markdown Document Modal is open,
+*   **When** viewing the header,
+*   **Then** a "Sector Breadcrumb" ({PROJECT_TITLE}`) is displayed above the document title.
+*   **And** the close 'X' is replaced with a localized, ghost-variant "Back" button to reinforce the navigation flow.
+*   **And** a thin horizontal **Reading Progress Bar** is docked at the bottom of the sticky header.
+*   **And** typography spacing utilizes generous vertical rhythm (`prose-p:mb-10`, `prose-headings:mt-16`) and comfortable line-height (`prose-p:leading-loose`).
+
+### Story 7.6: Floating Table of Contents
+As a User,
+I want an interactive Table of Contents for long documents,
+So that I can quickly understand the document's structure and jump to relevant sections.
+
+**Acceptance Criteria:**
+*   **Given** a document with multiple H2 and H3 headers,
+*   **When** the modal is open on desktop,
+*   **Then** an interactive Table of Contents (ToC) side-rail is displayed.
+*   **And** clicking a ToC entry scrolls the document to the corresponding section.
+*   **And** the ToC extraction logic must sit within the content parsing layer (`src/lib/`) to maintain architectural boundaries.
+
+### Story 7.7: Adaptive TOC Interaction
+As a User,
+I want the Table of Contents sidebar to adjust its position and internal scroll state as I navigate,
+So that I can maintain my reading rhythm and stay vertically centered within the document structure.
+
+**Acceptance Criteria:**
+*   **Given** the document modal is open,
+*   **When** scrolling through the content,
+*   **Then** the Table of Contents side-rail offset remains visible just below the persistent sticky header, preventing overlap.
+*   **And** the TOC sidebar automatically scrolls to keep the currently active heading entry vertically centered and visible (Active Item Centering).
+
+### Story 7.8: Refining Reading Rhythm & Focus
+As a User,
+I want the focus to be correctly restored after closing the modal and the document to be perfectly aligned with the sticky header,
+so that my reading experience remains stable and authoritative without technical "jitter".
+
+**Acceptance Criteria:**
+*   **Declarative Focus Restoration**: Closing the modal (via any method) must restore focus to the trigger icon in the grid using a declarative approach (e.g., Radix `onCloseAutoFocus`).
+*   **Stable Document Anchoring**: Clicking a Table of Contents link must land the document exactly at the header, respecting the `scroll-padding-top` and `headerHeight`.
+*   **Clean Technical Debt**: Remove any manual focus hacks (like redundant refs) or measurement logic that is no longer required by the refined implementation.
 
 <!-- Epic Definitions End -->

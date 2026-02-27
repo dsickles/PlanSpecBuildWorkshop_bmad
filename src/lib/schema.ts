@@ -8,6 +8,8 @@ import { z } from "zod";
 export type ParsedArticle = FrontmatterData & {
     /** XSS-sanitized HTML string generated from the Markdown body. */
     html: string;
+    /** Table of Contents extracted from the document headings. */
+    toc: { level: number; text: string; slug: string }[];
     /** Project slug derived from the directory structure. */
     projectSlug: string;
     /** Artifact type derived from the directory structure. */

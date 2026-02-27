@@ -107,9 +107,10 @@ Next.js local dev server (`npm run dev`) with Fast Refresh.
 
 The application does not use a traditional database. The GitHub repository serves as the single source of truth.
 
-**Markdown Ingestion Strategy: Custom Parser (`gray-matter` + `react-markdown`)**
+**Markdown Ingestion Strategy: Custom Parser (`gray-matter` + `unified` pipeline)**
 - *Rationale:* Keeps source markdown files completely pure/agnostic (no React code inside the `.md` files).
 - *Benefit:* Ensures that the portfolio markdown is fully portable to other stacks in the future. Total control over mapping plain markdown rules to specific Shadcn UI components.
+- *Implementation:* Uses `remark` and `rehype` for parsing, with `@tailwindcss/typography` for visual rendering.
 - *Affects:* Core data fetching logic for the grid and document display.
 
 ### Sort Order Configuration (FR20)
@@ -180,7 +181,7 @@ projects:              # filter bar pill order and Blueprint group order
 4. Implement the root layout using URL `searchParams` (server prop) and `FilterBar` (client component) to control the display grid.
 
 **Cross-Component Dependencies:**
-The choice of `react-markdown` necessitates creating a strict mapping dictionary that ties standard HTML tags to our stylized Next.js components (e.g., intercepting a standard `<a>` tag and replacing it with a Next.js `<Link>`).
+The choice of a standard HTML pipeline (`unified`) combined with `@tailwindcss/typography` necessitates creating a strict mapping dictionary or bespoke CSS overrides to tie standard HTML tags to our stylized Next.js components.
 
 ## Implementation Patterns & Consistency Rules
 
@@ -233,6 +234,7 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 - **Markdown Mapping Boundary:** A dedicated `MarkdownRenderer.tsx` wrapper must exist in `/src/components/custom/`. This acts as the *exclusive* dictionary mapping raw markdown syntax to styled shadcn primitives (e.g., converting `<a>` to `<Link>`).
 - **About Modal Boundary:** `AboutModal.tsx` renders structured content (portfolio metrics, "Fork a Workshop" CTA) rather than parsed markdown. Portfolio metrics (project count, document count, status distributions) are computed at build time from the parsed content data in `/content/`.
 - **Dashboard Grid Boundary:** `DashboardGrid.tsx` is the three-column CSS Grid layout wrapper. It receives filtered content arrays and maps them to the Agent Studio, Blueprints, and Build Lab columns. It handles column-level empty states (dashed borders, `[Concept]` pills) and delegates card rendering to `UniversalCompoundCard`.
+- **ToC Engine Boundary:** Any logic for structural document parsing (header extraction for Table of Contents) must sit within `src/lib/` (e.g., `src/lib/toc-engine.ts`). This preserves the **Content Boundary** by keeping parsing logic decoupled from React rendering components.
 
 ### Process Patterns
 
@@ -240,7 +242,7 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 - **Missing Content:** If a requested markdown file does not exist, the Next.js server component must use the native `notFound()` function to gracefully trigger the 404 UI boundary.
 - **Card Actions:** The UI behavior of a document or project card is controlled entirely by the `actionType` frontmatter string (or inferred by its column type / specific icon interactons):
     - `filter-view`: Updates the global URL parameter (e.g., `?project=x`) to filter the entire dashboard view. Triggered by the Project filter pills in the Filter Bar, OR the local 'Layers' icon shortcut on a Blueprint or Prototype Card.
-    - `document-view`: Updates URL parameters (e.g., `?project=x&document=y`) to open the markdown file in a modal overlay (shadcn `Dialog`). The `?document=` value is the filename stem (e.g., `prd`, `architecture`). Both the document title text link and the FileText icon trigger this action. Closing the modal (via X button, Escape key, overlay click, or browser back button) removes only the `?document=` parameter from the URL, preserving all other filter state (`?project=`, `?domain=`, `?tech=`).
+    - `document-view`: Updates URL parameters (e.g., `?project=x&document=y`) to open the markdown file in a modal overlay (shadcn `Dialog`). The `?document=` value is the filename stem (e.g., `prd`, `architecture`). Both the document title text link and the FileText icon trigger this action. The header remains persistent in size to ensure stable navigation. Closing the modal (via **Back** button, Escape key, overlay click, or browser back button) removes only the `?document=` parameter from the URL, preserving all other filter state (`?project=`, `?domain=`, `?tech=`). **Focus is restored declaratively to the triggering element in the grid upon dismissal using Radix's `onCloseAutoFocus` primitive.**
     - `external-link`: Renders a standard `<a target="_blank">` tag using the accompanying `actionUrl` frontmatter string (used by the Prototype Rocket CTA).
     - `none`: The card body is strictly informational and does not trigger routing (e.g., Agent Studio and Prototype card bodies).
 - **Clear Filter Behavior:** When any project is selected (Focus Mode), a `✕ Clear Filter` button appears inline in the Projects filter row (after the last project pill). Clicking it resets the `?project=` URL parameter to its default empty state, returning to Browse Mode. The button is not rendered when "All" is selected or no project filter is active.

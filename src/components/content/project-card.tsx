@@ -220,11 +220,13 @@ function IconButton({
     label,
     onClick,
     href,
+    id,
 }: {
     icon: React.ElementType;
     label: string;
     onClick?: () => void;
     href?: string;
+    id?: string;
 }) {
     const cls =
         "flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400";
@@ -244,7 +246,7 @@ function IconButton({
     }
 
     return (
-        <button onClick={onClick} aria-label={label} className={cls}>
+        <button id={id} onClick={onClick} aria-label={label} className={cls}>
             <Icon size={14} />
         </button>
     );
@@ -352,7 +354,12 @@ export function ProjectCard({
                                 <IconButton icon={Layers} label="Focus on this project" onClick={onLayersClick} />
                             )}
                             {onDocOpen && (
-                                <IconButton icon={FileText} label="View document" onClick={onDocOpen} />
+                                <IconButton
+                                    id={`doc-trigger-${cardContext}-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                                    icon={FileText}
+                                    label="View document"
+                                    onClick={onDocOpen}
+                                />
                             )}
                         </>
                     ) : undefined

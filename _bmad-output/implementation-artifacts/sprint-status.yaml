@@ -86,9 +86,13 @@ development_status:
   6-3-deprecate-per-file-order-field: done
   epic-6-retrospective: done
 
-  epic-7: in-progress
+  epic-7: done
   7-1-url-driven-modal-infrastructure: done
   7-2-focused-markdown-reading-experience: done
   7-3-reading-state-navigation: done
   7-4-error-fallback-states: done
-  epic-7-retrospective: optional
+  7-5-modal-shell-reading-rhythm: done
+  7-6-floating-table-of-contents: done
+  7-7-adaptive-toc-interaction: done
+  7-8-refining-reading-rhythm-focus: done
+  epic-7-retrospective: done

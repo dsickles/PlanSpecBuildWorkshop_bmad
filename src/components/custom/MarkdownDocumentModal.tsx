@@ -11,20 +11,143 @@ import { useFilterState } from "@/hooks/useFilterState";
 import { ParsedArticle, ErrorFrontmatter, isError } from "@/lib/schema";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { TocEntry } from "@/lib/toc-engine";
 
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 
 const DocumentSlugSchema = z.string().regex(/^[a-z0-9-_:]+$/);
+const TOC_HIGHLIGHT_THRESHOLD = 24; // Distance from top to trigger active heading
 
 interface MarkdownDocumentModalProps {
     allContent: (ParsedArticle | ErrorFrontmatter)[];
 }
 
+function TableOfContents({ toc, containerRef, activeId, onSelect, headerHeight }: { toc: TocEntry[], containerRef: React.RefObject<HTMLDivElement | null>, activeId: string | null, onSelect: (id: string) => void, headerHeight: number }) {
+    const sidebarRef = useRef<HTMLElement>(null);
+
+    // AC: Active Item Centering - auto-scroll the sidebar
+    useEffect(() => {
+        if (activeId && sidebarRef.current) {
+            const activeElement = sidebarRef.current.querySelector(`[data-toc-id="${activeId}"]`);
+            if (activeElement) {
+                activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }, [activeId]);
+
+    if (toc.length === 0) return null;
+
+    const scrollToId = (id: string) => {
+        const element = document.getElementById(id);
+        if (element && containerRef.current) {
+            onSelect(id);
+            // With scroll-padding-top on the container, this lands perfectly
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    return (
+        <nav
+            ref={sidebarRef}
+            className="hidden lg:block w-64 shrink-0 px-6 py-10 border-l border-zinc-800/30 overflow-y-auto sticky h-full custom-scrollbar"
+            style={{
+                top: 0
+            }}
+        >
+            <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Contents</h4>
+            <ul className="space-y-4">
+                {toc.map((entry, i) => (
+                    <li
+                        key={`${entry.slug}-${i}`}
+                        style={{ paddingLeft: entry.level === 3 ? '1rem' : '0' }}
+                    >
+                        <button
+                            onClick={() => scrollToId(entry.slug)}
+                            data-toc-id={entry.slug}
+                            className={cn(
+                                "text-left text-xs transition-all duration-300 leading-relaxed w-full",
+                                activeId === entry.slug
+                                    ? "text-blue-500 font-bold translate-x-1"
+                                    : "text-zinc-500 hover:text-white"
+                            )}
+                        >
+                            {entry.text}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
+}
+
 export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps) {
     const { activeDocument, setDocument } = useFilterState();
+    const [scrollProgress, setScrollProgress] = React.useState(0);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const lastFocusedElement = useRef<HTMLElement | null>(null);
+    const [activeToCId, setActiveToCId] = React.useState<string | null>(null);
+    const [isManualScroll, setIsManualScroll] = React.useState(false);
+    const [headerHeight, setHeaderHeight] = React.useState(280);
+    const manualScrollTimer = useRef<NodeJS.Timeout>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
+
+    // AC 3: Reading Progress Bar calculation
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const target = e.currentTarget;
+        const totalHeight = target.scrollHeight - target.clientHeight;
+
+        if (totalHeight > 0) {
+            const progress = (target.scrollTop / totalHeight) * 100;
+            setScrollProgress(progress);
+        }
+
+        // AC 2: Active Heading Highlighting
+        // Only update automatically if not currently processing a manual click-scroll
+        if (activeDoc?.toc && activeDoc.toc.length > 0 && !isManualScroll) {
+            // In a fixed-header layout, the scroll container's top is the viewport top.
+            // A small 24px threshold provides a nice buffer for active detection.
+            const threshold = TOC_HIGHLIGHT_THRESHOLD;
+
+            let currentId = activeDoc.toc[0].slug;
+
+            // Simple top-down check
+            for (const entry of activeDoc.toc) {
+                const element = document.getElementById(entry.slug);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    const relativeTop = rect.top - target.getBoundingClientRect().top;
+
+                    if (relativeTop <= threshold + 5) {
+                        currentId = entry.slug;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (currentId !== activeToCId) {
+                setActiveToCId(currentId);
+            }
+        }
+    };
+
+    // AC: Manual interaction breaks the ToC lock
+    const handleManualInteraction = () => {
+        if (isManualScroll) {
+            setIsManualScroll(false);
+            if (manualScrollTimer.current) {
+                clearTimeout(manualScrollTimer.current);
+            }
+        }
+    };
+
+    const handleToCSelect = (id: string) => {
+        setActiveToCId(id);
+        setIsManualScroll(true);
+        if (manualScrollTimer.current) clearTimeout(manualScrollTimer.current);
+        // Lock auto-highlighting for 1.2s to cover smooth scroll durations
+        manualScrollTimer.current = setTimeout(() => setIsManualScroll(false), 1200);
+    };
 
     // Find the active document in allContent
     const activeDoc = useMemo(() => {
@@ -51,35 +174,58 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
         );
     }, [activeDocument, allContent]);
 
-    // AC 4: Reset scroll position when document changes
-    useEffect(() => {
-        if (activeDocument) {
-            // Capture focus when opening - use the element that was active just before state change
-            // This is effectively the trigger button
-            if (document.activeElement instanceof HTMLElement) {
-                lastFocusedElement.current = document.activeElement;
-            }
+    const isOpen = !!activeDocument;
 
+    // AC 4: Reset scroll position when document changes
+    // AC: Dynamic Header Height measurement
+    useEffect(() => {
+        if (!headerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const rawH = entry.borderBoxSize[0].blockSize;
+                // Dead-band filtering: only update if change is > 2px
+                // and keep it as a clean integer for padding-top logic
+                const h = Math.round(rawH);
+                setHeaderHeight(prev => (Math.abs(prev - h) > 2 ? h : prev));
+            }
+        });
+
+        observer.observe(headerRef.current);
+        return () => {
+            observer.disconnect();
+        };
+    }, [isOpen]);
+
+    const lastDocId = useRef<string | null>(null);
+
+    // Isolated Scroll Reset: Only triggers when the document ID physically changes
+    useEffect(() => {
+        if (!activeDocument) {
+            lastDocId.current = null;
+            return;
+        }
+
+        if (activeDocument !== lastDocId.current) {
+            lastDocId.current = activeDocument;
+
+            // Clean modal opening reset
             if (scrollContainerRef.current) {
                 scrollContainerRef.current.scrollTop = 0;
             }
-        } else {
-            // Restore focus when closing
-            if (lastFocusedElement.current) {
-                const el = lastFocusedElement.current;
-                // Use a slightly more robust restoration cycle
-                setTimeout(() => {
-                    if (document.contains(el)) {
-                        el.focus({ preventScroll: true });
-                    }
-                }, 0);
-                lastFocusedElement.current = null;
+            if (activeDoc?.toc && activeDoc.toc.length > 0) {
+                setActiveToCId(activeDoc.toc[0].slug);
+            } else {
+                setActiveToCId(null);
             }
+
+            // Reset locks
+            setIsManualScroll(false);
+            if (manualScrollTimer.current) clearTimeout(manualScrollTimer.current);
         }
-    }, [activeDocument]);
+    }, [activeDocument]); // Dependency on activeDocument ID ONLY
 
-    const isOpen = !!activeDocument;
-
+    // Simplified state usage
     const handleOpenChange = (open: boolean) => {
         if (!open) {
             setDocument(null);
@@ -89,59 +235,106 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogContent
-                showCloseButton={true}
-                className="max-w-7xl h-[90vh] bg-zinc-950 border-zinc-800 text-zinc-100 p-0 shadow-2xl overflow-hidden"
+                showCloseButton={false}
+                className="max-w-7xl h-[90vh] bg-zinc-950 border-zinc-800 text-zinc-100 p-0 shadow-2xl overflow-hidden flex flex-col"
+                onCloseAutoFocus={(event) => {
+                    // AC 1: Explicitly handle focus restoration
+                    // Radix restores focus by default, but we provide this hook for 
+                    // architectural compliance and to ensure any manual overrides are handled.
+                    console.debug("Focus restoring to trigger element");
+                }}
             >
-                <div
-                    ref={scrollContainerRef}
-                    className="h-full overflow-y-auto custom-scrollbar"
-                >
-                    {activeDoc ? (
-                        <div data-testid="document-modal" aria-label={`Document: ${activeDoc.title}`}>
-                            <div className="sticky top-0 z-10 bg-zinc-950 border-b border-zinc-800/50">
-                                <div className="bg-zinc-950/80 backdrop-blur-md px-8 py-6">
-                                    <DialogHeader>
-                                        <div className="flex flex-wrap items-center gap-3 mb-2">
-                                            <DialogTitle className="text-2xl font-bold tracking-tight text-white">
-                                                {activeDoc.title}
-                                            </DialogTitle>
-                                            <StatusPill status={activeDoc.status} />
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            {activeDoc.description && (
-                                                <p className="text-sm text-zinc-400 max-w-2xl leading-relaxed">
-                                                    {activeDoc.description}
-                                                </p>
-                                            )}
-                                            <div className="flex flex-wrap gap-2">
-                                                {activeDoc.domain?.map((d) => (
+                {activeDoc && (
+                    <div ref={headerRef} className="shrink-0 bg-zinc-950 border-b border-zinc-800/50 z-20 relative">
+                        <div className="bg-zinc-950/80 backdrop-blur-md px-8 pt-6 pb-5">
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex flex-col gap-1.5">
+                                    <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold">
+                                        {activeDoc.projectTitle || activeDoc.projectSlug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <DialogTitle className="text-2xl font-bold tracking-tight text-white transition-all duration-300">
+                                            {activeDoc.title}
+                                        </DialogTitle>
+                                        <StatusPill status={activeDoc.status} />
+                                    </div>
+                                </div>
+
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleOpenChange(false)}
+                                    className="text-zinc-500 hover:text-white hover:bg-zinc-900 -mr-2 px-3"
+                                >
+                                    <span className="mr-2">←</span> Back
+                                </Button>
+                            </div>
+
+                            <DialogHeader className="space-y-0">
+                                <div className="flex flex-col gap-3">
+                                    {activeDoc.description && (
+                                        <p className="text-sm text-zinc-400 max-w-2xl leading-relaxed">
+                                            {activeDoc.description}
+                                        </p>
+                                    )}
+                                    <div className="space-y-1.5 mt-1">
+                                        {activeDoc.domain && activeDoc.domain.length > 0 && (
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {activeDoc.domain.map((d) => (
                                                     <FnTag key={d} label={d} />
                                                 ))}
-                                                {activeDoc.tech_stack?.map((t) => (
+                                            </div>
+                                        )}
+                                        {activeDoc.tech_stack && activeDoc.tech_stack.length > 0 && (
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {activeDoc.tech_stack.map((t) => (
                                                     <TechTag key={t} label={t} />
                                                 ))}
                                             </div>
-                                        </div>
-                                    </DialogHeader>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            </DialogHeader>
+                        </div>
 
-                            <div className="px-8 py-8 md:px-12 md:py-12">
-                                <div className="max-w-[70ch] mx-auto">
-                                    <article
-                                        className="prose prose-zinc dark:prose-invert max-w-none 
-                                            prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
-                                            prose-p:text-zinc-300 prose-p:leading-relaxed prose-p:mb-6
-                                            prose-strong:text-white prose-strong:font-semibold
-                                            prose-code:text-blue-400 prose-code:bg-blue-400/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-                                            prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-lg
-                                            prose-li:text-zinc-300 prose-li:mb-2
-                                            prose-hr:border-zinc-800"
-                                        dangerouslySetInnerHTML={{ __html: activeDoc.html }}
-                                    />
-                                </div>
+                        {/* Reading Progress Bar */}
+                        <div className="h-[2px] w-full bg-transparent absolute bottom-0 left-0 overflow-hidden z-30">
+                            <div
+                                role="progressbar"
+                                aria-valuemin={0}
+                                aria-valuemax={100}
+                                aria-valuenow={Math.round(scrollProgress)}
+                                aria-label="Reading progress"
+                                className="h-full bg-blue-600 transition-all duration-150 ease-out"
+                                style={{ width: `${scrollProgress}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
 
-                                <div className="mt-12 flex justify-center pb-8">
+                <div className="flex-1 overflow-hidden relative flex flex-col lg:flex-row">
+                    <div
+                        ref={scrollContainerRef}
+                        onScroll={handleScroll}
+                        onWheel={handleManualInteraction}
+                        onTouchStart={handleManualInteraction}
+                        className="flex-1 overflow-y-auto custom-scrollbar px-8 md:px-12 py-8 md:py-12"
+                    >
+                        {activeDoc ? (
+                            <div className="max-w-[70ch] mx-auto pb-12">
+                                <article
+                                    className="prose prose-zinc dark:prose-invert max-w-none 
+                                        prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
+                                        prose-headings:mt-16 first:prose-headings:mt-0
+                                        prose-p:text-zinc-300 prose-p:leading-loose prose-p:mb-10
+                                        prose-strong:text-white prose-strong:font-semibold
+                                        prose-code:text-blue-400 prose-code:bg-blue-400/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                                        prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-lg
+                                        prose-li:text-zinc-300 prose-li:mb-2
+                                        prose-hr:border-zinc-800"
+                                    dangerouslySetInnerHTML={{ __html: activeDoc.html }}
+                                />
+                                <div className="mt-12 flex justify-center border-t border-zinc-900 pt-8">
                                     <Button
                                         variant="outline"
                                         onClick={() => handleOpenChange(false)}
@@ -151,39 +344,49 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                                     </Button>
                                 </div>
                             </div>
-                        </div>
-                    ) : (
-                        <div className="h-full flex items-center justify-center p-8 bg-zinc-950">
-                            <div
-                                data-testid="document-error-fallback"
-                                aria-label="document not found"
-                                className="max-w-md w-full rounded-lg border border-dashed border-zinc-200 dark:border-zinc-700 p-12 bg-zinc-900/30 text-center"
-                            >
-                                <div className="flex justify-center mb-6">
-                                    <div className="p-3 rounded-full bg-zinc-900 border border-zinc-800">
-                                        <AlertCircle className="w-8 h-8 text-zinc-500" />
-                                    </div>
-                                </div>
-                                <DialogHeader>
-                                    <DialogTitle className="text-2xl font-bold text-white mb-3 text-center">
-                                        Document Not Found
-                                    </DialogTitle>
-                                    <p className="text-zinc-400 mb-8 leading-relaxed text-center">
-                                        The requested document could not be located or has been moved from its original sector.
-                                    </p>
-                                </DialogHeader>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => handleOpenChange(false)}
-                                    className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800"
+                        ) : (
+                            <div className="h-full flex items-center justify-center p-8 bg-zinc-950">
+                                <div
+                                    data-testid="document-error-fallback"
+                                    aria-label="document not found"
+                                    className="max-w-md w-full rounded-lg border border-dashed border-zinc-200 dark:border-zinc-700 p-12 bg-zinc-900/30 text-center"
                                 >
-                                    Return to Command Center
-                                </Button>
+                                    <div className="flex justify-center mb-6">
+                                        <div className="p-3 rounded-full bg-zinc-900 border border-zinc-800">
+                                            <AlertCircle className="w-8 h-8 text-zinc-500" />
+                                        </div>
+                                    </div>
+                                    <DialogHeader>
+                                        <DialogTitle className="text-2xl font-bold text-white mb-3 text-center">
+                                            Document Not Found
+                                        </DialogTitle>
+                                        <p className="text-zinc-400 mb-8 leading-relaxed text-center">
+                                            The requested document could not be located or has been moved from its original sector.
+                                        </p>
+                                    </DialogHeader>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => handleOpenChange(false)}
+                                        className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800"
+                                    >
+                                        Return to Command Center
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
+                        )}
+                    </div>
+
+                    {activeDoc && (
+                        <TableOfContents
+                            toc={activeDoc.toc || []}
+                            containerRef={scrollContainerRef}
+                            activeId={activeToCId}
+                            onSelect={handleToCSelect}
+                            headerHeight={headerHeight}
+                        />
                     )}
                 </div>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 }

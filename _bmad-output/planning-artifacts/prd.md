@@ -140,6 +140,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - Integration of live, embedded iframes for prototypes (instead of external links)
 - Mobile/tablet responsive layout — the 3-column Command Center must adapt to smaller screens while preserving the mental model of three distinct content lanes (e.g., sticky tab bar for column switching)
 - An interactive graph or visualization showing connections between tools and artifacts
+- **Smart Suite Navigation**: Implementing a "Suite Switcher" and "Recommended Next" logic within the document modal to allow jumping between project artifacts without closing the viewer.
 - A "How to build your own Agent" tutorial section
 - Support for Journey 3 (The Author) via more advanced automated deployment pipelines — *Note: Journey 3 is partially supported in Phase 1 via FR1-FR3 (basic markdown publishing). Phase 2 adds advanced CI/CD automation.*
 - Basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches)
