@@ -80,15 +80,15 @@ development_status:
   5-3-wire-agent-project-filtering-in-discovery-grid: done
   epic-5-retrospective: done
 
-  epic-6: backlog
+  epic-6: done
   6-1-create-sort-configuration-manifest: done
   6-2-implement-sort-manifest-parser: done
   6-3-deprecate-per-file-order-field: done
   epic-6-retrospective: done
 
-  epic-7: backlog
-  7-1-url-driven-modal-infrastructure: backlog
-  7-2-focused-markdown-reading-experience: backlog
-  7-3-reading-state-navigation: backlog
-  7-4-error-fallback-states: backlog
+  epic-7: in-progress
+  7-1-url-driven-modal-infrastructure: done
+  7-2-focused-markdown-reading-experience: done
+  7-3-reading-state-navigation: done
+  7-4-error-fallback-states: done
   epic-7-retrospective: optional

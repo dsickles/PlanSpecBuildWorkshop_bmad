@@ -6,6 +6,7 @@ import { ProjectCard, FallbackCard } from "@/components/content/project-card";
 import { BlueprintGroup, BlueprintErrorRow } from "@/components/content/blueprint-group";
 import { ParsedArticle, isError, ErrorFrontmatter } from "@/lib/schema";
 import { useFilterState } from "@/hooks/useFilterState";
+import { MarkdownDocumentModal } from "@/components/custom/MarkdownDocumentModal";
 
 interface DiscoveryGridProps {
     allContent: (ParsedArticle | ErrorFrontmatter)[];
@@ -13,7 +14,16 @@ interface DiscoveryGridProps {
 }
 
 export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGridProps) {
-    const { activeProject, activeDomains, activeTech, setProject } = useFilterState();
+    const { activeProject, activeDomains, activeTech, setProject, setDocument } = useFilterState();
+
+    const handleDocOpen = useMemo(() => (doc: ParsedArticle) => {
+        // Remove .md and path segments safely without Node.js 'path'
+        const parts = doc._filePath.split(/[/\\]/);
+        const fileName = parts[parts.length - 1] || "";
+        const stem = fileName.replace(/\.md$/, "");
+        // We pass the project slug to the URL to ensure uniqueness
+        setDocument(`${doc.projectSlug}:${stem}`);
+    }, [setDocument]);
 
     const memoizedData = useMemo(() => {
         const filtered = allContent.filter((item): item is ParsedArticle => {
@@ -74,95 +84,99 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
     const { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors } = memoizedData;
 
     return (
-        <DashboardGrid
-            studioColumn={
-                <>
-                    {agents.length === 0 && studioErrors.length === 0 && (
-                        <FallbackCard
-                            context="agent"
-                            title="No agents found"
-                            description="No agents match the current filters."
-                            className="mb-4"
-                        />
-                    )}
-                    {agents.map((agent) => (
-                        <div key={agent._filePath} className="mb-4">
-                            <ProjectCard
+        <>
+            <DashboardGrid
+                studioColumn={
+                    <>
+                        {agents.length === 0 && studioErrors.length === 0 && (
+                            <FallbackCard
                                 context="agent"
-                                artifactType="agent"
-                                title={agent.title}
-                                status={agent.status}
-                                description={agent.description}
-                                domain={agent.domain}
-                                tech_stack={agent.tech_stack}
+                                title="No agents found"
+                                description="No agents match the current filters."
+                                className="mb-4"
                             />
-                        </div>
-                    ))}
-                    {studioErrors.map((e) => (
-                        <div key={e._filePath} className="mb-4">
-                            <FallbackCard context="agent" title="Content unavailable" />
-                        </div>
-                    ))}
-                </>
-            }
-            blueprintsColumn={
-                <>
-                    {docsByProject.size === 0 && docErrors.length === 0 && (
-                        <FallbackCard
-                            context="doc"
-                            title="No blueprints found"
-                            description="No blueprints match the current filters."
-                            className="mb-4"
-                        />
-                    )}
-                    {Array.from(docsByProject.entries()).map(([slug, groupDocs]) => (
-                        <BlueprintGroup
-                            key={slug}
-                            projectSlug={slug}
-                            projectTitle={groupDocs[0]?.projectTitle}
-                            docs={groupDocs}
-                            isFocused={activeProject === slug}
-                            onLayersClick={() => setProject(slug)}
-                        />
-                    ))}
-                    {docErrors.map((e) => (
-                        <BlueprintErrorRow key={e._filePath} filePath={e._filePath} />
-                    ))}
-                </>
-            }
-            labColumn={
-                <>
-                    {prototypes.length === 0 && labErrors.length === 0 && (
-                        <FallbackCard
-                            context="prototype"
-                            title="No prototypes found"
-                            description="No prototypes match the current filters."
-                            className="mb-4"
-                        />
-                    )}
-                    {prototypes.map((proto) => (
-                        <div key={proto._filePath} className="mb-4">
-                            <ProjectCard
+                        )}
+                        {agents.map((agent) => (
+                            <div key={agent._filePath} className="mb-4">
+                                <ProjectCard
+                                    context="agent"
+                                    artifactType="agent"
+                                    title={agent.title}
+                                    status={agent.status}
+                                    description={agent.description}
+                                    domain={agent.domain}
+                                    tech_stack={agent.tech_stack}
+                                />
+                            </div>
+                        ))}
+                        {studioErrors.map((e) => (
+                            <div key={e._filePath} className="mb-4">
+                                <FallbackCard context="agent" title="Content unavailable" />
+                            </div>
+                        ))}
+                    </>
+                }
+                blueprintsColumn={
+                    <>
+                        {docsByProject.size === 0 && docErrors.length === 0 && (
+                            <FallbackCard
+                                context="doc"
+                                title="No blueprints found"
+                                description="No blueprints match the current filters."
+                                className="mb-4"
+                            />
+                        )}
+                        {Array.from(docsByProject.entries()).map(([slug, groupDocs]) => (
+                            <BlueprintGroup
+                                key={slug}
+                                projectSlug={slug}
+                                projectTitle={groupDocs[0]?.projectTitle}
+                                docs={groupDocs}
+                                isFocused={activeProject === slug}
+                                onLayersClick={() => setProject(slug)}
+                                onDocOpen={handleDocOpen}
+                            />
+                        ))}
+                        {docErrors.map((e) => (
+                            <BlueprintErrorRow key={e._filePath} filePath={e._filePath} />
+                        ))}
+                    </>
+                }
+                labColumn={
+                    <>
+                        {prototypes.length === 0 && labErrors.length === 0 && (
+                            <FallbackCard
                                 context="prototype"
-                                artifactType="prototype"
-                                title={proto.title}
-                                status={proto.status}
-                                description={proto.description}
-                                domain={proto.domain}
-                                tech_stack={proto.tech_stack}
-                                externalUrl={proto.external_url}
-                                githubUrl={proto.github_url}
-                                onLayersClick={() => setProject(proto.projectSlug)}
+                                title="No prototypes found"
+                                description="No prototypes match the current filters."
+                                className="mb-4"
                             />
-                        </div>
-                    ))}
-                    {labErrors.map((e) => (
-                        <div key={e._filePath} className="mb-4">
-                            <FallbackCard context="prototype" title="Content unavailable" />
-                        </div>
-                    ))}
-                </>
-            }
-        />
+                        )}
+                        {prototypes.map((proto) => (
+                            <div key={proto._filePath} className="mb-4">
+                                <ProjectCard
+                                    context="prototype"
+                                    artifactType="prototype"
+                                    title={proto.title}
+                                    status={proto.status}
+                                    description={proto.description}
+                                    domain={proto.domain}
+                                    tech_stack={proto.tech_stack}
+                                    externalUrl={proto.external_url}
+                                    githubUrl={proto.github_url}
+                                    onLayersClick={() => setProject(proto.projectSlug)}
+                                />
+                            </div>
+                        ))}
+                        {labErrors.map((e) => (
+                            <div key={e._filePath} className="mb-4">
+                                <FallbackCard context="prototype" title="Content unavailable" />
+                            </div>
+                        ))}
+                    </>
+                }
+            />
+            <MarkdownDocumentModal allContent={allContent} />
+        </>
     );
 }

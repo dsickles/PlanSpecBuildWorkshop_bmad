@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM } from "@/lib/constants";
+import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM, DOCUMENT_PARAM } from "@/lib/constants";
 
 export function useFilterState() {
     const router = useRouter();
@@ -12,6 +12,7 @@ export function useFilterState() {
     const activeProject = searchParams.get(PROJECT_PARAM);
     const activeDomains = searchParams.get(DOMAIN_PARAM)?.split(",").filter(Boolean) || [];
     const activeTech = searchParams.get(TECH_PARAM)?.split(",").filter(Boolean) || [];
+    const activeDocument = searchParams.get(DOCUMENT_PARAM);
 
     const createQueryString = (params: Record<string, string | string[] | null>) => {
         const newParams = new URLSearchParams(searchParams.toString());
@@ -31,11 +32,15 @@ export function useFilterState() {
 
     const updateUrl = (params: Record<string, string | string[] | null>) => {
         const queryString = createQueryString(params);
-        router.push(`${pathname}?${queryString}`, { scroll: false });
+        router.push(`${pathname}${queryString ? `?${queryString}` : ""}`, { scroll: false });
     };
 
     const setProject = (project: string | null) => {
         updateUrl({ [PROJECT_PARAM]: project });
+    };
+
+    const setDocument = (document: string | null) => {
+        updateUrl({ [DOCUMENT_PARAM]: document });
     };
 
     const toggleDomain = (domain: string) => {
@@ -66,7 +71,9 @@ export function useFilterState() {
         activeProject,
         activeDomains,
         activeTech,
+        activeDocument,
         setProject,
+        setDocument,
         toggleDomain,
         toggleTech,
         clearAllFilters,

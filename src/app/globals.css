@@ -138,3 +138,26 @@
     @apply bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50;
   }
 }
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-zinc-800/50;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-zinc-600 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-500;
+  }
+
+  /* Fix: Ensure DialogClose button is on top of sticky header */
+  [data-slot="dialog-close"] {
+    z-index: 60 !important;
+  }
+}

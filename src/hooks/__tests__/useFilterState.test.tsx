@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useFilterState } from '../useFilterState';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { DOCUMENT_PARAM } from '@/lib/constants';
 
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
@@ -39,6 +40,7 @@ describe('useFilterState', () => {
     expect(result.current.activeProject).toBe(null);
     expect(result.current.activeDomains).toEqual([]);
     expect(result.current.activeTech).toEqual([]);
+    expect(result.current.activeDocument).toBe(null);
   });
 
   it('reads project param from URL', () => {
@@ -108,5 +110,38 @@ describe('useFilterState', () => {
     });
 
     expect(mockPush).toHaveBeenCalledWith('/', { scroll: false });
+  });
+
+  it('reads document param from URL', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(
+      createMockSearchParams({ [DOCUMENT_PARAM]: 'my-doc' })
+    );
+    const { result } = renderHook(() => useFilterState());
+
+    expect(result.current.activeDocument).toBe('my-doc');
+  });
+
+  it('updates document param using router.push', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(createMockSearchParams({}));
+    const { result } = renderHook(() => useFilterState());
+
+    act(() => {
+      result.current.setDocument('new-doc');
+    });
+
+    expect(mockPush).toHaveBeenCalledWith(`/?${DOCUMENT_PARAM}=new-doc`, { scroll: false });
+  });
+
+  it('clears document param using setDocument(null)', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(
+      createMockSearchParams({ [DOCUMENT_PARAM]: 'some-doc', project: 'my-project' })
+    );
+    const { result } = renderHook(() => useFilterState());
+
+    act(() => {
+      result.current.setDocument(null);
+    });
+
+    expect(mockPush).toHaveBeenCalledWith('/?project=my-project', { scroll: false });
   });
 });
