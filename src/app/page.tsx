@@ -5,13 +5,7 @@ import { FilterBar } from "@/components/custom/FilterBar";
 import { DiscoveryGrid } from "@/components/custom/DiscoveryGrid";
 import { Suspense } from "react";
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const resolvedParams = await searchParams;
+export default async function Home() {
   const allContent = await getSortedParsedContent();
   const sortConfig = await loadSortConfig();
 
@@ -31,9 +25,20 @@ export default async function Home({
   }
 
   // Extract unique filter options for the FilterBar (Server-side derived from all valid content)
-  const projects = Array.from(new Set(validArticles.map(item => item.projectSlug)))
-    .filter(slug => slug !== "_shared")
-    .sort((a, b) => sortByList(a, b, sortConfig.projects));
+  const projectMap = new Map<string, string>();
+  validArticles.forEach(item => {
+    if (item.projectSlug !== "_shared" && !projectMap.has(item.projectSlug)) {
+      projectMap.set(item.projectSlug, item.projectTitle || item.projectSlug);
+    }
+  });
+
+  const projects = Array.from(projectMap.keys())
+    .sort((a, b) => sortByList(a, b, sortConfig.projects))
+    .map(slug => ({
+      slug,
+      title: projectMap.get(slug) || slug
+    }));
+
   const domains = Array.from(new Set(validArticles.flatMap(item => item.domain))).sort();
   const techStacks = Array.from(new Set(validArticles.flatMap(item => item.tech_stack))).sort();
 

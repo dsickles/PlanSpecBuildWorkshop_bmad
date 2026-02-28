@@ -7,7 +7,7 @@ Status: done
 ## Story
 
 As the Content Author,
-I want the "Plan. Spec. Build." project itself to exist as the foundational piece of Markdown content in the system,
+I want the "Plan Spec Build Workshop" project itself to exist as the foundational piece of Markdown content in the system,
 so that I can validate the ingestion pipeline using realistic portfolio data.
 
 ## Acceptance Criteria
@@ -49,7 +49,7 @@ so that I can validate the ingestion pipeline using realistic portfolio data.
 ### References
 
 - [Source: epics.md#Story 1.4: "Meta-Blueprint" Project Definition]
-- [Source: prd.md#FR16 — Plan. Spec. Build. is always first in the portfolio view]
+- [Source: prd.md#FR16 — Plan Spec Build Workshop is always first in the portfolio view]
 
 ## Dev Agent Record
 

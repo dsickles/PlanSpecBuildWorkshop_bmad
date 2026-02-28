@@ -4,12 +4,15 @@ import { useState } from "react";
 import { ChevronDown, FileText, Layers } from "lucide-react";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { ParsedArticle } from "@/lib/schema";
+import { getDocIdFromPath } from "@/lib/utils";
 
 interface BlueprintGroupProps {
     projectSlug: string;
     projectTitle?: string;
     docs: ParsedArticle[];
-    /** Called when the FileText icon is clicked — Epic 3 will wire up modal */
+    /** The project's root index.md content (Story 8.3) */
+    overviewDoc?: ParsedArticle;
+    /** Called when a document icon is clicked */
     onDocOpen?: (doc: ParsedArticle) => void;
     /** If true, all rows are force-expanded (Focus Mode) */
     isFocused?: boolean;
@@ -21,6 +24,7 @@ export function BlueprintGroup({
     projectSlug,
     projectTitle,
     docs,
+    overviewDoc,
     onDocOpen,
     isFocused = false,
     onLayersClick
@@ -91,15 +95,26 @@ export function BlueprintGroup({
                     </div>
                 </div>
 
-                {onLayersClick && (
-                    <button
-                        onClick={onLayersClick}
-                        aria-label="Focus on this project"
-                        className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
-                    >
-                        <Layers size={14} />
-                    </button>
-                )}
+                <div className="flex items-center gap-1">
+                    {overviewDoc && (
+                        <button
+                            onClick={() => onDocOpen?.(overviewDoc)}
+                            aria-label={`Open ${displayName} overview`}
+                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                        >
+                            <FileText size={14} />
+                        </button>
+                    )}
+                    {onLayersClick && (
+                        <button
+                            onClick={onLayersClick}
+                            aria-label="Focus on this project"
+                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                        >
+                            <Layers size={14} />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Document rows */}
@@ -127,7 +142,7 @@ export function BlueprintGroup({
                                     <div className="flex items-center gap-1">
                                         {/* Action Icon - styled like Prototype GitHub icon */}
                                         <button
-                                            id={`doc-trigger-${projectSlug}-${doc._filePath.split(/[/\\]/).pop()?.replace(/\.md$/, "")}`}
+                                            id={`doc-trigger-${doc.id}`}
                                             onClick={() => onDocOpen?.(doc)}
                                             aria-label={`Open ${doc.title}`}
                                             className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"

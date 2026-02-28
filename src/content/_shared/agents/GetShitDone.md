@@ -13,6 +13,9 @@ tech_stack:
   - "Sprint Management"
 description: "The high-velocity execution engine for complex projects — integrating Game Design, Architecture, and QA agents into a seamless development lifecycle."
 projects:
+external_links:
+  - label: "GitHub"
+    url: "https://github.com/gsd-build/get-shit-done/"
 ---
 
 # Get Shit Done (GSD)

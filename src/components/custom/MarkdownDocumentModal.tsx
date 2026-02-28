@@ -156,23 +156,14 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
         const validation = DocumentSlugSchema.safeParse(activeDocument);
         if (!validation.success) return null;
 
-        // If the slug contains a colon, it's project-specific (project:slug)
-        if (activeDocument.includes(':')) {
-            const [proj, slug] = activeDocument.split(':');
-            return allContent.find(
-                (item): item is ParsedArticle =>
-                    !isError(item) &&
-                    item.projectSlug === proj &&
-                    item._filePath.endsWith(`${slug}.md`)
-            );
-        }
-
-        // Fallback to filename-only matching for legacy links
         return allContent.find(
             (item): item is ParsedArticle =>
-                !isError(item) && item._filePath.endsWith(`${activeDocument}.md`)
+                !isError(item) && item.id === activeDocument
         );
     }, [activeDocument, allContent]);
+
+    // Fallback for legacy ID formats (colon-delimited doublet or filename)
+    // Removed legacy lookup as we are standardizing on path-based IDs.
 
     const isOpen = !!activeDocument;
 

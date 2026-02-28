@@ -13,7 +13,7 @@ description: "Core user experience, design system foundation, and component stra
 parent_project: "plan-spec-build-workshop"
 ---
 
-# UX Design Specification - "Plan. Spec. Build." Agentic Builder's Workshop
+# UX Design Specification - {{PROJECT_NAME}}
 
 **Author:** Dan
 **Date:** 2026-02-22

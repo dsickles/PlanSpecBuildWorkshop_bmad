@@ -11,7 +11,7 @@ tech_stack:
   - "Next.js"
   - "TypeScript"
   - "Tailwind CSS"
-description: "Complete epic and story breakdown for the Plan Spec Build Workshop roadmap."
+description: "Complete epic and story breakdown for the {{PROJECT_NAME}} roadmap."
 parent_project: "plan-spec-build-workshop"
 stepsCompleted: [1]
 inputDocuments: [
@@ -22,11 +22,11 @@ inputDocuments: [
 ]
 ---
 
-# Plan. Spec. Build. - Epic Breakdown
+# {{PROJECT_NAME}} - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for Plan. Spec. Build., decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
+This document provides the complete epic and story breakdown for {{PROJECT_NAME}}, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
 ## Requirements Inventory
 
@@ -47,7 +47,7 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 - **FR13:** The User can navigate directly from a specific prototype back to its accompanying documentation via explicit intra-linking.
 - **FR14:** The User can access an "About this Project" educational page from the global navigation.
 - **FR15:** The User can access a "Fork a Workshop" link to copy the underlying repository template.
-- **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
+- **FR16:** The System must present the portfolio itself ("{{PROJECT_NAME}}") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 - **FR19:** The System must support shared Agent Studio items associated with zero or more projects via a `projects` frontmatter array, without file duplication. Agents without a `projects` field are hidden when a project filter is active.
@@ -171,7 +171,7 @@ So that the interface is ready to receive and display categorized project compon
 *   **And** the component must accept dynamic `children` props to allow data-driven components to be injected into the columns in future Epics, rather than hardcoding children in the layout layer.
 
 ## Epic 1: The "Meta-Blueprint" Foundation & Content Ingestion
-The Author can publish Markdown/Frontmatter content to the repository, and the System successfully parses it into structured data, ensuring the portfolio itself ("Plan. Spec. Build.") is the first viewable project.  
+The Author can publish Markdown/Frontmatter content to the repository, and the System successfully parses it into structured data, ensuring the portfolio itself ("{{PROJECT_NAME}}") is the first viewable project.  
 *(Constraint: Implementation must use Zod for strict Frontmatter validation, mapping failures to customized `[Error]` fallback states instead of crashing the Next.js build).*
 **FRs covered:** FR1, FR2, FR3, FR4, FR16
 
@@ -212,7 +212,7 @@ So that the raw Markdown is transformed into the required React props for the Un
 
 ### Story 1.4: "Meta-Blueprint" Project Definition
 As the Content Author,
-I want the "Plan. Spec. Build." project itself to exist as the foundational piece of Markdown content in the system,
+I want the "{{PROJECT_NAME}}" project itself to exist as the foundational piece of Markdown content in the system,
 So that I can validate the ingestion pipeline using realistic portfolio data.
 
 **Acceptance Criteria:**

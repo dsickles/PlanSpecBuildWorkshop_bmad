@@ -22,7 +22,7 @@ FR12: The User can view "at a glance" summary metadata on all project and artifa
 FR13: The User can navigate directly from a specific prototype back to its accompanying documentation (e.g., its specific Decision Matrix) via explicit intra-linking.
 FR14: The User can access an "About this Project" educational page from the global navigation.
 FR15: The User can access a "Fork a Workshop" link to copy the underlying repository template.
-FR16: The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
+FR16: The System must present the portfolio itself ("Plan Spec Build Workshop") as the first selectable project (The Meta-Blueprint).
 FR17: The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform.
 FR18: (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 
@@ -75,7 +75,7 @@ The PRD is comprehensive, clearly separating functional and non-functional requi
 | FR13 | The User can navigate directly from a specific prototype back to its accompanying documentation (e.g., its specific Decision Matrix) via explicit intra-linking. | Epic 4 | ✓ Covered |
 | FR14 | The User can access an "About this Project" educational page from the global navigation. | Epic 4 | ✓ Covered |
 | FR15 | The User can access a "Fork a Workshop" link to copy the underlying repository template. | Epic 4 | ✓ Covered |
-| FR16 | The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint). | Epic 1 | ✓ Covered |
+| FR16 | The System must present the portfolio itself ("Plan Spec Build Workshop") as the first selectable project (The Meta-Blueprint). | Epic 1 | ✓ Covered |
 | FR17 | The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform. | Epic 2 | ✓ Covered |
 | FR18 | (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches). | (Deferred) | ✓ Covered |
 

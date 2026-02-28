@@ -11,7 +11,7 @@ tech_stack:
   - "Next.js"
   - "TypeScript"
   - "Tailwind CSS"
-description: "Core architectural decisions and pattern consistency rules for the Plan Spec Build Workshop."
+description: "Core architectural decisions and pattern consistency rules for the {{PROJECT_NAME}}."
 parent_project: "plan-spec-build-workshop"
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
 workflowType: 'architecture'

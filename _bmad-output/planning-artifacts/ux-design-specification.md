@@ -1,5 +1,5 @@
 
-# UX Design Specification - "Plan. Spec. Build." Agentic Builder's Workshop
+# UX Design Specification - "Plan Spec Build Workshop" Agentic Builder's Workshop
 
 **Author:** Dan
 **Date:** 2026-02-22
@@ -173,7 +173,7 @@ To achieve the "premium studio" aesthetic without becoming a confusing rainbow o
 
 ### Accessibility Considerations
 - **Contrast Ratios:** The "Tinted Neutrality" system must ensure that text within low-opacity status pills maintains WCAG AA compliance against both light and dark mode backgrounds.
-- **Dual-Mode System:** The strict grayscale token system ensures that the switch between Light and Dark mode feels native and effortless, as structural colors will invert seamlessly while tinted accents remain consistent.
+- **Dual-Mode System:** The strict grayscale token system ensures that the switch between Light and Dark mode feels native and effortless, as structural colors will invert seamlessly while tinted accents remain consistent. **Theme synchronization must be enforced across all components, specifically ensuring the Filter Bar and the Modal Document Reader strictly follow the user's system/Command Center preference.**
 
 ## Design Direction Decision
 
@@ -324,7 +324,7 @@ This card uses a compound layout: a project-level header card wrapping a 1-to-ma
 - **Purpose:** Provide a calm, "Notion-like" reading experience for highly technical markdown artifacts (like PRDs) within an overlay inside the Command Center. It evolves from a simple reader into a "Project Viewer" suite.
 - **Anatomy:** Sub-classes the shadcn `Dialog`. Wraps a raw Markdown rendering library (`react-markdown`).
 - **Header Dynamics:**
-  - **Sector Breadcrumb**: `PLAN. SPEC. BUILD. / {PROJECT_TITLE}` sits above the main title to maintain systemic context.
+  - **Sector Breadcrumb**: `Plan Spec Build Workshop / {PROJECT_TITLE}` sits above the main title to maintain systemic context.
   - **Localized Navigation**: The default 'X' is replaced with a **"Back"** button to signal a return to the Command Center grid.
   - **Progress Visuals**: A thin horizontal progress bar tracks the user's journey through the document.
 - **Reading Rhythm & Spacing:**
@@ -379,11 +379,11 @@ When a project exists in planning phase only (no prototype code yet), the UI mus
 *   **Communication rule:** Never use italicized placeholder text. The `[Concept]` pill + dashed border is the complete signal — no additional explanation needed.
 *   **Error/Fallback state:** If a content file has malformed frontmatter or cannot be parsed, the affected card renders with a dashed border and an `[Error]` pill (same visual pattern as `[Concept]` but using muted Red/Rose tints). Text reads "Content unavailable." All other cards render normally — the site never crashes entirely due to one bad content file.
 
-### 5. The "Clear Filter" Pattern
-When any project is selected (Focus Mode), a "✕ Clear Filter" button must appear inline in the Projects filter row, positioned after the last project pill.
-*   **Visual:** Small, muted-red ghost button — `border-red-500/30`, `text-red-400`, `bg-red-500/5`. Subtle but clearly dismissive.
-*   **Behavior:** Clicking returns to Browse Mode ("All" pill active, all cards visible, blueprint docs return to their prior collapsed/expanded state).
-*   **Absence:** Button is NOT shown when "All" is selected or no project filter is active.
+### 6. The "Clear Filter" Placement & Tone
+When any project is selected (Focus Mode), the "✕ Clear Filter" button appears above the filter rows rather than inline.
+*   **Visual:** Tonally simple and muted. It should not "jump out" or use aggressive colors (like bright red).
+*   **Placement:** Positioned above the set of filters to avoid pushing down other components as it toggles. It should seamlessly appear and disappear without causing layout shifts.
+*   **Behavior:** Clicking it resets the `?project=` parameter and returns to Browse Mode.
 
 ## Responsive Design & Accessibility
 

@@ -17,15 +17,19 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
     const { activeProject, activeDomains, activeTech, setProject, setDocument } = useFilterState();
 
     const handleDocOpen = useMemo(() => (doc: ParsedArticle) => {
-        // Remove .md and path segments safely without Node.js 'path'
-        const parts = doc._filePath.split(/[/\\]/);
-        const fileName = parts[parts.length - 1] || "";
-        const stem = fileName.replace(/\.md$/, "");
-        // We pass the project slug to the URL to ensure uniqueness
-        setDocument(`${doc.projectSlug}:${stem}`);
+        setDocument(doc.id);
     }, [setDocument]);
 
-    const memoizedData = useMemo(() => {
+    const memoizedData = useMemo<{
+        agents: ParsedArticle[];
+        docsByProject: Map<string, ParsedArticle[]>;
+        prototypes: ParsedArticle[];
+        overviewByProject: Map<string, ParsedArticle>;
+        blueprintOverviewByProject: Map<string, ParsedArticle>;
+        studioErrors: ErrorFrontmatter[];
+        docErrors: ErrorFrontmatter[];
+        labErrors: ErrorFrontmatter[];
+    }>(() => {
         const filtered = allContent.filter((item): item is ParsedArticle => {
             if (isError(item)) return false;
             const article = item as ParsedArticle;
@@ -58,10 +62,33 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
         const agents: ParsedArticle[] = [];
         const prototypes: ParsedArticle[] = [];
         const docsByProject = new Map<string, ParsedArticle[]>();
+        const overviewByProject = new Map<string, ParsedArticle>();
+        const blueprintOverviewByProject = new Map<string, ParsedArticle>();
 
         filtered.forEach(item => {
             const article = item as ParsedArticle;
-            if (article.artifactType === "agent") {
+            const normalizedPath = article._filePath.replace(/\\/g, '/');
+            const pathSegments = normalizedPath.split('/');
+            const fileName = pathSegments[pathSegments.length - 1];
+            const parentDir = pathSegments[pathSegments.length - 2];
+            const grandParentDir = pathSegments[pathSegments.length - 3];
+
+            // Root index: project/index.md
+            const isRootIndex = article.artifactType === "doc" &&
+                fileName === "index.md" &&
+                parentDir === article.projectSlug;
+
+            // Blueprint index: project/docs/index.md
+            const isBlueprintIndex = article.artifactType === "doc" &&
+                fileName === "index.md" &&
+                parentDir === "docs" &&
+                grandParentDir === article.projectSlug;
+
+            if (isRootIndex) {
+                overviewByProject.set(article.projectSlug, article);
+            } else if (isBlueprintIndex) {
+                blueprintOverviewByProject.set(article.projectSlug, article);
+            } else if (article.artifactType === "agent") {
                 agents.push(article);
             } else if (article.artifactType === "prototype") {
                 prototypes.push(article);
@@ -78,10 +105,10 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
         const docErrors = allErrors.filter((e) => e._filePath.toLowerCase().includes('docs'));
         const labErrors = allErrors.filter((e) => e._filePath.toLowerCase().includes('prototypes'));
 
-        return { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors };
+        return { agents, docsByProject, prototypes, overviewByProject, blueprintOverviewByProject, studioErrors, docErrors, labErrors };
     }, [allContent, serverErrors, activeProject, activeDomains, activeTech]);
 
-    const { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors } = memoizedData;
+    const { agents, docsByProject, prototypes, overviewByProject, blueprintOverviewByProject, studioErrors, docErrors, labErrors } = memoizedData;
 
     return (
         <>
@@ -96,19 +123,27 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                 className="mb-4"
                             />
                         )}
-                        {agents.map((agent) => (
-                            <div key={agent._filePath} className="mb-4">
-                                <ProjectCard
-                                    context="agent"
-                                    artifactType="agent"
-                                    title={agent.title}
-                                    status={agent.status}
-                                    description={agent.description}
-                                    domain={agent.domain}
-                                    tech_stack={agent.tech_stack}
-                                />
-                            </div>
-                        ))}
+                        {agents.map((agent) => {
+                            const targetProject = (activeProject && agent.projects?.includes(activeProject))
+                                ? activeProject
+                                : (agent.projects?.[0] || "");
+                            const hasOverview = !!(targetProject && overviewByProject.has(targetProject));
+
+                            return (
+                                <div key={agent._filePath} className="mb-4">
+                                    <ProjectCard
+                                        context="agent"
+                                        artifactType="agent"
+                                        title={agent.title}
+                                        status={agent.status}
+                                        description={agent.description}
+                                        domain={agent.domain}
+                                        tech_stack={agent.tech_stack}
+                                        externalLinks={agent.external_links}
+                                    />
+                                </div>
+                            );
+                        })}
                         {studioErrors.map((e) => (
                             <div key={e._filePath} className="mb-4">
                                 <FallbackCard context="agent" title="Content unavailable" />
@@ -132,6 +167,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                 projectSlug={slug}
                                 projectTitle={groupDocs[0]?.projectTitle}
                                 docs={groupDocs}
+                                overviewDoc={blueprintOverviewByProject.get(slug) || overviewByProject.get(slug)}
                                 isFocused={activeProject === slug}
                                 onLayersClick={() => setProject(slug)}
                                 onDocOpen={handleDocOpen}

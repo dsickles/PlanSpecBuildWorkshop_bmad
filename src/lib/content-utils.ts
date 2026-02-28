@@ -73,16 +73,26 @@ export function getContentFilePaths(): ContentFilePath[] {
     for (const projectSlug of allPathsToScan) {
         const projectDir = path.join(CONTENT_ROOT, projectSlug);
 
-        // Read artifact type subdirectories (agents, docs, prototypes)
-        let artifactDirs: fs.Dirent[];
+        // Read project directory to find both index.md and artifact subdirectories
+        let entries: fs.Dirent[];
         try {
-            artifactDirs = fs
-                .readdirSync(projectDir, { withFileTypes: true })
-                .filter((entry) => entry.isDirectory());
+            entries = fs.readdirSync(projectDir, { withFileTypes: true });
         } catch {
             // Skip unreadable project directories
             continue;
         }
+
+        // Story 8.3: Discover index.md in the project root as a generic 'doc'
+        const hasRootIndex = entries.some((e) => e.isFile() && e.name === "index.md");
+        if (hasRootIndex) {
+            results.push({
+                filePath: path.join(projectDir, "index.md"),
+                projectSlug,
+                artifactType: "doc",
+            });
+        }
+
+        const artifactDirs = entries.filter((entry) => entry.isDirectory());
 
         for (const artifactDir of artifactDirs) {
             const artifactType = DIR_TO_ARTIFACT_TYPE[artifactDir.name];

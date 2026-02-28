@@ -8,6 +8,7 @@ jest.mock("../../../hooks/useFilterState");
 
 const mockContent: ParsedArticle[] = [
     {
+        id: "_shared:agents:agent-a",
         title: "Agent A",
         projectSlug: "_shared",
         artifactType: "agent",
@@ -15,12 +16,14 @@ const mockContent: ParsedArticle[] = [
         domain: ["Domain A"],
         tech_stack: ["Tech A"],
         description: "Description A",
-        date: "2023-01-01",
-        html: "<p>A</p>",
         projects: ["project-a"],
-        _filePath: "content/_shared/agents/agent-a.md"
-    },
+        _filePath: "content/_shared/agents/agent-a.md",
+        html: "<p>A</p>",
+        date: "2023-01-01",
+        toc: []
+    } as ParsedArticle,
     {
+        id: "_shared:agents:agent-b",
         title: "Agent B",
         projectSlug: "_shared",
         artifactType: "agent",
@@ -28,12 +31,14 @@ const mockContent: ParsedArticle[] = [
         domain: ["Domain B"],
         tech_stack: ["Tech B"],
         description: "Description B",
-        date: "2023-01-01",
-        html: "<p>B</p>",
         projects: ["project-b"],
-        _filePath: "content/_shared/agents/agent-b.md"
-    },
+        _filePath: "content/_shared/agents/agent-b.md",
+        html: "<p>B</p>",
+        date: "2023-01-01",
+        toc: []
+    } as ParsedArticle,
     {
+        id: "project-a:docs:doc-c",
         title: "Doc C",
         projectSlug: "project-a",
         artifactType: "doc",
@@ -41,12 +46,14 @@ const mockContent: ParsedArticle[] = [
         domain: ["Domain A"],
         tech_stack: ["Tech A"],
         description: "Description C",
-        date: "2023-01-01",
-        html: "<p>C</p>",
         projects: [],
-        _filePath: "content/project-a/docs/doc-c.md"
-    },
+        _filePath: "content/project-a/docs/doc-c.md",
+        html: "<p>C</p>",
+        date: "2023-01-01",
+        toc: []
+    } as ParsedArticle,
     {
+        id: "_shared:agents:agent-shared",
         title: "Agent Shared",
         projectSlug: "_shared",
         artifactType: "agent",
@@ -54,11 +61,12 @@ const mockContent: ParsedArticle[] = [
         domain: ["Domain A"],
         tech_stack: ["Tech A"],
         description: "Shared Description",
-        date: "2023-01-01",
-        html: "<p>Shared</p>",
         projects: [],
-        _filePath: "content/_shared/agents/agent-shared.md"
-    }
+        _filePath: "content/_shared/agents/agent-shared.md",
+        html: "<p>Shared</p>",
+        date: "2023-01-01",
+        toc: []
+    } as ParsedArticle
 ];
 
 describe("DiscoveryGrid", () => {
@@ -213,5 +221,221 @@ describe("DiscoveryGrid", () => {
 
         // Verify that BlueprintErrorRow renders the directory name (parent of filePath)
         expect(screen.getByText("docs")).toBeInTheDocument();
+    });
+
+    it("identifies index.md as overviewDoc and passes it to BlueprintGroup", () => {
+        const mockOverview: ParsedArticle[] = [
+            {
+                id: "project-a:index",
+                _filePath: "content/project-a/index.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Project A Overview",
+                artifactType: "doc",
+                status: "Live",
+                domain: ["Logic"],
+                tech_stack: ["React"],
+                description: "Overview content",
+                html: "<h1>Overview</h1>",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+            {
+                id: "project-a:docs:spec",
+                _filePath: "content/project-a/docs/spec.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Technical Spec",
+                artifactType: "doc",
+                status: "Live",
+                domain: ["Logic"],
+                tech_stack: ["React"],
+                description: "Spec content",
+                html: "<h1>Spec</h1>",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+        ];
+
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: [],
+            setProject: jest.fn(),
+            setDocument: jest.fn(),
+        });
+
+        render(<DiscoveryGrid allContent={mockOverview} errors={[]} />);
+
+        // BlueprintGroup should receive the overviewDoc
+        // We can check if the button with aria-label "Open Project A overview" exists
+        expect(screen.getByLabelText(/Open Project A overview/i)).toBeInTheDocument();
+    });
+
+    it("does not render overview icon for agent cards", () => {
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: []
+        });
+
+        const agentsOnly = mockContent.filter(i => i.artifactType === "agent");
+        render(<DiscoveryGrid allContent={agentsOnly} errors={[]} />);
+
+        // Screen should not have any elements with the overview label for agents
+        expect(screen.queryByLabelText(/View project overview/i)).not.toBeInTheDocument();
+    });
+
+    it("does not render overview icon for prototype cards", () => {
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: []
+        });
+
+        const prototypesOnly: ParsedArticle[] = [{
+            id: "project-a:prototypes:proto-1",
+            _filePath: "content/project-a/prototypes/proto-1.md",
+            projectSlug: "project-a",
+            artifactType: "prototype",
+            title: "Proto 1",
+            status: "Live",
+            domain: [],
+            tech_stack: [],
+            html: "",
+            date: "2023-01-01",
+            toc: [],
+            projects: []
+        } as ParsedArticle];
+
+        render(<DiscoveryGrid allContent={prototypesOnly} errors={[]} />);
+
+        // Screen should not have any elements with the overview label for prototypes
+        expect(screen.queryByLabelText(/View project overview/i)).not.toBeInTheDocument();
+    });
+
+    it("identifies docs/index.md as blueprintOverview and uses it for header, while excluding it from rows", () => {
+        const mockBlueprintOverview: ParsedArticle[] = [
+            {
+                id: "project-a:docs:index",
+                _filePath: "content/project-a/docs/index.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Blueprint Overview",
+                artifactType: "doc",
+                status: "Live",
+                domain: [],
+                tech_stack: [],
+                html: "",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+            {
+                id: "project-a:docs:other",
+                _filePath: "content/project-a/docs/other.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Other Doc",
+                artifactType: "doc",
+                status: "Live",
+                domain: [],
+                tech_stack: [],
+                html: "",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+        ];
+
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: [],
+            setProject: jest.fn(),
+            setDocument: jest.fn(),
+        });
+
+        render(<DiscoveryGrid allContent={mockBlueprintOverview} errors={[]} />);
+
+        // Header icon should exist (BlueprintGroup uses aria-label="Open Project A overview")
+        expect(screen.getByLabelText(/Open Project A overview/i)).toBeInTheDocument();
+        // Row for 'Other Doc' should exist
+        expect(screen.getByText("Other Doc")).toBeInTheDocument();
+        // 'Blueprint Overview' should NOT appear in rows
+        expect(screen.queryByText("Blueprint Overview")).not.toBeInTheDocument();
+    });
+
+    it("prioritizes docs/index.md over root index.md for BlueprintGroup overview", () => {
+        const mockMixedOverview: ParsedArticle[] = [
+            {
+                id: "project-a:index",
+                _filePath: "content/project-a/index.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Project Root Overview",
+                artifactType: "doc",
+                status: "Live",
+                domain: [],
+                tech_stack: [],
+                html: "Root",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+            {
+                id: "project-a:docs:index",
+                _filePath: "content/project-a/docs/index.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Blueprint Doc Overview",
+                artifactType: "doc",
+                status: "Live",
+                domain: [],
+                tech_stack: [],
+                html: "Doc",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+            {
+                id: "project-a:docs:other",
+                _filePath: "content/project-a/docs/other.md",
+                projectSlug: "project-a",
+                projectTitle: "Project A",
+                title: "Other Doc",
+                artifactType: "doc",
+                status: "Live",
+                domain: [],
+                tech_stack: [],
+                html: "",
+                date: "2023-01-01",
+                toc: [],
+                projects: []
+            } as ParsedArticle,
+        ];
+
+        const setDocument = jest.fn();
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: [],
+            setProject: jest.fn(),
+            setDocument,
+        });
+
+        render(<DiscoveryGrid allContent={mockMixedOverview} errors={[]} />);
+
+        const headerBtn = screen.getByLabelText(/Open Project A overview/i);
+        fireEvent.click(headerBtn);
+
+        // Should have called setDocument with the ID for the docs/index.md file
+        try {
+            expect(setDocument).toHaveBeenCalledWith("project-a:docs:index");
+        } catch (e) {
+            throw new Error(`Expected ID: project-a:docs:index. Actual calls: ${JSON.stringify(setDocument.mock.calls)}`);
+        }
     });
 });

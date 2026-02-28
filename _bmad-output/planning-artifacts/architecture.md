@@ -107,11 +107,11 @@ Next.js local dev server (`npm run dev`) with Fast Refresh.
 
 The application does not use a traditional database. The GitHub repository serves as the single source of truth.
 
-**Markdown Ingestion Strategy: Custom Parser (`gray-matter` + `unified` pipeline)**
-- *Rationale:* Keeps source markdown files completely pure/agnostic (no React code inside the `.md` files).
-- *Benefit:* Ensures that the portfolio markdown is fully portable to other stacks in the future. Total control over mapping plain markdown rules to specific Shadcn UI components.
-- *Implementation:* Uses `remark` and `rehype` for parsing, with `@tailwindcss/typography` for visual rendering.
-- *Affects:* Core data fetching logic for the grid and document display.
+**Markdown Ingestion Strategy: Decoupled Custom Parser (`gray-matter` + `markdown-renderer.ts`)**
+- *Rationale:* Decouples content parsing (business logic) from the complex Markdown-to-HTML rendering pipeline (technical dependency).
+- *Benefit:* Ensures that branding tokenization and frontmatter validation can be 100% unit tested by mocking the renderer, bypassing ESM transformation issues in test environments (Jest).
+- *Implementation:* `src/lib/content-parser.ts` handles ingestion and tokenization; `src/lib/markdown-renderer.ts` (ESM-only) handles the `unified`/`remark`/`rehype` conversion.
+- *Affects:* Core data fetching logic and the ingestion pipeline stability.
 
 ### Sort Order Configuration (FR20)
 
@@ -165,6 +165,12 @@ projects:              # filter bar pill order and Blueprint group order
 - *Implementation:* Managed via `useState` or `useReducer` within the Blueprint card component. This is the only exception to the URL-driven state strategy.
 - *Affects:* Blueprint card component only.
 
+### Shared Documentation Strategy (Remote Pointers)
+- *Rationale:* To eliminate redundancy, the system must support linking to "live" documentation (PRDs, Architectures) residing in the `_bmad-output/` or other root directories, rather than requiring manual copy-pasting into `/content/`.
+- *Implementation:* The `FrontmatterSchema` will be extended with an optional `sourcePath` string. If present, the `parser.ts` utility will resolve this path relative to the project root and ingest the content from the external file.
+- *Constraint:* Standard `/content/` files always take precedence. Remote pointers are only resolved if the local file body is empty or explicitly configured as a link.
+- *Affects:* `src/lib/parser.ts` and `src/lib/schema.ts`.
+
 ### Infrastructure & Deployment
 
 **Hosting Strategy: Vercel**
@@ -194,6 +200,12 @@ The choice of a standard HTML pipeline (`unified`) combined with `@tailwindcss/t
 
 **Frontmatter Naming Conventions:**
 All markdown files must use strictly `camelCase` for YAML frontmatter keys (e.g., `publishDate`, `shortDescription`, `actionType`). This maps 1:1 with TypeScript interfaces and eliminates translation layers in the frontend code.
+
+**Branding Tokenization (Centralized Control):**
+To ensure branding consistency without mass-editing files, the ingestion engine supports a `{{PROJECT_NAME}}` token.
+- **Source of Truth:** The `title` field in a project's root `index.md` (e.g., `/content/plan-spec-build/index.md`).
+- **Processing:** The `content-parser.ts` recursively replaces this token in all frontmatter strings and the Markdown body before rendering.
+- **Rules:** Authors should use the token in headers, descriptions, and body text whenever referring to the project name.
 
 ### Structure Patterns
 
@@ -235,6 +247,7 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 - **About Modal Boundary:** `AboutModal.tsx` renders structured content (portfolio metrics, "Fork a Workshop" CTA) rather than parsed markdown. Portfolio metrics (project count, document count, status distributions) are computed at build time from the parsed content data in `/content/`.
 - **Dashboard Grid Boundary:** `DashboardGrid.tsx` is the three-column CSS Grid layout wrapper. It receives filtered content arrays and maps them to the Agent Studio, Blueprints, and Build Lab columns. It handles column-level empty states (dashed borders, `[Concept]` pills) and delegates card rendering to `UniversalCompoundCard`.
 - **ToC Engine Boundary:** Any logic for structural document parsing (header extraction for Table of Contents) must sit within `src/lib/` (e.g., `src/lib/toc-engine.ts`). This preserves the **Content Boundary** by keeping parsing logic decoupled from React rendering components.
+- **Markdown Renderer Boundary:** The heavy Markdown-to-HTML conversion pipeline must reside in `src/lib/markdown-renderer.ts`. This acts as an architectural "airlock" for ESM-only dependencies (`unified`, `remark`), ensuring the rest of the logic layer (`content-parser.ts`) remains clean, lightweight, and fully testable via standard mocking.
 
 ### Process Patterns
 
@@ -282,6 +295,14 @@ const FrontmatterSchema = z.object({
   parent_project: z.string().optional(),
   related_docs: z.array(z.string()).optional(),
   artifact_type: z.enum(["agent", "doc", "prototype"]).optional(),
+  // Enhancements for Epic 8/9
+  sourcePath: z.string().optional(),
+  externalLinks: z.array(z.object({
+    label: z.string(),
+    url: z.string().url(),
+  })).optional(),
+  associatedProjects: z.array(z.string()).optional(),
+  isOverview: z.boolean().optional(),
 });
 ```
 

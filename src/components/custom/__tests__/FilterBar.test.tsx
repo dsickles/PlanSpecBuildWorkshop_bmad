@@ -11,7 +11,7 @@ describe('FilterBar - Clear Filter Visibility', () => {
     const mockClearAllFilters = jest.fn();
 
     const defaultProps = {
-        projects: ['Project A'],
+        projects: [{ slug: 'project-a', title: 'Project A' }],
         domains: ['Domain A'],
         techStacks: ['Tech A'],
     };
@@ -37,7 +37,7 @@ describe('FilterBar - Clear Filter Visibility', () => {
 
     it('shows "Clear Filter" button when project filter is active', () => {
         (useFilterState as jest.Mock).mockReturnValue({
-            activeProject: 'Project A',
+            activeProject: 'project-a',
             activeDomains: [],
             activeTech: [],
             setProject: mockSetProject,
@@ -82,7 +82,7 @@ describe('FilterBar - Clear Filter Visibility', () => {
 
     it('calls clearFilters when clicked', () => {
         (useFilterState as jest.Mock).mockReturnValue({
-            activeProject: 'Project A',
+            activeProject: 'project-a',
             activeDomains: [],
             activeTech: [],
             setProject: mockSetProject,
@@ -94,5 +94,31 @@ describe('FilterBar - Clear Filter Visibility', () => {
         render(<FilterBar {...defaultProps} />);
         fireEvent.click(screen.getByText('Clear Filter'));
         expect(mockClearAllFilters).toHaveBeenCalledTimes(1);
+    });
+
+    it('displays the project title but calls setProject with the slug', () => {
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: [],
+            activeTech: [],
+            setProject: mockSetProject,
+            toggleDomain: mockToggleDomain,
+            toggleTech: mockToggleTech,
+            clearAllFilters: mockClearAllFilters,
+        });
+
+        const customProps = {
+            projects: [{ slug: 'p1-slug', title: 'P1 Title' }],
+            domains: [],
+            techStacks: [],
+        };
+
+        render(<FilterBar {...customProps} />);
+
+        const button = screen.getByText('P1 Title');
+        expect(button).toBeInTheDocument();
+
+        fireEvent.click(button);
+        expect(mockSetProject).toHaveBeenCalledWith('p1-slug');
     });
 });

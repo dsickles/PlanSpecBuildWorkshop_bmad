@@ -96,3 +96,20 @@ development_status:
   7-7-adaptive-toc-interaction: done
   7-8-refining-reading-rhythm-focus: done
   epic-7-retrospective: done
+
+  epic-8: done
+  8-1-decouple-filesystem-slugs-from-display-titles: done
+  8-2-agent-studio-external-link-support: done
+  8-3-project-overview-cta-mapping: done
+  epic-8-retrospective: done
+
+  epic-9: backlog
+  9-1-remote-pointer-parser-implementation: backlog
+  9-2-agentic-tool-documentation-viewer: backlog
+  epic-9-retrospective: optional
+
+  epic-10: backlog
+  10-1-about-page-density-optimization: backlog
+  10-2-global-theme-synchronization: backlog
+  10-3-revamped-clear-filter-workflow: backlog
+  epic-10-retrospective: optional

@@ -30,7 +30,7 @@ We are focusing on conceptualizing a portfolio platform for an Enterprise PM to 
 
 **Thematic Organization:**
 
-**Theme 1: The "Plan. Spec. Build." Architecture**
+**Theme 1: The "Plan Spec Build Workshop" Architecture**
 *Focus: The overarching conceptual structure and branding.*
 - **The Tri-Pillar Gallery:** Categorizing output into Agent Studio (Tools), Blueprints (Docs), and Build Lab (Software).
 - **The Workshop Analogy:** Framing the portfolio not as an "AI showcase," but as a craftsman's workshop where you orchestrate powerful tools to build rigorous products.
@@ -55,7 +55,7 @@ We are focusing on conceptualizing a portfolio platform for an Enterprise PM to 
 
 **Action Planning:**
 
-**Idea 1: The "Plan. Spec. Build." MVP Architecture**
+**Idea 1: The "Plan Spec Build Workshop" MVP Architecture**
 **Why This Matters:** Provides the foundation for all future project entries.
 **Next Steps:**
 1. Define the data schema (JSON/YAML) to link Projects -> Tools, Blueprints, and Prototypes.
@@ -76,7 +76,7 @@ We are focusing on conceptualizing a portfolio platform for an Enterprise PM to 
 ## Session Summary and Insights
 
 **Key Achievements:**
-- Established a mature, fluff-free branding strategy ("Plan. Spec. Build.")
+- Established a mature, fluff-free branding strategy ("Plan Spec Build Workshop")
 - Designed a scalable, UX-friendly navigation system for non-technical audiences.
 - Engineered specific artifacts (Pivot Logs, Meta-Blueprints) to pre-emptively build trust and demonstrate authentic PM execution.
 

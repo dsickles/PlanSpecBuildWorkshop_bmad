@@ -6,6 +6,8 @@ import { z } from "zod";
  * structural metadata derived from the directory tree.
  */
 export type ParsedArticle = FrontmatterData & {
+    /** Unique identifier derived from the relative file path. */
+    id: string;
     /** XSS-sanitized HTML string generated from the Markdown body. */
     html: string;
     /** Table of Contents extracted from the document headings. */
@@ -71,6 +73,10 @@ export const FrontmatterSchema = z.object({
     external_url: z.string().url("external_url must be a valid URL").optional(),
     github_url: z.string().url("github_url must be a valid URL").optional(),
     projects: z.array(z.string()).nullish().transform(v => v ?? []),
+    external_links: z.array(z.object({
+        label: z.string(),
+        url: z.string().url("External link must be a valid URL"),
+    })).optional(),
 });
 
 /** Inferred TypeScript type for valid frontmatter data. */

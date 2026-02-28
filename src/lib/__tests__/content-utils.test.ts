@@ -74,5 +74,28 @@ describe("content-utils", () => {
                 artifactType: "agent"
             });
         });
+
+        it("should discover index.md in project root", () => {
+            (fs.readdirSync as jest.Mock).mockImplementation((dirPath: string) => {
+                if (dirPath === CONTENT_ROOT) {
+                    return [createMockDir("project-a")];
+                }
+                if (dirPath.endsWith("project-a")) {
+                    return [createMockFile("index.md"), createMockDir("docs")];
+                }
+                if (dirPath.endsWith(path.join("project-a", "docs"))) {
+                    return [createMockFile("prd.md")];
+                }
+                return [];
+            });
+
+            const paths = getContentFilePaths();
+
+            expect(paths).toContainEqual({
+                filePath: expect.stringContaining(path.join("project-a", "index.md")),
+                projectSlug: "project-a",
+                artifactType: "doc"
+            });
+        });
     });
 });

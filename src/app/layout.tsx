@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Plan. Spec. Build. Workshop",
+  title: "Plan Spec Build Workshop",
   description: "A portfolio showcasing a full AI-assisted product development workflow.",
 };
 

@@ -14,15 +14,15 @@ tech_stack:
   - "shadcn/ui"
   - "Zod"
   - "React"
-description: "This project! The complete design and planning documentation for the Plan Spec Build Workshop — PRD, Architecture, UX Specification, and Epics."
+description: "This project! The complete design and planning documentation for the {{PROJECT_NAME}} — PRD, Architecture, UX Specification, and Epics."
 parent_project: "plan-spec-build-workshop"
 related_docs:
   - "plan-spec-build-workshop/agents"
 ---
 
-# Plan. Spec. Build. — Portfolio Design System
+# {{PROJECT_NAME}} — Portfolio Design System
 
-Comprehensive planning and design documentation for the **Plan. Spec. Build.** portfolio application — built end-to-end using the BMAD AI agent workflow.
+Comprehensive planning and design documentation for the **{{PROJECT_NAME}}** portfolio application — built end-to-end using the BMAD AI agent workflow.
 
 ## Documents in this Blueprint
 
@@ -47,4 +47,4 @@ The portfolio is built on a modern, statically-optimized Next.js stack:
 
 ## Design Philosophy
 
-The "Linear-style" dark-mode command center layout — three columns (Studio, Blueprints, Lab) — reflects the natural phases of AI-assisted product development: Think → Plan → Build.
+The "Linear-style" dark-mode command center layout — three columns (Studio, Blueprints, Lab) — reflects the natural phases of AI-assisted product development: Plan → Spec → Build.

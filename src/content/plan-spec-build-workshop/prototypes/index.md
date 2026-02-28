@@ -1,5 +1,5 @@
 ---
-title: "Plan Spec Build Workshop"
+title: "{{PROJECT_NAME}}"
 date: "2026-02-23"
 status: "WIP"
 domain:
@@ -19,6 +19,6 @@ github_url: "https://github.com/dsickles/PlanSpecBuildWorkshop_bmad"
 external_url: "http://localhost:3000"
 ---
 
-# Plan. Spec. Build. Portfolio
+# {{PROJECT_NAME}} Portfolio
 
 The working portfolio application — a tri-column "Command Center" built entirely using the BMAD AI agent workflow. Demonstrates that structured AI collaboration produces production-quality software with full planning artifacts.

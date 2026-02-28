@@ -11,18 +11,18 @@ tech_stack:
   - "Next.js"
   - "TypeScript"
   - "Tailwind CSS"
-description: "Full PRD for the Plan Spec Build Workshop — user journeys, functional requirements, NFRs, and phased roadmap."
+description: "Full PRD for the {{PROJECT_NAME}} — user journeys, functional requirements, NFRs, and phased roadmap."
 parent_project: "plan-spec-build-workshop"
 ---
 
-# Product Requirements Document - "Plan. Spec. Build." Agentic Builder's Workshop
+# Product Requirements Document - {{PROJECT_NAME}}
 
 **Author:** Dan
 **Date:** 2026-02-22
 
 ## Executive Summary
 
-The "Plan. Spec. Build." Agentic Builder's Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
+The "{{PROJECT_NAME}}" Agentic Builder's Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
 
 ### What Makes This Special
 
@@ -54,7 +54,7 @@ The core differentiator is the platform's **interlocking 3-column architecture**
 
 ### Journey 1: The Skeptical Hiring Manager (Primary Evaluator)
 - **Opening Scene:** A Hiring Manager clicks the portfolio link, groaning internally. They've seen dozens of "I built an app with AI" portfolios this week, mostly generic, single-prompt outputs with no depth. They expect more "AI Slop."
-- **Rising Action:** They land on the "Plan. Spec. Build." dashboard. It doesn't look like a basic tech demo; it looks like a professional workshop. They select a project and the UI dynamically sorts into the 3-column view. They scan the thoughtfully designed UI cards for the Blueprints and notice the PRD sounds distinctly human-authored. They spot a document titled "Decision Matrix."
+- **Rising Action:** They land on the "{{PROJECT_NAME}}" dashboard. It doesn't look like a basic tech demo; it looks like a professional workshop. They select a project and the UI dynamically sorts into the 3-column view. They scan the thoughtfully designed UI cards for the Blueprints and notice the PRD sounds distinctly human-authored. They spot a document titled "Decision Matrix."
 - **Climax:** They open the Decision Matrix and read a specific entry detailing how the AI failed at a complex architectural constraint, and how the PM (you) explicitly intervened to course-correct the schema. 
 - **Resolution:** The skepticism vanishes. The Hiring Manager realizes this candidate is a rigorous product manager who *commands* AI tools, not someone who just gets lucky with prompts. They click the "Build Lab" link to view the working prototype, already convinced of your strategic value.
 
@@ -188,7 +188,7 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **FR13:** The User can navigate directly from a specific prototype back to its accompanying documentation (e.g., its specific Decision Matrix) via explicit intra-linking.
 - **FR14:** The User can access an "About this Project" educational page from the global navigation.
 - **FR15:** The User can access a "Fork a Workshop" link to copy the underlying repository template.
-- **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
+- **FR16:** The System must present the portfolio itself ("{{PROJECT_NAME}}") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 

@@ -1,19 +1,19 @@
 ---
-title: "Plan. Spec. Build." Agentic Builder's Workshop
+title: "Plan Spec Build Workshop"
 author: Dan
 date: 2026-02-22
 version: 1.0
 status: Complete
 ---
 
-# Product Requirements Document - "Plan. Spec. Build." Agentic Builder's Workshop
+# Product Requirements Document - Plan Spec Build Workshop
 
 **Author:** Dan
 **Date:** 2026-02-22
 
 ## Executive Summary
 
-The "Plan. Spec. Build." Agentic Builder's Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
+The Plan Spec Build Workshop is a zero-fluff, highly practical portfolio web application designed to document and showcase an Enterprise PM's agentic development journey. Unlike typical AI showcases that highlight "magical" one-click generation, this product intentionally exposes the rigorous "messy middle" of software development. It targets Hiring Managers seeking evidence of strategic oversight and Peer PMs looking for a proven blueprint to adopt agentic workflows. By prioritizing demonstrable product management discipline—such as constraints management and architectural trade-offs—the platform establishes the author as a pragmatic orchestrator of AI tools, building trust through verifiable, human-edited documentation.
 
 ### What Makes This Special
 
@@ -45,7 +45,7 @@ The core differentiator is the platform's **interlocking 3-column architecture**
 
 ### Journey 1: The Skeptical Hiring Manager (Primary Evaluator)
 - **Opening Scene:** A Hiring Manager clicks the portfolio link, groaning internally. They've seen dozens of "I built an app with AI" portfolios this week, mostly generic, single-prompt outputs with no depth. They expect more "AI Slop."
-- **Rising Action:** They land on the "Plan. Spec. Build." dashboard. It doesn't look like a basic tech demo; it looks like a professional workshop. They select a project and the UI dynamically sorts into the 3-column view. They scan the thoughtfully designed UI cards for the Blueprints and notice the PRD sounds distinctly human-authored. They spot a document titled "Decision Matrix."
+- **Rising Action:** They land on the "Plan Spec Build Workshop" dashboard. It doesn't look like a basic tech demo; it looks like a professional workshop. They select a project and the UI dynamically sorts into the 3-column view. They scan the thoughtfully designed UI cards for the Blueprints and notice the PRD sounds distinctly human-authored. They spot a document titled "Decision Matrix."
 - **Climax:** They open the Decision Matrix and read a specific entry detailing how the AI failed at a complex architectural constraint, and how the PM (you) explicitly intervened to course-correct the schema. 
 - **Resolution:** The skepticism vanishes. The Hiring Manager realizes this candidate is a rigorous product manager who *commands* AI tools, not someone who just gets lucky with prompts. They click the "Build Lab" link to view the working prototype, already convinced of your strategic value.
 
@@ -143,6 +143,10 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **Smart Suite Navigation**: Implementing a "Suite Switcher" and "Recommended Next" logic within the document modal to allow jumping between project artifacts without closing the viewer.
 - A "How to build your own Agent" tutorial section
 - Support for Journey 3 (The Author) via more advanced automated deployment pipelines — *Note: Journey 3 is partially supported in Phase 1 via FR1-FR3 (basic markdown publishing). Phase 2 adds advanced CI/CD automation.*
+- **Enhanced Document Access:** Treat project `index.md` as the "Overview" document accessible via the card's Doc CTA. Support external links (GitHub, websites) directly in Agent Studio cards.
+- **Maintenance Optimization:** Implement a "Remote Pointer" strategy to eliminate artifact redundancy by linking to source documentation paths in the parent repo.
+- **Agentic Transparency:** Introduce a document viewer for Agent Studio tools to explain "how it works" and project history.
+- **UI Refinement:** Optimize About page density, synchronize theme consistency for filters/modals, and revamp the Filter Clear workflow for a more seamless, muted experience.
 - Basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches)
 
 **Phase 3 (Expansion):**
@@ -180,13 +184,18 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - **FR13:** The User can navigate directly from a specific prototype back to its accompanying documentation (e.g., its specific Decision Matrix) via explicit intra-linking.
 - **FR14:** The User can access an "About this Project" educational page from the global navigation.
 - **FR15:** The User can access a "Fork a Workshop" link to copy the underlying repository template.
-- **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
+- **FR16:** The System must present the portfolio itself ("Plan Spec Build Workshop") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account on any external platform.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 
 ### Shared Content & Display Ordering
 - **FR19:** The System must support shared Agent Studio items that can be associated with zero or more projects via a `projects` frontmatter array, without requiring file duplication across project folders. Agents without a `projects` field (or with an empty array) are displayed only in Browse Mode and hidden when a project filter is active. Agents with a `projects` array are displayed when any of their listed projects match the active project filter.
 - **FR20:** The Author can define the display order of Agent Studio cards, Blueprint documents (per project), Build Lab cards, and project filter pills via a central `sort-config.yaml` manifest file. Items not listed in the manifest appear after listed items, sorted alphabetically by title.
+- **FR21:** The System must allow capitalization and spaces in project names, mapping from filesystem slugs to display titles.
+- **FR22:** The User can access project "Overview" content (from `index.md`) via the Blueprint card's primary document CTA.
+- **FR23:** The Author can link to documentation artifacts outside the `/content/` directory via pointer metadata to avoid file redundancy.
+- **FR24:** The System must synchronize Dark/Light mode theme state across all components, including filters and the modal document reader.
+- **FR25:** The System must display "no tools" for empty Agent Studio states and support external links for agentic tools.
 
 ## Non-Functional Requirements
 

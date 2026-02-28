@@ -13,6 +13,9 @@ tech_stack:
   - "Strategic Foresight"
 description: "A precision-engineered toolkit for defining, designing, and validating product concepts through structured Design Thinking and Innovation Strategy agents."
 projects:
+external_links:
+  - label: "GitHub"
+    url: "https://github.com/github/spec-kit"
 ---
 
 # Spec Kit (CIS)

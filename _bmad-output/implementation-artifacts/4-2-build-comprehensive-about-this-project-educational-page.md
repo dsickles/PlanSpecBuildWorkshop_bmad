@@ -24,7 +24,7 @@ so that I can comprehend the portfolio's purpose and instantly assess the volume
     - [x] Create `src/app/about/page.tsx` using the `DashboardGrid`'s parent container for width consistency (`max-w-7xl`).
     - [x] Implement a centered, typographic-heavy layout using `zinc-50` for headings and `zinc-400` for body copy.
 - [x] Task 2: Implement Philosophy Section (AC: 2.1)
-    - [x] Add static markdown-styled content explaining the "Plan. Spec. Build." philosophy.
+    - [x] Add static markdown-styled content explaining the "Plan Spec Build Workshop" philosophy.
 - [x] Task 3: Implement Dynamic "At a Glance" Metrics (AC: 2.2)
     - [x] Import `getAllArticles` and `getProjects` (or equivalent) from `src/lib/content-parser.ts`.
     - [x] Calculate the total count of projects, agent cards, blueprint documents, and prototypes.

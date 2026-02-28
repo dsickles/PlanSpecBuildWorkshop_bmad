@@ -5,8 +5,13 @@ import { cn } from "@/lib/utils";
 import { useFilterState } from "@/hooks/useFilterState";
 import { RED_GHOST_BUTTON_STYLES } from "@/lib/constants";
 
+interface ProjectOption {
+    slug: string;
+    title: string;
+}
+
 interface FilterBarProps {
-    projects: string[];
+    projects: ProjectOption[];
     domains: string[];
     techStacks: string[];
 }
@@ -44,17 +49,17 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                     </button>
                     {projects.map((project) => (
                         <button
-                            key={project}
-                            onClick={() => setProject(project)}
-                            aria-pressed={activeProject === project}
+                            key={project.slug}
+                            onClick={() => setProject(project.slug)}
+                            aria-pressed={activeProject === project.slug}
                             className={cn(
                                 "px-4 py-1.5 text-sm rounded-full transition-colors border filter-pill",
-                                activeProject === project
+                                activeProject === project.slug
                                     ? "bg-blue-600 border-blue-600 text-white"
                                     : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-300"
                             )}
                         >
-                            {project}
+                            {project.title}
                         </button>
                     ))}
 

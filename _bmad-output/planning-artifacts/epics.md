@@ -8,11 +8,11 @@ inputDocuments: [
 ]
 ---
 
-# Plan. Spec. Build. - Epic Breakdown
+# Plan Spec Build Workshop - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for Plan. Spec. Build., decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
+This document provides the complete epic and story breakdown for Plan Spec Build Workshop, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
 ## Requirements Inventory
 
@@ -33,7 +33,7 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 - **FR13:** The User can navigate directly from a specific prototype back to its accompanying documentation via explicit intra-linking.
 - **FR14:** The User can access an "About this Project" educational page from the global navigation.
 - **FR15:** The User can access a "Fork a Workshop" link to copy the underlying repository template.
-- **FR16:** The System must present the portfolio itself ("Plan. Spec. Build.") as the first selectable project (The Meta-Blueprint).
+- **FR16:** The System must present the portfolio itself ("Plan Spec Build Workshop") as the first selectable project (The Meta-Blueprint).
 - **FR17:** The User can view all portfolio content (projects, blueprints, prototypes) without requiring authentication or an account.
 - **FR18:** (Deferred to v2) The System will support basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches).
 - **FR19:** The System must support shared Agent Studio items associated with zero or more projects via a `projects` frontmatter array, without file duplication. Agents without a `projects` field are hidden when a project filter is active.
@@ -108,6 +108,9 @@ This document provides the complete epic and story breakdown for Plan. Spec. Bui
 *   **Epic 5:** Shared Agent Studio Items
 *   **Epic 6:** Central Sort Order Manifest
 *   **Epic 7:** Deep Document Discovery
+*   **Epic 8:** Content Identity & Agent Visibility
+*   **Epic 9:** Maintenance & Strategic Rigor
+*   **Epic 10:** Interface Refinement & Flow
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -158,7 +161,7 @@ So that the interface is ready to receive and display categorized project compon
 *   **And** the component must accept dynamic `children` props to allow data-driven components to be injected into the columns in future Epics, rather than hardcoding children in the layout layer.
 
 ## Epic 1: The "Meta-Blueprint" Foundation & Content Ingestion
-The Author can publish Markdown/Frontmatter content to the repository, and the System successfully parses it into structured data, ensuring the portfolio itself ("Plan. Spec. Build.") is the first viewable project.  
+The Author can publish Markdown/Frontmatter content to the repository, and the System successfully parses it into structured data, ensuring the portfolio itself ("Plan Spec Build Workshop") is the first viewable project.
 *(Constraint: Implementation must use Zod for strict Frontmatter validation, mapping failures to customized `[Error]` fallback states instead of crashing the Next.js build).*
 **FRs covered:** FR1, FR2, FR3, FR4, FR16
 
@@ -199,7 +202,7 @@ So that the raw Markdown is transformed into the required React props for the Un
 
 ### Story 1.4: "Meta-Blueprint" Project Definition
 As the Content Author,
-I want the "Plan. Spec. Build." project itself to exist as the foundational piece of Markdown content in the system,
+I want the "Plan Spec Build Workshop" project itself to exist as the foundational piece of Markdown content in the system,
 So that I can validate the ingestion pipeline using realistic portfolio data.
 
 **Acceptance Criteria:**
@@ -524,5 +527,103 @@ so that my reading experience remains stable and authoritative without technical
 *   **Declarative Focus Restoration**: Closing the modal (via any method) must restore focus to the trigger icon in the grid using a declarative approach (e.g., Radix `onCloseAutoFocus`).
 *   **Stable Document Anchoring**: Clicking a Table of Contents link must land the document exactly at the header, respecting the `scroll-padding-top` and `headerHeight`.
 *   **Clean Technical Debt**: Remove any manual focus hacks (like redundant refs) or measurement logic that is no longer required by the refined implementation.
+
+
+## Epic 8: Content Identity & Agent Visibility
+Refining how projects and agents are presented by decoupled filesystem slugs from user-facing titles, enabling external link support for agent tools, and surfacing project overview content directly from `index.md`.
+**FRs covered:** FR21, FR22, FR25
+
+### Story 8.1: Decouple Filesystem Slugs from Display Titles
+As a Content Author,
+I want my project cards to display capitalized titles with spaces (e.g., "Plan Spec Build Workshop"),
+So that the portfolio feels professional and is not constrained by filesystem naming rules.
+
+**Acceptance Criteria:**
+*   **Given** a project `index.md` with a `title` frontmatter field,
+*   **When** rendering the dashboard,
+*   **Then** the project navigation pills and card headers display the frontmatter title rather than the folder slug.
+*   **And** the mapping from slug to title is performed during the ingestion phase to maintain performance.
+
+### Story 8.2: Agent Studio External Link Support
+As a User,
+I want to see icons linking to GitHub or demo sites directly on Agent Studio cards,
+So that I can quickly explore the tools being showcased.
+
+**Acceptance Criteria:**
+*   **Given** an agent markdown file,
+*   **When** the `externalLinks` frontmatter array is present,
+*   **Then** the Agent Studio card renders a small cluster of icons in the top-right corner.
+*   **And** the icons match the link type (e.g., GitHub logo for repo links, Globe for websites).
+
+### Story 8.3: Project "Overview" CTA Mapping
+As a User,
+I want the Blueprint card's primary document icon to open the project's `index.md` content,
+So that I can read a high-level overview of the project as my starting point.
+
+**Acceptance Criteria:**
+*   **Given** a project card in the Blueprints column,
+*   **When** clicking the "Doc" CTA or a designated "Overview" link,
+*   **Then** the Markdown Modal opens with the content parsed from the project's root `index.md`.
+
+## Epic 9: Maintenance & Strategic Rigor
+Eliminating redundant workflows for the author by allowing documentation pointers to external repository paths and introducing a dedicated viewer for agentic tool specifications.
+**FRs covered:** FR23, FR25
+
+### Story 9.1: Remote Pointer Parser Implementation
+As a Content Author,
+I want to link to "real" documentation files in my repository (e.g., `/_bmad-output/planning-artifacts/prd.md`) instead of copy-pasting them into the `/content/` folder,
+So that my portfolio always displays the live, current versions of my work.
+
+**Acceptance Criteria:**
+*   **Given** a document markdown file with a `sourcePath` frontmatter field,
+*   **When** the content is ingested,
+*   **Then** the parser resolves the `sourcePath` relative to the project root and returns the content of that file.
+*   **And** if the path is invalid, a clear build-time warning is logged.
+
+### Story 9.2: Agentic Tool Documentation Viewer
+As a User,
+I want to view deep-dives into "how it works" for specific agentic tools, including a list of projects that used them,
+So that I can understand the methodology and history behind the tools in the Agent Studio.
+
+**Acceptance Criteria:**
+*   **Given** an Agent Studio card,
+*   **When** clicking the documentation icon,
+*   **Then** a Markdown Modal opens displaying the agent's full documentation and an auto-generated list of associated projects derived from the `associatedProjects` schema field.
+
+## Epic 10: Interface Refinement & Flow
+Synthesizing the visual experience through theme synchronization, optimized about page density, and a more seamless filtering navigation workflow.
+**FRs covered:** FR24
+
+### Story 10.1: About Page Density Optimization
+As a User,
+I want the About page to present information more densely while maintaining its linear, scannable design,
+So that I can absorb the project vision and metrics without excessive scrolling.
+
+**Acceptance Criteria:**
+*   **Given** the About modal,
+*   **When** viewing content,
+*   **Then** typography and margins are optimized for a "premium studio" density matching the grid experience.
+*   **And** metrics (Project/Doc counts) are presented in a compact, high-impact grid row.
+
+### Story 10.2: Global Theme Synchronization
+As a User,
+I want the Filter Bar and Modal Reader to always match the theme preference I have selected in the Global Header,
+So that the interface remains visually cohesive in both Light and Dark modes.
+
+**Acceptance Criteria:**
+*   **Given** a change to the Theme Toggle,
+*   **When** the theme is updated,
+*   **Then** both the Filter Bar (including pills/icons) and the Modal Reader (including the prose content) update their tokens instantaneously to match.
+
+### Story 10.3: Revamped Clear Filter Workflow
+As a User,
+I want the "Clear Filter" action to be positioned above the filters and have a muted, non-disruptive appearance,
+So that I can reset my view without jarring layout shifts or vibrant visual distractions.
+
+**Acceptance Criteria:**
+*   **Given** an active project filter,
+*   **When** the "Clear Filter" button appears,
+*   **Then** it is positioned above the tri-row filter area.
+*   **And** it uses a muted grayscale or low-intensity tonal style that disappears seamlessly when filters are cleared.
 
 <!-- Epic Definitions End -->

@@ -1,11 +1,11 @@
-# Decision Matrix - "Plan. Spec. Build." Agentic Builder's Workshop
+# Decision Matrix - Plan Spec Build Workshop
 
 **Author:** Dan
 **Date:** 2026-02-22
 
 ---
 
-This document outlines key decisions made during the planning and specification phases of the "Plan. Spec. Build." portfolio project. It serves to expose the "messy middle" of agentic development, demonstrating where human strategic oversight, constraint management, and user-centric design choices superseded or refined raw AI output.
+This document outlines key decisions made during the planning and specification phases of the Plan Spec Build Workshop portfolio project. It serves to expose the "messy middle" of agentic development, demonstrating where human strategic oversight, constraint management, and user-centric design choices superseded or refined raw AI output.
 
 ## 1. Product & Strategic Decisions
 

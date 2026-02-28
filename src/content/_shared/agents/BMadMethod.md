@@ -14,11 +14,14 @@ tech_stack:
 description: "The full BMAD AI Agent Suite — Analyst, PM, Architect, Dev, QA, Scrum Master, and UX Designer agents used to plan, spec, and build this portfolio from scratch."
 projects:
   - "plan-spec-build-workshop"
+external_links:
+  - label: "GitHub"
+    url: "https://github.com/bmad-code-org/BMAD-METHOD"
 ---
 
 # BMAD AI Agent Suite
 
-The complete set of BMAD (Build Me A Dream) AI agents used to design and build the **Plan. Spec. Build.** portfolio application.
+The complete set of BMAD (Build Me A Dream) AI agents used to design and build the **Plan Spec Build Workshop** portfolio application.
 
 ## Agents Deployed
 

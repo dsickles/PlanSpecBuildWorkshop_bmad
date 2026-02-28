@@ -3,8 +3,9 @@
 // Client-side compound card component — safe to import from Server Components.
 
 import React from "react";
-import { Rocket, Layers, Github, FileText } from "lucide-react";
+import { Rocket, Layers, Github, FileText, Globe } from "lucide-react";
 import { ArtifactType } from "@/lib/schema";
+import { getDocIdFromPath } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Status Pill — "Tinted Neutrality" exact rgba values per UX Specification
@@ -274,6 +275,8 @@ export interface ProjectCardProps {
     onLayersClick?: () => void;
     /** Callback for doc card file icon — opens Document Modal */
     onDocOpen?: () => void;
+    /** For agent and other cards: optional array of external links */
+    externalLinks?: { label: string; url: string }[];
 }
 
 export function ProjectCard({
@@ -288,6 +291,7 @@ export function ProjectCard({
     githubUrl,
     onLayersClick,
     onDocOpen,
+    externalLinks,
 }: ProjectCardProps) {
     const cardContext = context || (artifactType as "agent" | "doc" | "prototype");
     const testId = `${cardContext}-card`;
@@ -296,11 +300,36 @@ export function ProjectCard({
     // Concept or Archived prototypes hide the live launch CTA and GitHub link
     const isInactive = status === "Concept" || status === "Archived";
 
-    // ---- Agent card — purely informational, no actions ----
+    // ---- Agent card — header icons for external links ----
     if (artifactType === "agent") {
+        const actions = (externalLinks && externalLinks.length > 0) || onLayersClick || onDocOpen ? (
+            <>
+                {onLayersClick && (
+                    <IconButton icon={Layers} label="Focus on this project" onClick={onLayersClick} />
+                )}
+                {onDocOpen && (
+                    <IconButton icon={FileText} label="View project overview" onClick={onDocOpen} />
+                )}
+                {externalLinks?.map((link, idx) => {
+                    const label = link.label.toLowerCase();
+                    const isGithub = label.includes("github");
+                    const icon = isGithub ? Github : Globe;
+                    const actionLabel = isGithub ? `View ${link.label} repository` : `Visit ${link.label} website`;
+                    return (
+                        <IconButton
+                            key={`${link.url}-${idx}`}
+                            icon={icon}
+                            label={actionLabel}
+                            href={link.url}
+                        />
+                    );
+                })}
+            </>
+        ) : undefined;
+
         return (
             <ProjectCardRoot data-testid={testId} aria-label={ariaLabel}>
-                <ProjectCardHeader title={title} status={status} />
+                <ProjectCardHeader title={title} status={status} actions={actions} />
                 <ProjectCardBody description={description} />
                 <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
             </ProjectCardRoot>
@@ -313,6 +342,9 @@ export function ProjectCard({
             <>
                 {onLayersClick && (
                     <IconButton icon={Layers} label="Focus on this project" onClick={onLayersClick} />
+                )}
+                {onDocOpen && (
+                    <IconButton icon={FileText} label="View project overview" onClick={onDocOpen} />
                 )}
                 {!isInactive && githubUrl && (
                     <IconButton icon={Github} label="View source on GitHub" href={githubUrl} />
@@ -355,7 +387,7 @@ export function ProjectCard({
                             )}
                             {onDocOpen && (
                                 <IconButton
-                                    id={`doc-trigger-${cardContext}-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                                    id={`doc-trigger-${cardContext}-${getDocIdFromPath(cardContext, title)}`}
                                     icon={FileText}
                                     label="View document"
                                     onClick={onDocOpen}

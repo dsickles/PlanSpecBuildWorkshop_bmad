@@ -13,6 +13,9 @@ tech_stack:
   - "React"
   - "Supabase"
 description: "A rapid product-building workflow using Lovable to go from prompt to production-ready full-stack applications through structured AI-driven iteration."
+external_links:
+  - label: "Website"
+    url: "https://lovable.dev"
 projects:
 ---
 

@@ -4,12 +4,7 @@ import fs from "fs";
 import path from "path";
 import { z } from "zod";
 import matter from "gray-matter";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkGfm from "remark-gfm";
-import remarkRehype from "remark-rehype";
-import rehypeSanitize from "rehype-sanitize";
-import rehypeStringify from "rehype-stringify";
+import { renderMarkdownToHtml } from "./markdown-renderer";
 import {
     ErrorFrontmatter,
     ArtifactType,
@@ -18,7 +13,8 @@ import {
 } from "./schema";
 import { getContentFilePaths, CONTENT_ROOT } from "./content-utils";
 import { loadSortConfig, applySortOrder } from "./sort-utils";
-import { extractToc, injectHeadingIds } from "./toc-engine";
+import { extractToc } from "./toc-engine";
+import { pathToId } from "./utils";
 
 // =============================================================================
 // Content Parser — Metadata Ingestion Engine
@@ -26,7 +22,28 @@ import { extractToc, injectHeadingIds } from "./toc-engine";
 // See: Story 1.3 — Markdown Content and Metadata Ingestion Engine
 // =============================================================================
 
-// =============================================================================
+// Internal constant for branding tokenization
+const PROJECT_NAME_TOKEN = /{{PROJECT_NAME}}/g;
+
+/**
+ * Recursively replaces the branding token in any string value within an object or array.
+ */
+function tokenizeMetadata(data: any, title: string): any {
+    if (typeof data === "string") {
+        return data.replace(PROJECT_NAME_TOKEN, title);
+    }
+    if (Array.isArray(data)) {
+        return data.map((item) => tokenizeMetadata(item, title));
+    }
+    if (data !== null && typeof data === "object") {
+        const result: Record<string, any> = {};
+        for (const key in data) {
+            result[key] = tokenizeMetadata(data[key], title);
+        }
+        return result;
+    }
+    return data;
+}
 
 /**
  * Parses a single Markdown file into structured content.
@@ -36,7 +53,7 @@ import { extractToc, injectHeadingIds } from "./toc-engine";
  * 2. Extract frontmatter with `gray-matter`
  * 3. Normalize gray-matter's Date objects → strings before Zod validation
  * 4. Validate frontmatter with `FrontmatterSchema.safeParse`
- * 5. Convert Markdown body → XSS-safe HTML via remark/rehype pipeline
+ * 5. Convert Markdown body → XSS-safe HTML via decoupled renderer
  * 6. Return `ParsedArticle` on success, `ErrorFrontmatter` on failure
  *
  * @param filePath - Absolute path to the index.md file
@@ -83,8 +100,6 @@ export async function parseMarkdownFile(
     }
 
     // Step 3: Normalize gray-matter Date objects → ISO strings
-    // gray-matter parses YAML date values as JS Date objects. The Zod schema
-    // uses z.string() for date to avoid this inconsistency.
     const normalizedData = normalizeDates(data);
 
     // Step 4: Inject artifact_type from directory structure if not set in frontmatter
@@ -92,7 +107,7 @@ export async function parseMarkdownFile(
         normalizedData.artifact_type = artifactType;
     }
 
-    // Step 5: Validate with Zod (safeParse never throws)
+    // Step 5: Validate with Zod
     const result = FrontmatterSchema.safeParse(normalizedData);
     if (!result.success) {
         const message = result.error.issues
@@ -104,32 +119,34 @@ export async function parseMarkdownFile(
     }
 
     // Step 6: Convert Markdown body → XSS-safe HTML
+    // Inject token replacement logic before Markdown-to-HTML conversion
+    const titleToUse = projectTitle || projectSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const processedContent = content.replace(PROJECT_NAME_TOKEN, titleToUse);
+
+    const toc = extractToc(processedContent);
+
     let html: string;
-    const toc = extractToc(content);
-
     try {
-        const vfile = await unified()
-            .use(remarkParse)
-            .use(remarkGfm)
-            .use(remarkRehype)
-            .use(rehypeSanitize) // default schema strips <script> and event handlers
-            .use(rehypeStringify)
-            .process(content);
-        html = String(vfile);
-
-        // Step 7: Inject IDs into headers for anchor linking
-        html = injectHeadingIds(html, toc);
+        // Delegate rendering to a decoupled utility to ensure testability
+        html = await renderMarkdownToHtml(processedContent, toc);
     } catch (err) {
-        return buildError(filePath, `Markdown rendering failed: ${String(err)}`);
+        return buildError(filePath, String(err));
     }
 
+    // Step 7: Return the parsed article with tokenized metadata
+    const tokenizedData = tokenizeMetadata(result.data, titleToUse);
+
+    const relativePath = path.relative(CONTENT_ROOT, filePath);
+    const id = pathToId(relativePath);
+
     return {
-        ...result.data,
+        ...tokenizedData,
+        id,
         html,
         toc,
         projectSlug,
         artifactType,
-        projectTitle,
+        projectTitle: titleToUse,
         _filePath: filePath,
     } as ParsedArticle;
 }
