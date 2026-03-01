@@ -59,9 +59,31 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Layout Rhythm & Symmetry Tokens */
+  --spacing-header-mb: var(--layout-header-mb);
+  --spacing-page-pt: var(--layout-page-pt);
+  --spacing-page-pt-md: var(--layout-page-pt-md);
+  --spacing-v-rhythm: var(--filter-bar-symmetry);
+
+  --spacing-filter-offset: var(--layout-filter-offset);
+
+  /* Collision Offsets (Brittle-Free Architecture) */
+  --spacing-filter-collision: calc(-1 * (var(--layout-header-mb) + var(--layout-page-pt)));
+  --spacing-filter-collision-md: calc(-1 * (var(--layout-header-mb) + var(--layout-page-pt-md)));
 }
 
 :root {
+  --layout-header-mb: 2rem;
+  /* 32px */
+  --layout-page-pt: 2rem;
+  /* 32px */
+  --layout-page-pt-md: 3rem;
+  /* 48px */
+  --filter-bar-symmetry: 3rem;
+  /* 48px */
+  --layout-filter-offset: 4.75rem;
+  /* 76px (w-16 + gap-3) */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

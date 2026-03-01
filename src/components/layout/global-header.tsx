@@ -2,7 +2,7 @@
 
 import { Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
+import { useFilterState } from "@/hooks/useFilterState";
 import { useEffect, useState } from "react";
 
 const iconButtonClass =
@@ -10,6 +10,7 @@ const iconButtonClass =
 
 export function GlobalHeader() {
     const { setTheme, resolvedTheme } = useTheme();
+    const { setAbout } = useFilterState();
     const [mounted, setMounted] = useState(false);
 
     // Prevent hydration mismatch by only rendering the toggle after mounting
@@ -19,7 +20,7 @@ export function GlobalHeader() {
     }, []);
 
     return (
-        <header className="w-full border-b border-zinc-200 dark:border-zinc-800/60 bg-background mb-8">
+        <header className="w-full border-b border-zinc-200 dark:border-zinc-800/60 bg-background mb-header-mb">
             <div className="container max-w-screen-2xl mx-auto px-4 md:px-8 py-6 md:py-8 flex items-start justify-between">
                 <div>
                     <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-2">
@@ -46,13 +47,14 @@ export function GlobalHeader() {
                         ) : (
                             <div className={`${iconButtonClass} opacity-0 pointer-events-none`} aria-hidden="true" />
                         )}
-                        <Link
-                            href="/about"
+                        <button
+                            onClick={() => setAbout(true)}
                             className={iconButtonClass}
                             aria-label="Information"
+                            type="button"
                         >
                             <Info className="h-4 w-4" />
-                        </Link>
+                        </button>
                     </nav>
                 </div>
             </div>

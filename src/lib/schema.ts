@@ -12,6 +12,8 @@ export type ParsedArticle = FrontmatterData & {
     html: string;
     /** Table of Contents extracted from the document headings. */
     toc: { level: number; text: string; slug: string }[];
+    /** Associated projects, if this artifact is part of multiple projects. */
+    associatedProjects?: { slug: string; title: string }[];
     /** Project slug derived from the directory structure. */
     projectSlug: string;
     /** Artifact type derived from the directory structure. */
@@ -77,6 +79,7 @@ export const FrontmatterSchema = z.object({
         label: z.string(),
         url: z.string().url("External link must be a valid URL"),
     })).optional(),
+    source_path: z.string().optional(),
 });
 
 /** Inferred TypeScript type for valid frontmatter data. */

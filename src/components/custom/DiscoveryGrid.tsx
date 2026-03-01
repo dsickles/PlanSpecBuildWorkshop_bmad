@@ -140,6 +140,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                         domain={agent.domain}
                                         tech_stack={agent.tech_stack}
                                         externalLinks={agent.external_links}
+                                        onDocOpen={() => setDocument(agent.id)}
                                     />
                                 </div>
                             );

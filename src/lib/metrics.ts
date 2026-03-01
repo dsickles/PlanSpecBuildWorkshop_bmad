@@ -1,4 +1,4 @@
-import { isError, ParsedContent, ParsedArticle } from "./schema";
+import { isError, ParsedContent, ParsedArticle, SHARED_DIR } from "./schema";
 
 export interface ProjectMetrics {
     totalProjects: number;
@@ -14,9 +14,15 @@ export interface ProjectMetrics {
  * @returns ProjectMetrics object containing counts
  */
 export function calculateMetrics(content: (ParsedContent | ParsedArticle)[]): ProjectMetrics {
-    const validArticles = content.filter((item): item is ParsedArticle => !isError(item));
+    const validArticles = content.filter((item): item is ParsedArticle =>
+        !isError(item) && "projectSlug" in item
+    );
 
-    const projectSlugs = new Set(validArticles.map((item) => item.projectSlug));
+    const projectSlugs = new Set(
+        validArticles
+            .map((item) => item.projectSlug)
+            .filter((slug) => slug !== SHARED_DIR)
+    );
 
     const metrics: ProjectMetrics = {
         totalProjects: projectSlugs.size,
@@ -31,7 +37,10 @@ export function calculateMetrics(content: (ParsedContent | ParsedArticle)[]): Pr
                 metrics.totalAgents++;
                 break;
             case "doc":
-                metrics.totalDocs++;
+                // Exclude project index.md files from the blueprint count
+                if (!article._filePath.endsWith("index.md")) {
+                    metrics.totalDocs++;
+                }
                 break;
             case "prototype":
                 metrics.totalPrototypes++;

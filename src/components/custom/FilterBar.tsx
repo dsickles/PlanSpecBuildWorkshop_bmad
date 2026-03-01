@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFilterState } from "@/hooks/useFilterState";
-import { RED_GHOST_BUTTON_STYLES } from "@/lib/constants";
+import { MUTED_GHOST_BUTTON_STYLES } from "@/lib/constants";
 
 interface ProjectOption {
     slug: string;
@@ -28,10 +28,29 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
     } = useFilterState();
 
     return (
-        <div className="flex flex-col gap-3 mb-10 overflow-x-auto pb-2">
+        <div className="relative pt-v-rhythm mt-filter-collision md:mt-filter-collision-md flex flex-col gap-3 mb-v-rhythm overflow-x-auto pb-2">
+            {/* Top Row: Clear Filter (Flex Centered & Aligned with Content via Design Tokens) */}
+            {(activeProject || activeDomains.length > 0 || activeTech.length > 0) && (
+                <div className="absolute top-0 left-filter-offset h-v-rhythm flex items-center z-10 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <button
+                        onClick={clearAllFilters}
+                        className={cn(
+                            "px-3 py-1 text-[10px] uppercase font-bold tracking-tight rounded-md border flex items-center gap-1.5 shadow-sm",
+                            MUTED_GHOST_BUTTON_STYLES
+                        )}
+                        title="Clear all filters and return to browse mode"
+                        aria-label="Clear all filters"
+                        aria-controls="discovery-grid"
+                    >
+                        <X className="w-3 h-3" />
+                        <span>Clear Filter</span>
+                    </button>
+                </div>
+            )}
+
             {/* Projects Row */}
             <div className="flex items-center gap-3">
-                <span className="w-16 flex-shrink-0 text-[10px] uppercase text-zinc-600 font-semibold tracking-wider">
+                <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Projects
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -39,10 +58,10 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                         onClick={() => setProject(null)}
                         aria-pressed={!activeProject}
                         className={cn(
-                            "px-4 py-1.5 text-sm rounded-full transition-colors border filter-pill",
+                            "px-4 py-1.5 text-sm rounded-full transition-all border filter-pill",
                             !activeProject
                                 ? "bg-blue-600 border-blue-600 text-white"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-300"
+                                : "bg-muted/50 border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         )}
                     >
                         All
@@ -53,37 +72,21 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                             onClick={() => setProject(project.slug)}
                             aria-pressed={activeProject === project.slug}
                             className={cn(
-                                "px-4 py-1.5 text-sm rounded-full transition-colors border filter-pill",
+                                "px-4 py-1.5 text-sm rounded-full transition-all border filter-pill",
                                 activeProject === project.slug
-                                    ? "bg-blue-600 border-blue-600 text-white"
-                                    : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-300"
+                                    ? "bg-blue-600 border-blue-600 text-white shadow-md"
+                                    : "bg-muted/50 border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                             )}
                         >
                             {project.title}
                         </button>
                     ))}
-
-                    {/* Clear Filter Button */}
-                    {(activeProject || activeDomains.length > 0 || activeTech.length > 0) && (
-                        <button
-                            onClick={clearAllFilters}
-                            className={cn(
-                                "ml-2 px-3 py-1.5 text-sm rounded-full transition-colors border flex items-center gap-1",
-                                RED_GHOST_BUTTON_STYLES
-                            )}
-                            title="Clear Filter"
-                            aria-label="Clear all filters"
-                        >
-                            <X className="w-3.5 h-3.5" />
-                            <span>Clear Filter</span>
-                        </button>
-                    )}
                 </div>
             </div>
 
             {/* Domain Row */}
             <div className="flex items-start md:items-center gap-3">
-                <span className="w-16 flex-shrink-0 text-[10px] items-center pt-2 md:pt-0 uppercase text-zinc-600 font-semibold tracking-wider">
+                <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Domain
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -95,10 +98,10 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                                 onClick={() => toggleDomain(domain)}
                                 aria-pressed={isActive}
                                 className={cn(
-                                    "px-3 py-1 text-sm rounded-md transition-colors border chip-toggle",
+                                    "px-3 py-1 text-sm rounded-md transition-all border chip-toggle",
                                     isActive
-                                        ? "bg-zinc-800 border-zinc-700 text-white"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-300"
+                                        ? "bg-secondary border-muted text-secondary-foreground"
+                                        : "bg-muted/50 border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                 )}
                             >
                                 {domain}
@@ -110,7 +113,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
 
             {/* Tech Stack Row */}
             <div className="flex items-start md:items-center gap-3">
-                <span className="w-16 flex-shrink-0 text-[10px] pt-2 md:pt-0 uppercase text-zinc-600 font-semibold tracking-wider">
+                <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Tech
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -122,10 +125,10 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                                 onClick={() => toggleTech(tech)}
                                 aria-pressed={isActive}
                                 className={cn(
-                                    "px-3 py-1 text-sm rounded-md transition-colors border chip-toggle",
+                                    "px-3 py-1 text-sm rounded-md transition-all border chip-toggle",
                                     isActive
-                                        ? "bg-zinc-800 border-zinc-700 text-white"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-300"
+                                        ? "bg-secondary border-muted text-secondary-foreground"
+                                        : "bg-muted/50 border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                 )}
                             >
                                 {tech}

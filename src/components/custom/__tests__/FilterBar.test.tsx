@@ -121,4 +121,43 @@ describe('FilterBar - Clear Filter Visibility', () => {
         fireEvent.click(button);
         expect(mockSetProject).toHaveBeenCalledWith('p1-slug');
     });
+
+    describe('Layout & Accessibility', () => {
+        beforeEach(() => {
+            (useFilterState as jest.Mock).mockReturnValue({
+                activeProject: 'project-a',
+                activeDomains: [],
+                activeTech: [],
+                setProject: mockSetProject,
+                toggleDomain: mockToggleDomain,
+                toggleTech: mockToggleTech,
+                clearAllFilters: mockClearAllFilters,
+            });
+        });
+
+        it('has correct architectural positioning classes', () => {
+            render(<FilterBar {...defaultProps} />);
+            const container = screen.getByText('Clear Filter').closest('div');
+            const mainContainer = container?.parentElement;
+
+            // Critical collision management via design tokens
+            expect(mainContainer).toHaveClass('mt-filter-collision', 'md:mt-filter-collision-md', 'pt-v-rhythm', 'mb-v-rhythm');
+
+            // Critical centering and stabilization architecture
+            expect(container).toHaveClass('absolute', 'top-0', 'h-v-rhythm', 'flex', 'items-center', 'z-10');
+
+            // Critical horizontal alignment (aligned with content via design token)
+            expect(container).toHaveClass('left-filter-offset');
+        });
+
+        it('has correct accessibility attributes', () => {
+            render(<FilterBar {...defaultProps} />);
+            const button = screen.getByLabelText('Clear all filters');
+
+            expect(button).toHaveAttribute('aria-controls', 'discovery-grid');
+
+            // Verify focus styles are present in the constant or applied
+            expect(button).toHaveClass('focus-visible:ring-2');
+        });
+    });
 });

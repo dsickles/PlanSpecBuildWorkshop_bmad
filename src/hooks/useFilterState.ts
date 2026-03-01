@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM, DOCUMENT_PARAM } from "@/lib/constants";
+import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM, DOCUMENT_PARAM, ABOUT_PARAM } from "@/lib/constants";
 
 export function useFilterState() {
     const router = useRouter();
@@ -13,6 +13,7 @@ export function useFilterState() {
     const activeDomains = searchParams.get(DOMAIN_PARAM)?.split(",").filter(Boolean) || [];
     const activeTech = searchParams.get(TECH_PARAM)?.split(",").filter(Boolean) || [];
     const activeDocument = searchParams.get(DOCUMENT_PARAM);
+    const activeAbout = searchParams.get(ABOUT_PARAM) === "true";
 
     const createQueryString = (params: Record<string, string | string[] | null>) => {
         const newParams = new URLSearchParams(searchParams.toString());
@@ -41,6 +42,10 @@ export function useFilterState() {
 
     const setDocument = (document: string | null) => {
         updateUrl({ [DOCUMENT_PARAM]: document });
+    };
+
+    const setAbout = (open: boolean) => {
+        updateUrl({ [ABOUT_PARAM]: open ? "true" : null });
     };
 
     const toggleDomain = (domain: string) => {
@@ -72,10 +77,13 @@ export function useFilterState() {
         activeDomains,
         activeTech,
         activeDocument,
+        activeAbout,
         setProject,
         setDocument,
+        setAbout,
         toggleDomain,
         toggleTech,
+        updateFilters: updateUrl,
         clearAllFilters,
     };
 }

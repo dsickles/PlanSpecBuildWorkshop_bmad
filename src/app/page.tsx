@@ -3,6 +3,7 @@ import { loadSortConfig, sortByList } from "@/lib/sort-utils";
 import { isError, ErrorFrontmatter, ParsedArticle } from "@/lib/schema";
 import { FilterBar } from "@/components/custom/FilterBar";
 import { DiscoveryGrid } from "@/components/custom/DiscoveryGrid";
+import { AboutModal } from "@/components/custom/AboutModal";
 import { Suspense } from "react";
 
 export default async function Home() {
@@ -43,11 +44,14 @@ export default async function Home() {
   const techStacks = Array.from(new Set(validArticles.flatMap(item => item.tech_stack))).sort();
 
   return (
-    <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-screen-2xl">
+    <div className="container mx-auto px-4 md:px-8 py-page-pt md:py-page-pt-md max-w-screen-2xl">
       <Suspense fallback={null}>
         <FilterBar projects={projects} domains={domains} techStacks={techStacks} />
       </Suspense>
       <DiscoveryGrid allContent={allContent} errors={errors} />
+      <Suspense fallback={null}>
+        <AboutModal allContent={allContent} />
+      </Suspense>
     </div>
   );
 }

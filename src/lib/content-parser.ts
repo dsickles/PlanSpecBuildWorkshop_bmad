@@ -17,6 +17,19 @@ import { extractToc } from "./toc-engine";
 import { pathToId } from "./utils";
 
 // =============================================================================
+// Cache Store
+// Prevents redundant disk I/O for frequently accessed metadata.
+// =============================================================================
+const TITLE_CACHE = new Map<string, string>();
+
+/**
+ * Resets the project title cache. Used primarily for unit testing isolation.
+ */
+export function resetTitleCache(): void {
+    TITLE_CACHE.clear();
+}
+
+// =============================================================================
 // Content Parser — Metadata Ingestion Engine
 // Server-only ("use server"): reads files and transforms Markdown → HTML.
 // See: Story 1.3 — Markdown Content and Metadata Ingestion Engine
@@ -28,7 +41,7 @@ const PROJECT_NAME_TOKEN = /{{PROJECT_NAME}}/g;
 /**
  * Recursively replaces the branding token in any string value within an object or array.
  */
-function tokenizeMetadata(data: any, title: string): any {
+function tokenizeMetadata(data: unknown, title: string): unknown {
     if (typeof data === "string") {
         return data.replace(PROJECT_NAME_TOKEN, title);
     }
@@ -36,13 +49,44 @@ function tokenizeMetadata(data: any, title: string): any {
         return data.map((item) => tokenizeMetadata(item, title));
     }
     if (data !== null && typeof data === "object") {
-        const result: Record<string, any> = {};
-        for (const key in data) {
-            result[key] = tokenizeMetadata(data[key], title);
+        const result: Record<string, unknown> = {};
+        const obj = data as Record<string, unknown>;
+        for (const key in obj) {
+            result[key] = tokenizeMetadata(obj[key], title);
         }
         return result;
     }
     return data;
+}
+
+/**
+ * Resolves a project's human-readable title from its index.md file.
+ * Uses TITLE_CACHE to avoid redundant disk I/O.
+ */
+async function resolveProjectTitle(projectSlug: string): Promise<string> {
+    if (!projectSlug) return "";
+
+    let title = TITLE_CACHE.get(projectSlug);
+    if (title) return title;
+
+    try {
+        const projectDir = path.join(CONTENT_ROOT, projectSlug);
+        const projectIndexPath = path.join(projectDir, "index.md");
+        if (fs.existsSync(projectIndexPath)) {
+            const projectRaw = await fs.promises.readFile(projectIndexPath, "utf-8");
+            const projectMatter = matter(projectRaw);
+            title = projectMatter.data.title;
+            if (title) {
+                TITLE_CACHE.set(projectSlug, title);
+                return title;
+            }
+        }
+    } catch (err) {
+        console.error(`Failed to resolve project title for ${projectSlug}:`, err);
+    }
+
+    // Fallback: Convert slug to Title Case
+    return projectSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /**
@@ -65,25 +109,13 @@ export async function parseMarkdownFile(
     projectSlug: string,
     artifactType: ArtifactType
 ): Promise<ParsedArticle | ErrorFrontmatter> {
-    // Step 0: Resolve project title from index.md if possible
-    let projectTitle: string | undefined;
-    try {
-        const projectDir = path.join(CONTENT_ROOT, projectSlug);
-        const projectIndexPath = path.join(projectDir, "index.md");
-        if (fs.existsSync(projectIndexPath)) {
-            const projectRaw = fs.readFileSync(projectIndexPath, "utf-8");
-            const projectMatter = matter(projectRaw);
-            projectTitle = projectMatter.data.title;
-        }
-    } catch (err) {
-        // Fallback to slug if title lookup fails
-        console.error(`Failed to resolve project title for ${projectSlug}:`, err);
-    }
+    const projectTitle = await resolveProjectTitle(projectSlug);
+    const titleToUse = projectTitle || projectSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
     // Step 1: Read the file
     let raw: string;
     try {
-        raw = fs.readFileSync(filePath, "utf-8");
+        raw = await fs.promises.readFile(filePath, "utf-8");
     } catch (err) {
         return buildError(filePath, `Could not read file: ${String(err)}`);
     }
@@ -118,10 +150,32 @@ export async function parseMarkdownFile(
         return buildError(filePath, message);
     }
 
+    // Step 5.5: Handle source_path redirection (Story 9.1)
+    let finalContent = content;
+    if (result.data.source_path) {
+        try {
+            // Security: Prevent path traversal (Adversarial Review Finding 1)
+            const normalizedSource = path.normalize(result.data.source_path);
+            if (normalizedSource.startsWith("..") || path.isAbsolute(normalizedSource)) {
+                throw new Error("Security: Direct absolute paths or parent-directory traversal (..) are not permitted in source_path.");
+            }
+
+            const absoluteSourcePath = path.join(process.cwd(), normalizedSource);
+            if (fs.existsSync(absoluteSourcePath)) {
+                const remoteRaw = await fs.promises.readFile(absoluteSourcePath, "utf-8");
+                const remoteParsed = matter(remoteRaw);
+                finalContent = remoteParsed.content; // Strip remote frontmatter
+            } else {
+                console.warn(`[Story 9.1] source_path not found: ${absoluteSourcePath}. Falling back to local content.`);
+            }
+        } catch (err: unknown) {
+            console.error(`[Story 9.1] Failed to read source_path: ${result.data.source_path}`, err instanceof Error ? err.message : String(err));
+        }
+    }
+
     // Step 6: Convert Markdown body → XSS-safe HTML
     // Inject token replacement logic before Markdown-to-HTML conversion
-    const titleToUse = projectTitle || projectSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-    const processedContent = content.replace(PROJECT_NAME_TOKEN, titleToUse);
+    const processedContent = finalContent.replace(PROJECT_NAME_TOKEN, titleToUse);
 
     const toc = extractToc(processedContent);
 
@@ -133,6 +187,17 @@ export async function parseMarkdownFile(
         return buildError(filePath, String(err));
     }
 
+    // Step 6.5: Resolve Associated Projects for Agents (Story 9.2)
+    const associatedProjects: { slug: string; title: string }[] = [];
+    if (artifactType === "agent" && result.data.projects && Array.isArray(result.data.projects)) {
+        for (const slug of result.data.projects) {
+            if (typeof slug === "string") {
+                const title = await resolveProjectTitle(slug);
+                associatedProjects.push({ slug, title });
+            }
+        }
+    }
+
     // Step 7: Return the parsed article with tokenized metadata
     const tokenizedData = tokenizeMetadata(result.data, titleToUse);
 
@@ -140,10 +205,11 @@ export async function parseMarkdownFile(
     const id = pathToId(relativePath);
 
     return {
-        ...tokenizedData,
+        ...(tokenizedData as Record<string, unknown>),
         id,
         html,
         toc,
+        associatedProjects: associatedProjects.length > 0 ? associatedProjects : undefined,
         projectSlug,
         artifactType,
         projectTitle: titleToUse,

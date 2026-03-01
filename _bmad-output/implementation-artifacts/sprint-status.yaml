@@ -103,13 +103,13 @@ development_status:
   8-3-project-overview-cta-mapping: done
   epic-8-retrospective: done
 
-  epic-9: backlog
-  9-1-remote-pointer-parser-implementation: backlog
-  9-2-agentic-tool-documentation-viewer: backlog
-  epic-9-retrospective: optional
+  epic-9: done
+  9-1-remote-pointer-parser-implementation: done
+  9-2-agentic-tool-documentation-viewer: done
+  epic-9-retrospective: done
 
-  epic-10: backlog
-  10-1-about-page-density-optimization: backlog
-  10-2-global-theme-synchronization: backlog
-  10-3-revamped-clear-filter-workflow: backlog
+  epic-10: in-progress
+  10-1-about-page-density-optimization: done
+  10-2-global-theme-synchronization: done
+  10-3-revamped-clear-filter-workflow: review
   epic-10-retrospective: optional
