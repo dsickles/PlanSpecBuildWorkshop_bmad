@@ -205,7 +205,16 @@ All markdown files must use strictly `camelCase` for YAML frontmatter keys (e.g.
 To ensure branding consistency without mass-editing files, the ingestion engine supports a `{{PROJECT_NAME}}` token.
 - **Source of Truth:** The `title` field in a project's root `index.md` (e.g., `/content/plan-spec-build/index.md`).
 - **Processing:** The `content-parser.ts` recursively replaces this token in all frontmatter strings and the Markdown body before rendering.
+- **Shared Branding:** For shared items in `_shared/`, the branding title is resolved from `/content/_shared/index.md` (e.g., "Agent Studio"). This ensures system slugs like `_shared` are never displayed to the user.
 - **Rules:** Authors should use the token in headers, descriptions, and body text whenever referring to the project name.
+
+**Metadata Resolution Hierarchy:**
+To prevent ambiguity when attributes are defined in multiple locations, the system follows this precedence order:
+
+1.  **Project Root `index.md`**: Overrides a folder's existence. (Source for `title`, `domain`, `tech_stack`).
+2.  **Explicit Frontmatter**: Local attributes within individual `.md` files.
+3.  **Folder-Level `index.md`**: Optional overrides for specific sub-columns (e.g., `docs/index.md`).
+4.  **Filesystem Slug**: Final fallback for titles/identifiers if no markdown metadata is found.
 
 ### Structure Patterns
 
@@ -214,6 +223,7 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
 - All content lives in a root `/content/` directory.
 - Projects are organized hierarchically: `/content/[project-slug]/[folder]/document.md`.
 - **Shared content** lives in a reserved `/content/_shared/` directory (see Shared Agent Studio Items below).
+- **Metadata Drivers:** Project-level metadata (title, domain, tech_stack) is primarily driven by the `index.md` file located in the project's root or the `_shared/` directory. If `index.md` is missing, the system falls back to the filesystem slug.
 - **Canonical content folder names** (mapping content folder → UI column):
 
   | Content Folder | UI Column | Example |
@@ -221,13 +231,14 @@ Markdown content is strictly decoupled from the Next.js `src` directory.
   | `_shared/agents/` | Agent Studio | `/content/_shared/agents/BMadMethod.md` |
   | `docs/` | Blueprints | `/content/plan-spec-build/docs/prd.md` |
   | `prototypes/` | Build Lab | `/content/plan-spec-build/prototypes/portfolio.md` |
-- A project's UI display metadata is controlled via a `/content/[project-slug]/index.md` file (using the `title` frontmatter).
+- A project's UI display metadata is controlled via a `/content/[project-slug]/index.md` or `/content/_shared/index.md` file (using the `title` frontmatter).
 - Display ordering across all sections is controlled via a central `/content/sort-config.yaml` manifest (see Sort Order Configuration below).
 
 **Shared Agent Studio Items (FR19):**
 Agent Studio content lives in a single shared folder (`/content/_shared/agents/`) rather than per-project `agents/` subfolders. This prevents file duplication when the same agent (e.g., Lovable) is used across multiple projects.
 
 - Each agent `.md` file has an optional `projects` frontmatter array listing the project slugs it is associated with (e.g., `projects: ["plan-spec-build-workshop"]`).
+- **Branding:** The "Agent Studio" header in the UI is derived from `/content/_shared/index.md`.
 - **Filtering rules:**
   - **Browse Mode (no project filter):** All agents display regardless of their `projects` field.
   - **Focus Mode (project filter active):** Only agents whose `projects` array includes the active project slug are displayed. Agents with no `projects` field or an empty `projects` array are hidden.
@@ -318,13 +329,16 @@ plan-spec-build-portfolio/
 │   ├── README-CONTENT.md        # The E2E PM guide + Frontmatter schemas
 │   ├── sort-config.yaml         # Central display ordering manifest (FR20)
 │   ├── _shared/                 # 🟡 SHARED CONTENT (not a project)
+│   │   ├── index.md             # Shared Branding Metadata (e.g. Agent Studio)
 │   │   └── agents/              # → Agent Studio column (all agents live here)
 │   │       └── [agent].md       # Optional `projects` frontmatter for association
 │   └── [project-slug]/          # e.g., plan-spec-build/
 │       ├── index.md             # UI Display Metadata
 │       ├── docs/                # → Blueprints column
+│       │   ├── index.md         # Optional folder-level override
 │       │   └── [document].md    # Target markdown file
 │       └── prototypes/          # → Build Lab column
+│           └── index.md         # Optional folder-level override
 ├── src/                         # 🔵 LOGIC BOUNDARY (React/Next.js)
 │   ├── app/                     # Routing & Layouts
 │   │   ├── layout.tsx           # Global Shell (Header + Filter Bar + Grid)

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ProjectCard } from "../project-card";
+import { ProjectCard, FallbackCard } from "../project-card";
 import React from "react";
 
 // Mock lucide-react icons to test their presence
@@ -52,5 +52,14 @@ describe("ProjectCard - Agent External Links", () => {
 
         rerender(<ProjectCard {...defaultProps} externalLinks={[]} />);
         expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    });
+});
+
+describe("FallbackCard", () => {
+    test("should not render a status pill in the header", () => {
+        render(<FallbackCard title="No results" description="Nothing found" />);
+        // StatusPill renders the status text inside a span. 
+        // FallbackCard currently passes status="Concept" to ProjectCardHeader.
+        expect(screen.queryByText("Concept")).not.toBeInTheDocument();
     });
 });

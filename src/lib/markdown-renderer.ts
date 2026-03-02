@@ -1,5 +1,5 @@
 // Server-only module
-import { extractToc, injectHeadingIds, TocEntry } from "./toc-engine";
+import { injectHeadingIds, TocEntry } from "./toc-engine";
 
 /**
  * Renders Markdown content to sanitized HTML with Table of Contents injection.

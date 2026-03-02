@@ -1,9 +1,10 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { BlueprintGroup } from "../blueprint-group";
+import { BlueprintGroup, BlueprintErrorRow } from "../blueprint-group";
 import { ParsedArticle } from "@/lib/schema";
 
 const mockDocs: ParsedArticle[] = [
     {
+        id: "doc-1",
         title: "Doc 1",
         projectSlug: "project-a",
         artifactType: "doc",
@@ -13,10 +14,12 @@ const mockDocs: ParsedArticle[] = [
         description: "Description 1",
         date: "2023-01-01",
         html: "<p>1</p>",
+        toc: [],
         projects: [],
         _filePath: "content/project-a/docs/doc-1.md"
     },
     {
+        id: "doc-2",
         title: "Doc 2",
         projectSlug: "project-a",
         artifactType: "doc",
@@ -26,6 +29,7 @@ const mockDocs: ParsedArticle[] = [
         description: "Description 2",
         date: "2023-01-02",
         html: "<p>2</p>",
+        toc: [],
         projects: [],
         _filePath: "content/project-a/docs/doc-2.md"
     }
@@ -82,12 +86,12 @@ describe("BlueprintGroup", () => {
         expect(screen.getByText("Description 1")).toBeInTheDocument();
         expect(screen.getByText("Description 2")).toBeInTheDocument();
 
-        const collapseAllBtn = screen.getByText("[Collapse All]");
+        const collapseAllBtn = screen.getByTestId("expand-collapse-all-button");
         fireEvent.click(collapseAllBtn);
 
         expect(screen.queryByText("Description 1")).not.toBeInTheDocument();
         expect(screen.queryByText("Description 2")).not.toBeInTheDocument();
-        expect(screen.getByText("[Expand All]")).toBeInTheDocument();
+        expect(screen.getByTestId("expand-collapse-all-button")).toHaveTextContent("Expand All");
     });
 
     it("calls onLayersClick when Layers icon is clicked", () => {
@@ -98,5 +102,12 @@ describe("BlueprintGroup", () => {
         fireEvent.click(layersBtn);
 
         expect(onLayersClick).toHaveBeenCalled();
+    });
+});
+
+describe("BlueprintErrorRow", () => {
+    it("does not render a status pill", () => {
+        render(<BlueprintErrorRow filePath="agents/invalid.md" />);
+        expect(screen.queryByText("Concept")).not.toBeInTheDocument();
     });
 });

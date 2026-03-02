@@ -108,8 +108,14 @@ development_status:
   9-2-agentic-tool-documentation-viewer: done
   epic-9-retrospective: done
 
-  epic-10: in-progress
+  epic-10: done
   10-1-about-page-density-optimization: done
   10-2-global-theme-synchronization: done
-  10-3-revamped-clear-filter-workflow: review
-  epic-10-retrospective: optional
+  10-3-revamped-clear-filter-workflow: done
+  epic-10-retrospective: done
+
+  epic-11: done
+  11-1-ui-layout-refinement-expand-button-empty-states: done
+  11-2-shared-agent-branding-refinement: done
+  11-3-architecture-sync-meta-data-pointers: done
+  epic-11-retrospective: done

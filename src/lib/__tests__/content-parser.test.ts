@@ -280,4 +280,34 @@ Agent body`);
         expect(result.associatedProjects).toContainEqual({ slug: "project-a", title: "Alpha Project" });
         expect(result.associatedProjects).toContainEqual({ slug: "project-b", title: "Beta Project" });
     });
+
+    test("should brand _shared project as 'Agent Studio' when index.md is present", async () => {
+        const sharedIndexPath = path.join(process.cwd(), "src/content/_shared/index.md");
+        const docInSharedPath = "/test/content/_shared/docs/shared-doc.md";
+
+        (fs.existsSync as jest.Mock).mockImplementation((p) =>
+            p === sharedIndexPath || p === docInSharedPath
+        );
+
+        (fs.promises.readFile as jest.Mock).mockImplementation((p) => {
+            if (p === sharedIndexPath) return Promise.resolve("---\ntitle: \"Agent Studio\"\n---\n");
+            if (p === docInSharedPath) {
+                return Promise.resolve(`---
+title: "Shared Doc"
+date: "2024-01-01"
+status: "Live"
+---
+This is a shared doc.`);
+            }
+            return Promise.resolve("");
+        });
+
+        const result = await parseMarkdownFile(
+            docInSharedPath,
+            "_shared",
+            "doc"
+        ) as ParsedArticle;
+
+        expect(result.projectTitle).toBe("Agent Studio");
+    });
 });

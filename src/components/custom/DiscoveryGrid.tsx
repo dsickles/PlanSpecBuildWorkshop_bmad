@@ -118,8 +118,8 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                         {agents.length === 0 && studioErrors.length === 0 && (
                             <FallbackCard
                                 context="agent"
-                                title="No agents found"
-                                description="No agents match the current filters."
+                                title="No tools found"
+                                description="No tools match the current filters."
                                 className="mb-4"
                             />
                         )}

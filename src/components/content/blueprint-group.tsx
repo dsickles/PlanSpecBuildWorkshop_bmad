@@ -4,7 +4,6 @@ import { useState } from "react";
 import { ChevronDown, FileText, Layers } from "lucide-react";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { ParsedArticle } from "@/lib/schema";
-import { getDocIdFromPath } from "@/lib/utils";
 
 interface BlueprintGroupProps {
     projectSlug: string;
@@ -72,46 +71,52 @@ export function BlueprintGroup({
     return (
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden mb-4">
             {/* Group header — docs are always visible, header controls Expand All / Collapse All */}
-            <div className="w-full flex items-start justify-between px-4 py-3 border-b border-zinc-100 dark:border-zinc-800/60">
-                <div className="flex flex-col">
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-none">
+            <div
+                className="w-full flex flex-col px-4 py-3 border-b border-zinc-100 dark:border-zinc-800/60"
+                data-testid="blueprint-group-header"
+            >
+                {/* Row 1: Title and Main Action Icons */}
+                <div className="flex items-start justify-between w-full">
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-tight mt-0.5">
                         {displayName}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1.5">
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 leading-none">
-                            {docs.length} Document{docs.length !== 1 ? "s" : ""}
-                        </span>
-                        {docs.length > 0 && (
-                            <>
-                                <span className="text-xs text-zinc-300 dark:text-zinc-600 leading-none">•</span>
-                                <button
-                                    onClick={toggleAll}
-                                    className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:underline leading-none"
-                                >
-                                    [{allExpanded ? "Collapse All" : "Expand All"}]
-                                </button>
-                            </>
+                    <div className="flex items-center gap-1">
+                        {overviewDoc && (
+                            <button
+                                onClick={() => onDocOpen?.(overviewDoc)}
+                                aria-label={`Open ${displayName} overview`}
+                                className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                            >
+                                <FileText size={14} />
+                            </button>
+                        )}
+                        {onLayersClick && (
+                            <button
+                                onClick={onLayersClick}
+                                aria-label="Focus on this project"
+                                className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                            >
+                                <Layers size={14} />
+                            </button>
                         )}
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1">
-                    {overviewDoc && (
+                {/* Row 2: Metadata (Count) and Secondary Actions (Expand All) */}
+                <div className="flex items-center justify-between w-full mt-1.5">
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400 leading-tight">
+                        {docs.length} Document{docs.length !== 1 ? "s" : ""}
+                    </span>
+                    {docs.length > 0 && (
                         <button
-                            onClick={() => onDocOpen?.(overviewDoc)}
-                            aria-label={`Open ${displayName} overview`}
-                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
+                            onClick={toggleAll}
+                            data-testid="expand-collapse-all-button"
+                            aria-label={allExpanded ? "Collapse all items" : "Expand all items"}
+                            className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:underline leading-tight"
                         >
-                            <FileText size={14} />
-                        </button>
-                    )}
-                    {onLayersClick && (
-                        <button
-                            onClick={onLayersClick}
-                            aria-label="Focus on this project"
-                            className="flex items-center justify-center rounded-md p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-zinc-400"
-                        >
-                            <Layers size={14} />
+                            <span aria-hidden="true">[</span>
+                            {allExpanded ? "Collapse All" : "Expand All"}
+                            <span aria-hidden="true">]</span>
                         </button>
                     )}
                 </div>
@@ -211,7 +216,6 @@ export function BlueprintErrorRow({ filePath }: { filePath: string }) {
         >
             <div className="flex items-center gap-1.5">
                 <span className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">{name}</span>
-                <StatusPill status="Concept" />
             </div>
             <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">Content unavailable</p>
         </div>

@@ -125,7 +125,8 @@ function ProjectCardRoot({
 
 interface ProjectCardHeaderProps {
     title: string;
-    status: string;
+    /** Optional status for the pill */
+    status?: string;
     date?: string;
     /** Slot for right-aligned action buttons (icons) */
     actions?: React.ReactNode;
@@ -143,7 +144,7 @@ function ProjectCardHeader({
                     <h3 className="text-lg font-semibold leading-tight line-clamp-2 text-zinc-900 dark:text-white">
                         {title}
                     </h3>
-                    <StatusPill status={status} />
+                    {status && <StatusPill status={status} />}
                 </div>
             </div>
             {actions && (
@@ -442,7 +443,7 @@ export function FallbackCard({
             data-testid={testId}
             aria-label={ariaLabel}
         >
-            <ProjectCardHeader title={title} status="Concept" />
+            <ProjectCardHeader title={title} />
             <ProjectCardBody description={description}>
                 {children}
             </ProjectCardBody>

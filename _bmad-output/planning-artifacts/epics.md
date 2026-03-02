@@ -111,6 +111,7 @@ This document provides the complete epic and story breakdown for Plan Spec Build
 *   **Epic 8:** Content Identity & Agent Visibility
 *   **Epic 9:** Maintenance & Strategic Rigor
 *   **Epic 10:** Interface Refinement & Flow
+*   **Epic 11:** Production Polish & Final Documentation
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -625,5 +626,42 @@ So that I can reset my view without jarring layout shifts or vibrant visual dist
 *   **When** the "Clear Filter" button appears,
 *   **Then** it is positioned above the tri-row filter area.
 *   **And** it uses a muted grayscale or low-intensity tonal style that disappears seamlessly when filters are cleared.
+
+## Epic 11: Production Polish & Final Documentation
+Final cleanup of the user interface and synchronization of the architecture documentation based on manual testing and final design review. This epic ensures the portfolio is "world-ready" by addressing small visual friction points and ensuring the technical documentation accurately reflects the final folder structure.
+
+### Story 11.1: UI Layout Refinement (Expand Button & Empty States)
+As a User,
+I want the expand/collapse controls to be placed intuitively and for empty states to stay visually "quiet",
+So that the interface feels professional and consistent across all filter states.
+
+**Acceptance Criteria:**
+*   **Given** a Blueprint group in the grid,
+*   **When** viewing the header,
+*   **Then** the `[Expand All] / [Collapse All]` button is positioned on the far right of the column.
+*   **Given** a filter state with 0 results,
+*   **When** the fallback cards appear,
+*   **Then** no status pill (e.g., "Concept") is displayed in the fallback header.
+
+### Story 11.2: Shared Agent Branding Refinement
+As a User,
+I want shared agents to be labeled with a professional project name like "Common Agents",
+So that I don't see raw system directory names like `_shared` in the UI.
+
+**Acceptance Criteria:**
+*   **Given** an Agent Studio card for a shared agent,
+*   **When** viewing the project label,
+*   **Then** it displays "Common Agents" (or value from `_shared/index.md`) instead of `_shared`.
+
+### Story 11.3: Architecture Sync & Meta-Data Pointers
+As a Developer,
+I want the architecture documentation to accurately describe the folder structure and metadata drivers,
+So that the system remains maintainable and the project-root accurately represents the content architecture.
+
+**Acceptance Criteria:**
+*   **Given** the `architecture.md` file,
+*   **When** viewing the folder structure section,
+*   **Then** it includes `index.md` files within the `docs/`, `prototypes/`, and `_shared/` folders.
+*   **And** it explicitly describes how these files drive project-level metadata (including shared branding) and documentation source paths.
 
 <!-- Epic Definitions End -->
