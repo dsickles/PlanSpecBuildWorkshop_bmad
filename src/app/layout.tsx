@@ -32,7 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative flex min-h-screen flex-col bg-background">
-            <Suspense fallback={<div className="w-full border-b border-zinc-200 dark:border-zinc-800/60 bg-background mb-header-mb" style={{ minHeight: "89px" }} />}>
+            <Suspense fallback={null}>
               <GlobalHeader />
             </Suspense>
             <main className="flex-1">

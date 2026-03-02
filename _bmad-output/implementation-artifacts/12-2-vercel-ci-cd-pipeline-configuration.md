@@ -1,6 +1,6 @@
 # Story 12.2: Vercel CI/CD Pipeline Configuration
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -36,7 +36,7 @@ so that `git push` automatically triggers deployments only when Zod schemas and 
   - [x] Subtask 4.1: Skipped explicit test — gatekeeping confirmed structurally: `ignoreBuildErrors` is NOT set in `next.config.ts`; TS errors will fail the build.
   - [x] Subtask 4.2: Verified `next.config.ts` contains only `transpilePackages`. No `ignoreBuildErrors` flag. AC2 satisfied.
 - [x] Task 5: Pre-Review Validation
-  - [x] Subtask 5.1: `npm run lint` — clean.
+  - [x] Subtask 5.1: `npm run lint` — `layout.tsx` and `page.tsx` are lint-clean (0 errors in story files). 4 pre-existing errors in `DiscoveryGrid` and `AboutModal` (unrelated to this story; present before Epic 12).
   - [x] Subtask 5.2: All changed files documented in File List below.
 
 ## Dev Notes
@@ -175,7 +175,7 @@ _Build failed on first Vercel deploy with `useSearchParams() should be wrapped i
 <!-- ⚠️ POPULATE THIS AT STORY START, not at the end. Add every file you plan to touch here BEFORE you begin implementing.
      Update throughout development. Final check: run `git status --porcelain` before moving to review and confirm this list matches. -->
 
-- `vercel.json` — NEW: Explicit Vercel build configuration (framework, buildCommand, outputDirectory, installCommand)
-- `src/app/layout.tsx` — MODIFIED: wrapped `GlobalHeader` in `<Suspense>` to fix `useSearchParams()` prerender error on `/_not-found`
+- `vercel.json` — NEW: Explicit Vercel build configuration. Updated during code review: normalized to 2-space indentation (project convention) and added `devCommand`.
+- `src/app/layout.tsx` — MODIFIED: wrapped `GlobalHeader` in `<Suspense>` to fix `useSearchParams()` prerender error on `/_not-found`; fallback simplified to `null` during code review (replaced brittle magic-number `89px` per architecture consultation).
 - `src/app/page.tsx` — MODIFIED: wrapped `DiscoveryGrid` in `<Suspense>` to fix `useSearchParams()` prerender error on `/`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml` — MODIFIED: story status → review
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — MODIFIED: story status → done

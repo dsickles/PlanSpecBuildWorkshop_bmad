@@ -122,6 +122,6 @@ development_status:
 
   epic-12: in-progress
   12-1-pre-build-sync-automation: done
-  12-2-vercel-ci-cd-pipeline-configuration: review
+  12-2-vercel-ci-cd-pipeline-configuration: done
   12-3-end-to-end-e2e-flow-evaluation: backlog
   epic-12-retrospective: optional
