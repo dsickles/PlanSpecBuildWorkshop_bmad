@@ -467,6 +467,38 @@ Critical AI conflict points (naming schemas, folder structures, component bounda
 **First Implementation Priority:**
 Execute the Next.js / shadcn initialization command defined in the "Starter Template Evaluation" section to establish the base repository.
 
+## Technical Debt
+
+The following technical debt items and functional risks have been identified through architectural analysis and adversarial review. Each item is assigned a criticality level to prioritize remediation.
+
+### [Critical] Security & XSS in Markdown
+The requirement to parse GitHub-flavored markdown safely currently lacks a specified sanitization standard. If an author includes an `<iframe>` or an SVG with an `onload` attribute, the application is vulnerable to Cross-Site Scripting (XSS).
+*Remediation:* Enforce a strict HTML sanitizer (e.g., DOMPurify or `rehype-sanitize`) within the markdown rendering pipeline before injecting via `dangerouslySetInnerHTML`.
+
+### [Major] Zod Strictness Cascading Failures
+While Zod successfully maps project-level parsing failures to `[Error]` UI states, the architecture does not define the blast radius for root-level failures. If a shared configuration file (like `sort-config.yaml` or a core `_shared/index.md` agent) fails validation, it risks bringing down the entire grid rendering process.
+*Remediation:* Implement architectural boundary limits for root-level parses, ensuring the application gracefully degrades (e.g., falling back to alphabetical sorting) rather than throwing an unhandled exception during the build or runtime.
+
+### [Major] Client-Side Payload Explosion
+The architecture currently performs filter operations incrementally against the entire initial data payload on the client side. As the portfolio scales (30+ projects), this risks O(N) payload explosion, degraded Lighthouse scores, and increased Time to Interactive (TTI).
+*Remediation:* Investigate component lazy-loading, pagination, or Server-Driven filtering to constrain the initial hydration payload.
+
+### [Major] E2E Test Brittleness
+E2E testing flows are relatively coupled to specific DOM structures and CSS selectors, making the test suite highly brittle to standard UI refactoring or filter logic changes.
+*Remediation:* Implement robust `data-testid` strategies and decouple interaction tests from strict layout assertions prior to CI/CD integration.
+
+### [Minor] Flaky Radix Focus Restoration
+The document modal relies on Radix's declarative `onCloseAutoFocus` to return focus to the exact grid card upon closing. Because the grid is dynamically filtered via `useMemo`, if the state changes or the DOM reflows while the modal is open, Radix will throw an error attempting to focus a detached DOM node.
+*Remediation:* Implement defensive checks before restoring focus, or anchor focus to a stable parent container if the specific trigger node is no longer present in the DOM.
+
+### [Minor] App Router Shallow Routing Caching
+Next.js App Router shallow routing edge cases can cause stale UI states to be served when users utilize the browser "Back" navigation after opening and closing multiple modals or activating various filters.
+*Remediation:* Explicitly manage router cache invalidation or leverage tools like `nuqs` to handle type-safe, URL-synchronous state without aggressive browser history pollution.
+
+### [Minor] Filter Combinatorial Black Holes
+The tri-modal filtering system (Project + Domain + Tech Stack) allows users to select combinations that result in zero content, offering a poor UX "dead end" without a clear path back.
+*Remediation:* Implement predictive disabled states for filter pills that would result in zero matches based on the current context.
+
 ## Deferred Architectural Patterns (Phase 2)
 
 The following patterns are architecturally sound but explicitly **out of scope for Phase 1 MVP**. They are preserved here so future implementation does not need to re-derive them.

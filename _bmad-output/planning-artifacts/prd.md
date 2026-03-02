@@ -132,33 +132,37 @@ As a Professional Portfolio and Builder's Workshop, the application functions pr
 - Dark/Light mode toggle
 - **Card UX & Navigation:** Individual cards within the columns must be thoughtfully optimized for scannability, featuring contextually appropriate "at a glance" information for personas. The cards must support explicit intra-linking (e.g., clicking directly from a prototype card to its specific PRD or Decision Matrix). Note: Phase 1 prioritizes a 0ms instant transition when filtering to guarantee core layout stability and Markdown parsing capabilities.
 - **Tri-modal filtering:** Domain and Tech Stack filters apply across ALL three columns (Agent Studio, Blueprints, Build Lab). Any card in any column that lacks the selected tag is hidden from view. This cross-column filtering behavior is consistent in both Browse Mode and Focus Mode.
+- **Deployment & Go-Live:** Connect the GitHub repository to Vercel (or equivalent edge host) and trigger a production build. The CI/CD pipeline must correctly execute `npm run build` without failing on Zod or TypeScript errors. Crucially, to support "Remote Pointers" without duplicating files or breaking the isolated Vercel build environment, a Pre-Build Sync Script (e.g., using symlinks or secure copying) must stage external artifacts before SSG compilation. Finally, a holistic evaluation of end-to-end (E2E) flows must be conducted prior to deployment to ensure tests are decoupled from specific DOM structures and are not brittle. (NFR6, NFR7)
 
 ### Post-MVP Features
-**Phase 2 (Growth):**
-- **Deployment & Go-Live:** Connect the GitHub repository to Vercel (or equivalent edge host) and trigger a production build. The CI/CD pipeline must correctly execute `npm run build` without failing on Zod or TypeScript errors, deploying the application to a public domain with SSG routing and Markdown parsing working identically to the local environment. (NFR6, NFR7)
-- **Fluid Grid Transitions:** Upgrade the core Phase 1 0ms instant filter transition to a 200ms fluid, spatial CSS animation (The "Command Center Collapse") to elevate the "premium studio" feel.
+**Phase 2 (Metrics, Stability, and Growth):**
+- **Observability and Metric Instrumentation:**
+    - Basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches)
+- **Improved Peer PM Support (The Forker):** Eliminate the hardcoded rigidity of the "Meta-Blueprint" requirement (FR16) to reduce friction for users cloning the repository. Additionally, explore integrations for a non-technical CMS (e.g., Decap CMS or similar Git-backed interfaces) so PMs and Designers can author content without writing markdown frontmatter or resolving merge conflicts.
+- **Ensure Architecture Can Scale:** Address the O(N) client-side payload explosion currently caused by performing filter operations against the entire initial data payload. Investigate component lazy-loading, pagination, or server-driven filtering to protect Lighthouse scores and FCP as the portfolio grows beyond 30+ projects.
+- **Robust URL State Management:** Fortify the interface against URL parameter pollution (e.g., validating array vs string inputs, guarding against malicious paths) and resolve Next.js App Router shallow routing edge cases (e.g., avoiding stale cache serving on browser "Back" navigation).
 - Integration of live, embedded iframes for prototypes (instead of external links)
-- Mobile/tablet responsive layout — the 3-column Command Center must adapt to smaller screens while preserving the mental model of three distinct content lanes (e.g., sticky tab bar for column switching)
+- Mobile/tablet responsive layout — the 3-column Command Center must adapt to smaller screens while preserving the mental model of three distinct content lanes. Implementation strategies must include structural "Quick Wins" identified during the V1 audit, specifically:
+  - **Horizontal Scrolling Filters:** Replacing flex-wrap with a swipeable, horizontally scrolling filter ribbon to prevent the filter bar from pushing content below the fold on narrow screens.
+  - **Reclaimed Modal Space:** Reducing the hardcoded `px-8` horizontal padding on the document modal to `px-4` on mobile viewports to maximize the reading width.
 - An interactive graph or visualization showing connections between tools and artifacts
-- **Smart Suite Navigation**: Implementing a "Suite Switcher" and "Recommended Next" logic within the document modal to allow jumping between project artifacts without closing the viewer.
-- A "How to build your own Agent" tutorial section
-- Support for Journey 3 (The Author) via more advanced automated deployment pipelines — *Note: Journey 3 is partially supported in Phase 1 via FR1-FR3 (basic markdown publishing). Phase 2 adds advanced CI/CD automation.*
-- **Enhanced Document Access:** Treat project `index.md` as the "Overview" document accessible via the card's Doc CTA. Support external links (GitHub, websites) directly in Agent Studio cards.
-- **Maintenance Optimization:** Implement a "Remote Pointer" strategy to eliminate artifact redundancy by linking to source documentation paths in the parent repo.
-- **Agentic Transparency:** Introduce a document viewer for Agent Studio tools to explain "how it works" and project history.
-- **UI Refinement:** Optimize About page density, synchronize theme consistency for filters/modals, and revamp the Filter Clear workflow for a more seamless, muted experience.
-- Basic usage telemetry (e.g., Vercel Analytics) to validate the "Evaluator" user journey (tracking document views vs. prototype launches)
 
-**Phase 3 (Expansion):**
+**Phase 3 (Expansion and UX Polish):**
 - Multi-tenant hosting (allowing other PMs to deploy their instances to a centralized domain) — *Note: This represents a non-trivial architectural pivot from a single static site and should not influence MVP architecture decisions.*
 - Offline support (PWA integration)
 - Link rot mitigation (archived screenshots for dead prototypes)
+- **Fluid Grid Transitions:** Upgrade the core Phase 1 0ms instant filter transition to a 200ms fluid, spatial CSS animation (The "Command Center Collapse") to elevate the "premium studio" feel.
+- **Smart Suite Navigation**: Implementing a "Suite Switcher" and "Recommended Next" logic within the document modal to allow jumping between project artifacts without closing the viewer.
+- A "How to build your own Agent" tutorial section
+- Support for Journey 3 (The Author) via more advanced automated deployment pipelines — *Note: Journey 3 is partially supported in Phase 1 via FR1-FR3 (basic markdown publishing). Phase 2 adds advanced CI/CD automation.*
 
 ### Risk Mitigation Strategy
 - **Technical Risks:** *Markdown Parsing Complexity.* Mitigation: Build Phase 1 using established SSG tools (like Astro or Next.js) that have robust out-of-the-box markdown handling rather than rolling a custom parser.
 - **Market Risks:** *Lack of interest from Hiring Managers.* Mitigation: The MVP is inherently valuable as a personal historical record even if no one else looks at it, ensuring the build effort is never wasted.
 - **Resource Risks:** *UI build takes too long.* Mitigation: Start with a minimalist, brutalist "no-fluff" CSS framework to guarantee the routing and markdown parsing works before adding visual polish.
 - **UX Risks:** *Mobile Adaptation of 3-Column Layout.* The product's identity is the interlocking 3-column "Command Center." Mitigation: Mobile responsive design is deferred to v2 to keep the MVP focused on the desktop experience where hiring managers primarily evaluate portfolios. The v2 UX design phase will define a mobile navigation pattern (e.g., tab-based column switcher) that preserves the sense of column interconnection.
+
+
 
 ## Functional Requirements 
 

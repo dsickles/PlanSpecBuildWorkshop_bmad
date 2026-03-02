@@ -3,11 +3,11 @@ import { ParsedArticle, ParsedContent } from "../schema";
 
 describe("calculateMetrics", () => {
     const mockContent: Partial<ParsedArticle>[] = [
-        { projectSlug: "p1", artifactType: "agent" },
-        { projectSlug: "p1", artifactType: "doc" },
-        { projectSlug: "p2", artifactType: "agent" },
-        { projectSlug: "p2", artifactType: "prototype" },
-        { projectSlug: "p2", artifactType: "doc" },
+        { projectSlug: "p1", artifactType: "agent", _filePath: "content/p1/agents/agent-a.md" },
+        { projectSlug: "p1", artifactType: "doc", _filePath: "content/p1/docs/doc-a.md" },
+        { projectSlug: "p2", artifactType: "agent", _filePath: "content/p2/agents/agent-b.md" },
+        { projectSlug: "p2", artifactType: "prototype", _filePath: "content/p2/prototypes/proto-a.md" },
+        { projectSlug: "p2", artifactType: "doc", _filePath: "content/p2/docs/doc-b.md" },
     ];
 
     it("should correctly count projects, agents, docs, and prototypes", () => {

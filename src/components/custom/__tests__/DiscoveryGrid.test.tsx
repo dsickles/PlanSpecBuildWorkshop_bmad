@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { DiscoveryGrid } from "../DiscoveryGrid";
 import { useFilterState } from "../../../hooks/useFilterState";
 import { ParsedArticle, ErrorFrontmatter } from "../../../lib/schema";
@@ -74,6 +74,10 @@ describe("DiscoveryGrid", () => {
         jest.clearAllMocks();
     });
 
+    afterEach(() => {
+        cleanup();
+    });
+
     it("filters agents by projects array when activeProject is set", () => {
         (useFilterState as jest.Mock).mockReturnValue({
             activeProject: "project-a",
@@ -97,7 +101,7 @@ describe("DiscoveryGrid", () => {
 
         render(<DiscoveryGrid allContent={mockContent} errors={[]} />);
 
-        expect(screen.getByText("No agents found")).toBeInTheDocument();
+        expect(screen.getByText("No tools found")).toBeInTheDocument();
         expect(screen.getByText("No blueprints found")).toBeInTheDocument();
         expect(screen.getByText("No prototypes found")).toBeInTheDocument();
     });
@@ -189,7 +193,7 @@ describe("DiscoveryGrid", () => {
 
         expect(screen.queryByText("Agent A")).not.toBeInTheDocument();
         expect(screen.queryByText("Agent B")).not.toBeInTheDocument();
-        expect(screen.getByText("No agents found")).toBeInTheDocument();
+        expect(screen.getByText("No tools found")).toBeInTheDocument();
     });
 
     it("shows agents matching both active project and active domain", () => {
@@ -274,18 +278,20 @@ describe("DiscoveryGrid", () => {
         expect(screen.getByLabelText(/Open Project A overview/i)).toBeInTheDocument();
     });
 
-    it("does not render overview icon for agent cards", () => {
+    it("renders overview icon for agent cards (opens agent doc in modal)", () => {
         (useFilterState as jest.Mock).mockReturnValue({
             activeProject: null,
             activeDomains: [],
-            activeTech: []
+            activeTech: [],
+            setDocument: jest.fn()
         });
 
         const agentsOnly = mockContent.filter(i => i.artifactType === "agent");
         render(<DiscoveryGrid allContent={agentsOnly} errors={[]} />);
 
-        // Screen should not have any elements with the overview label for agents
-        expect(screen.queryByLabelText(/View project overview/i)).not.toBeInTheDocument();
+        // Agent cards receive onDocOpen from DiscoveryGrid, so they render the overview icon
+        const overviewButtons = screen.getAllByLabelText(/View project overview/i);
+        expect(overviewButtons.length).toBe(agentsOnly.length);
     });
 
     it("does not render overview icon for prototype cards", () => {

@@ -12,11 +12,16 @@ describe("Frontmatter Schema - External Links", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         (renderMarkdownToHtml as jest.Mock).mockImplementation((content) => Promise.resolve(`<div class="rendered">${content}</div>`));
-        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.existsSync as jest.Mock).mockReturnValue(false); // No project index.md
+        // content-parser uses fs.promises.readFile (async), not fs.readFileSync
+        (fs as jest.Mocked<typeof fs>).promises = {
+            ...fs.promises,
+            readFile: jest.fn(),
+        } as unknown as typeof fs.promises;
     });
 
     test("should parse external_links from frontmatter", async () => {
-        (fs.readFileSync as jest.Mock).mockReturnValue(`---
+        const fileContent = `---
 title: "Lovable"
 date: "2024-01-01"
 status: "Live"
@@ -26,7 +31,8 @@ external_links:
   - label: "Website"
     url: "https://lovable.dev"
 ---
-Content`);
+Content`;
+        (fs.promises.readFile as jest.Mock).mockResolvedValue(fileContent);
 
         const result = await parseMarkdownFile(
             mockFilePath,
@@ -46,7 +52,7 @@ Content`);
     });
 
     test("should fail validation if external_links url is invalid", async () => {
-        (fs.readFileSync as jest.Mock).mockReturnValue(`---
+        const fileContent = `---
 title: "Lovable"
 date: "2024-01-01"
 status: "Live"
@@ -54,7 +60,8 @@ external_links:
   - label: "GitHub"
     url: "not-a-url"
 ---
-Content`);
+Content`;
+        (fs.promises.readFile as jest.Mock).mockResolvedValue(fileContent);
 
         const result = await parseMarkdownFile(
             mockFilePath,

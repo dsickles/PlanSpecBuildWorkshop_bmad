@@ -8,6 +8,7 @@ jest.mock("../../../hooks/useFilterState");
 
 const mockContent: ParsedArticle[] = [
     {
+        id: "test-doc",
         title: "Test Document",
         projectSlug: "test-project",
         artifactType: "doc",

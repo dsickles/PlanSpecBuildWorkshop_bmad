@@ -119,3 +119,9 @@ development_status:
   11-2-shared-agent-branding-refinement: done
   11-3-architecture-sync-meta-data-pointers: done
   epic-11-retrospective: done
+
+  epic-12: in-progress
+  12-1-pre-build-sync-automation: done
+  12-2-vercel-ci-cd-pipeline-configuration: ready-for-dev
+  12-3-end-to-end-e2e-flow-evaluation: backlog
+  epic-12-retrospective: optional

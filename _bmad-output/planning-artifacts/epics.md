@@ -112,6 +112,7 @@ This document provides the complete epic and story breakdown for Plan Spec Build
 *   **Epic 9:** Maintenance & Strategic Rigor
 *   **Epic 10:** Interface Refinement & Flow
 *   **Epic 11:** Production Polish & Final Documentation
+*   **Epic 12:** MVP Deployment & Go-Live
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -645,13 +646,13 @@ So that the interface feels professional and consistent across all filter states
 
 ### Story 11.2: Shared Agent Branding Refinement
 As a User,
-I want shared agents to be labeled with a professional project name like "Common Agents",
+I want shared agents to show a configrable header on the modal but defaults to the grouping title, "Agent Studio",
 So that I don't see raw system directory names like `_shared` in the UI.
 
 **Acceptance Criteria:**
 *   **Given** an Agent Studio card for a shared agent,
 *   **When** viewing the project label,
-*   **Then** it displays "Common Agents" (or value from `_shared/index.md`) instead of `_shared`.
+*   **Then** it displays "Agent Studio" (or value from `_shared/index.md`) instead of `_shared`.
 
 ### Story 11.3: Architecture Sync & Meta-Data Pointers
 As a Developer,
@@ -663,5 +664,43 @@ So that the system remains maintainable and the project-root accurately represen
 *   **When** viewing the folder structure section,
 *   **Then** it includes `index.md` files within the `docs/`, `prototypes/`, and `_shared/` folders.
 *   **And** it explicitly describes how these files drive project-level metadata (including shared branding) and documentation source paths.
+
+## Epic 12: MVP Deployment & Go-Live
+Executing the final deployment phase by connecting to Vercel, ensuring clean builds, staging remote pointer artifacts via a pre-build script, and conducting a final E2E test pass to satisfy NFR6 and NFR7.
+**FRs/NFRs covered:** NFR6, NFR7
+
+### Story 12.1: Pre-Build Sync Automation
+As a Release Engineer,
+I want a pre-build script that securely copies or symlinks external artifacts into the isolated Vercel build context,
+So that "Remote Pointers" correctly resolve during SSG compilation without requiring manual file duplication.
+
+**Acceptance Criteria:**
+*   **Given** external markdown files referenced via `sourcePath`,
+*   **When** the CI pipeline triggers the `build` script,
+*   **Then** a pre-build task successfully stages these files into the expected `/content/` subdirectories.
+*   **And** the Next.js SSG build step completes without "File Not Found" errors for these pointers.
+
+### Story 12.2: Vercel CI/CD Pipeline Configuration
+As a Release Engineer,
+I want the repository connected to Vercel with strict build requirements,
+So that `git push` automatically triggers deployments only when Zod schemas and TypeScript typings are fully validated.
+
+**Acceptance Criteria:**
+*   **Given** a staging or production branch push,
+*   **When** Vercel triggers the Next.js build,
+*   **Then** the `npm run build` succeeds with zero Zod validation or TypeScript compilation errors.
+*   **And** the build fails explicitly before deployment if any type errors or missing frontmatter fields are detected.
+
+### Story 12.3: End-to-End (E2E) Flow Evaluation
+As a QA/Release Engineer,
+I want a holistic evaluation of end-to-end navigational flows,
+So that the deployed portfolio functions cohesively without brittle UI dependencies.
+
+**Acceptance Criteria:**
+*   **Given** the final production candidate payload,
+*   **When** executing the cross-column navigation flows (Journey 1 & 2),
+*   **Then** the routing succeeds instantly without full page reloads.
+*   **And** all filtering logic accurately narrows the data, surviving simulated edge conditions or URL manipulation.
+*   **And** any test scripts rely on semantic attributes (e.g., `data-testid`) rather than brittle DOM hierarchy selectors.
 
 <!-- Epic Definitions End -->
