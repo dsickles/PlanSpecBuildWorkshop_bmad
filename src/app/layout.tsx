@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import { GlobalHeader } from "@/components/layout/global-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -31,7 +32,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative flex min-h-screen flex-col bg-background">
-            <GlobalHeader />
+            <Suspense fallback={<div className="w-full border-b border-zinc-200 dark:border-zinc-800/60 bg-background mb-header-mb" style={{ minHeight: "89px" }} />}>
+              <GlobalHeader />
+            </Suspense>
             <main className="flex-1">
               {children}
             </main>

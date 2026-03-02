@@ -48,7 +48,9 @@ export default async function Home() {
       <Suspense fallback={null}>
         <FilterBar projects={projects} domains={domains} techStacks={techStacks} />
       </Suspense>
-      <DiscoveryGrid allContent={allContent} errors={errors} />
+      <Suspense fallback={null}>
+        <DiscoveryGrid allContent={allContent} errors={errors} />
+      </Suspense>
       <Suspense fallback={null}>
         <AboutModal allContent={allContent} />
       </Suspense>
