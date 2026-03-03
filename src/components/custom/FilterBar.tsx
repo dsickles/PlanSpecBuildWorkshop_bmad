@@ -34,6 +34,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                 <div className="absolute top-0 left-filter-offset h-v-rhythm flex items-center z-10 animate-in fade-in slide-in-from-top-1 duration-200">
                     <button
                         onClick={clearAllFilters}
+                        data-testid="clear-filter-button"
                         className={cn(
                             "px-3 py-1 text-[10px] uppercase font-bold tracking-tight rounded-md border flex items-center gap-1.5 shadow-sm",
                             MUTED_GHOST_BUTTON_STYLES
@@ -53,9 +54,10 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                 <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Projects
                 </span>
-                <div className="flex flex-wrap items-center gap-2">
+                <div role="group" aria-label="Filter by project" className="flex flex-wrap items-center gap-2">
                     <button
                         onClick={() => setProject(null)}
+                        data-testid="filter-pill-all"
                         aria-pressed={!activeProject}
                         className={cn(
                             "px-4 py-1.5 text-sm rounded-full transition-all border filter-pill",
@@ -70,6 +72,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                         <button
                             key={project.slug}
                             onClick={() => setProject(project.slug)}
+                            data-testid={`filter-pill-${project.slug}`}
                             aria-pressed={activeProject === project.slug}
                             className={cn(
                                 "px-4 py-1.5 text-sm rounded-full transition-all border filter-pill",
@@ -89,7 +92,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                 <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Domain
                 </span>
-                <div className="flex flex-wrap items-center gap-2">
+                <div role="group" aria-label="Filter by domain" className="flex flex-wrap items-center gap-2">
                     {domains.map((domain) => {
                         const isActive = activeDomains.includes(domain);
                         return (
@@ -116,7 +119,7 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                 <span className="w-16 flex-shrink-0 text-[10px] uppercase text-muted-foreground font-bold tracking-wider">
                     Tech
                 </span>
-                <div className="flex flex-wrap items-center gap-2">
+                <div role="group" aria-label="Filter by tech stack" className="flex flex-wrap items-center gap-2">
                     {techStacks.map((tech) => {
                         const isActive = activeTech.includes(tech);
                         return (

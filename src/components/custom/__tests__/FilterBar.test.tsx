@@ -47,7 +47,9 @@ describe('FilterBar - Clear Filter Visibility', () => {
         });
 
         render(<FilterBar {...defaultProps} />);
-        expect(screen.getByText('Clear Filter')).toBeInTheDocument();
+        const button = screen.getByRole('button', { name: /clear all filters/i });
+        expect(button).toBeInTheDocument();
+        expect(button).toHaveAttribute('data-testid', 'clear-filter-button');
     });
 
     it('shows "Clear Filter" button when domain filter is active', () => {
@@ -117,6 +119,10 @@ describe('FilterBar - Clear Filter Visibility', () => {
 
         const button = screen.getByText('P1 Title');
         expect(button).toBeInTheDocument();
+        expect(button).toHaveAttribute('data-testid', 'filter-pill-p1-slug');
+
+        const allButton = screen.getByText('All');
+        expect(allButton).toHaveAttribute('data-testid', 'filter-pill-all');
 
         fireEvent.click(button);
         expect(mockSetProject).toHaveBeenCalledWith('p1-slug');
@@ -158,6 +164,11 @@ describe('FilterBar - Clear Filter Visibility', () => {
 
             // Verify focus styles are present in the constant or applied
             expect(button).toHaveClass('focus-visible:ring-2');
+
+            // Verify semantic grouping
+            expect(screen.getByRole('group', { name: 'Filter by project' })).toBeInTheDocument();
+            expect(screen.getByRole('group', { name: 'Filter by domain' })).toBeInTheDocument();
+            expect(screen.getByRole('group', { name: 'Filter by tech stack' })).toBeInTheDocument();
         });
     });
 });

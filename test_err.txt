@@ -1,0 +1,1309 @@
+﻿node.exe : FAIL 
+src/components/custom/__tests__/FilterBar.test.tsx
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (FAIL src 
+   /compon...terBar.test.tsx:String) [], RemoteExcep  
+  tion
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  ΓùÅ FilterBar - Clear Filter Visibility ΓÇ║ shows 
+"Clear Filter" button when project filter is active
+
+    expect(element).toHaveAttribute("data-testid", 
+"clear-filter-button") // 
+element.getAttribute("data-testid") === 
+"clear-filter-button"
+
+    Expected the element to have attribute:
+      data-testid="clear-filter-button"
+    Received:
+      null
+
+    [0m [90m 50 |[39m         [36mconst[39m 
+button [33m=[39m 
+screen[33m.[39mgetByText([32m'Clear 
+Filter'[39m)[33m;[39m
+     [90m 51 |[39m         expect(button)[33m.[39m
+toBeInTheDocument()[33m;[39m
+    [31m[1m>[22m[39m[90m 52 |[39m         expect
+(button)[33m.[39mtoHaveAttribute([32m'data-testid'
+[39m[33m,[39m 
+[32m'clear-filter-button'[39m)[33m;[39m
+     [90m    |[39m                        
+[31m[1m^[22m[39m
+     [90m 53 |[39m     })[33m;[39m
+     [90m 54 |[39m
+     [90m 55 |[39m     it([32m'shows "Clear 
+Filter" button when domain filter is 
+active'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.toHaveAttribute (src/components/custom
+/__tests__/FilterBar.test.tsx:52:24)
+
+PASS src/components/custom/__tests__/MarkdownDocumentM
+odal.test.tsx
+  ΓùÅ Console
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 40 |[39m         })[33m;[39m
+     [90m 41 |[39m
+    [31m[1m>[22m[39m[90m 42 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m               
+[31m[1m^[22m[39m
+     [90m 43 |[39m
+     [90m 44 |[39m         [90m// Find the 
+elements in the Portal (JSDOM usually renders them in 
+document.body)[39m
+     [90m 45 |[39m         [36mconst[39m 
+dialogContent [33m=[39m document[33m.[39mquerySele
+ctor([32m'[data-slot="dialog-content"]'[39m)[33m;[
+39m[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:42:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 67 |[39m         })[33m;[39m
+     [90m 68 |[39m
+    [31m[1m>[22m[39m[90m 69 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m               
+[31m[1m^[22m[39m
+     [90m 70 |[39m
+     [90m 71 |[39m
+     [90m 72 |[39m         [90m// Check for Back 
+button instead of Close button[39m[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:69:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 93 |[39m         })[33m;[39m
+     [90m 94 |[39m
+    [31m[1m>[22m[39m[90m 95 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m               
+[31m[1m^[22m[39m
+     [90m 96 |[39m
+     [90m 97 |[39m         [36mconst[39m 
+errorFallback [33m=[39m screen[33m.[39mgetByTestId
+([32m"document-error-fallback"[39m)[33m;[39m
+     [90m 98 |[39m         expect(errorFallback)[33
+m.[39mtoBeInTheDocument()[33m;[39m[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:95:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 115 |[39m         })[33m;[39m
+     [90m 116 |[39m
+    [31m[1m>[22m[39m[90m 117 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m     |[39m               
+[31m[1m^[22m[39m
+     [90m 118 |[39m
+     [90m 119 |[39m         expect(screen[33m.[39m
+getByTestId([32m"document-error-fallback"[39m))[33m
+.[39mtoBeInTheDocument()[33m;[39m
+     [90m 120 |[39m         
+expect(screen[33m.[39mgetByText([32m"Document Not F
+ound"[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:117:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 136 |[39m         })[33m;[39m
+     [90m 137 |[39m
+    [31m[1m>[22m[39m[90m 138 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{contentWithToc} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m     |[39m               
+[31m[1m^[22m[39m
+     [90m 139 |[39m
+     [90m 140 |[39m         [90m// The active ID 
+defaults to the first item (item-1) in useEffect[39m
+     [90m 141 |[39m         [36mawait[39m 
+waitFor(() [33m=>[39m {[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:138:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 150 |[39m         })[33m;[39m
+     [90m 151 |[39m
+    [31m[1m>[22m[39m[90m 152 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m     |[39m               
+[31m[1m^[22m[39m
+     [90m 153 |[39m
+     [90m 154 |[39m         [36mconst[39m 
+scrollContainer [33m=[39m screen[33m.[39mgetByRole
+([32m"article"[39m)[33m.[39mparentElement[33m?[3
+9m[33m.[39mparentElement[33m;[39m
+     [90m 155 |[39m         expect(scrollContainer)
+[33m.[39mnot[33m.[39mtoHaveStyle({ 
+scrollPaddingTop[33m:[39m [32m'280px'[39m 
+})[33m;[39m[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:152:15)
+
+    console.warn
+      Warning: Missing `Description` or 
+`aria-describedby={undefined}` for {DialogContent}.
+
+    [0m [90m 163 |[39m         })[33m;[39m
+     [90m 164 |[39m
+    [31m[1m>[22m[39m[90m 165 |[39m         
+render([33m<[39m[33mMarkdownDocumentModal[39m 
+allContent[33m=[39m{mockContent} 
+[33m/[39m[33m>[39m)[33m;[39m
+     [90m     |[39m               
+[31m[1m^[22m[39m
+     [90m 166 |[39m
+     [90m 167 |[39m         [90m// We verify that 
+the Dialog is rendering with the expected 
+onCloseAutoFocus handler[39m
+     [90m 168 |[39m         [90m// by checking 
+that the component doesn't crash and the handler is 
+present in the DOM [39m[0m
+
+      at node_modules/@radix-ui/react-dialog/src/dialo
+g.tsx:543:36
+      at Object.react_stack_bottom_frame (node_modules
+/react-dom/cjs/react-dom-client.development.js:25989:2
+0)
+      at runWithFiberInDEV (node_modules/react-dom/cjs
+/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react
+-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15718:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15476:11)
+      at recursivelyTraversePassiveMountEffects (node_
+modules/react-dom/cjs/react-dom-client.development.js:
+15439:11)
+      at commitPassiveMountOnFiber (node_modules/react
+-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18432:9)
+      at flushPendingEffects (node_modules/react-dom/c
+js/react-dom-client.development.js:18358:14)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18323:44)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performSyncWorkOnRoot (node_modules/react-dom
+/cjs/react-dom-client.development.js:18972:7)
+      at flushSyncWorkAcrossRoots_impl (node_modules/r
+eact-dom/cjs/react-dom-client.development.js:18814:21)
+      at flushSpawnedWork (node_modules/react-dom/cjs/
+react-dom-client.development.js:18334:9)
+      at commitRoot (node_modules/react-dom/cjs/react-
+dom-client.development.js:17955:9)
+      at performWorkOnRoot (node_modules/react-dom/cjs
+/react-dom-client.development.js:16667:15)
+      at performWorkOnRootViaSchedulerTask (node_modul
+es/react-dom/cjs/react-dom-client.development.js:18957
+:7)
+      at flushActQueue 
+(node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act 
+(node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-
+compat.js:46:25
+      at renderRoot (node_modules/@testing-library/rea
+ct/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/d
+ist/pure.js:291:10)
+      at Object.<anonymous> (src/components/custom/__t
+ests__/MarkdownDocumentModal.test.tsx:165:15)
+
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        0.907 s, estimated 1 s
+Ran all test suites matching src/components/custom/__t
+ests__/FilterBar.test.tsx|src/components/custom/__test
+s__/MarkdownDocumentModal.test.tsx.

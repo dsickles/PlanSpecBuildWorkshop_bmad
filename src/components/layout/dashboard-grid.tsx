@@ -18,7 +18,7 @@ export function DashboardGrid({
     labColumn,
 }: DashboardGridProps) {
     return (
-        <div className="grid min-h-[calc(100vh-3.5rem)] grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div id="discovery-grid" data-testid="discovery-grid" className="grid min-h-[calc(100vh-3.5rem)] grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {/* Studio Column */}
             <div className="flex flex-col">
                 <ColumnHeader label="Agent Studio" />

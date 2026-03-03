@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MarkdownDocumentModal } from "../MarkdownDocumentModal";
 import { useFilterState } from "../../../hooks/useFilterState";
 import { ParsedArticle } from "../../../lib/schema";
@@ -120,7 +120,7 @@ describe("MarkdownDocumentModal", () => {
         expect(screen.getByText("Document Not Found")).toBeInTheDocument();
     });
 
-    it("auto-scrolls TOC sidebar when active item changes", () => {
+    it("auto-scrolls TOC sidebar when active item changes", async () => {
         const scrollIntoViewMock = jest.fn();
         window.Element.prototype.scrollIntoView = scrollIntoViewMock;
 
@@ -138,7 +138,9 @@ describe("MarkdownDocumentModal", () => {
         render(<MarkdownDocumentModal allContent={contentWithToc} />);
 
         // The active ID defaults to the first item (item-1) in useEffect
-        expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
+        await waitFor(() => {
+            expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
+        });
     });
 
     it("does not apply redundant scroll-padding-top (Fixed Regression)", () => {
