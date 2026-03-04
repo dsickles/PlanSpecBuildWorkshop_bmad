@@ -31,7 +31,7 @@ export function GlobalHeader() {
                             Plan Spec Build Workshop
                         </h1>
                         <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed mt-1 whitespace-nowrap">
-                            AI-powered context engineering in practice, from concept to working prototype.
+                            AI-powered context engineering in practice, from concept to production.
                         </p>
                     </div>
                 </div>

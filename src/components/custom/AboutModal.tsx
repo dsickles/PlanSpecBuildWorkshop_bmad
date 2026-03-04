@@ -53,7 +53,7 @@ export function AboutModal({ allContent }: AboutModalProps) {
                                     Plan Spec Build Workshop
                                 </h2>
                                 <p className="text-sm text-muted-foreground mt-0.5 whitespace-nowrap">
-                                    AI-powered context engineering in practice, from concept to working prototype.
+                                    AI-powered context engineering in practice, from concept to production.
                                 </p>
                             </div>
                         </div>
