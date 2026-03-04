@@ -8,6 +8,8 @@ agent_studio:
   - Lovable
   - SpecKit
   - GetShitDone
+  - Cursor
+  - Antigravity
 
 blueprints:
   plan-spec-build-workshop:
