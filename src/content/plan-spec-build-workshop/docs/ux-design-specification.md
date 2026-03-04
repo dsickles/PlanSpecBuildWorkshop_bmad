@@ -4,13 +4,9 @@ date: "2026-02-23"
 status: "Live"
 artifact_type: "doc"
 domain:
-  - "UX Design"
-  - "Developer Experience"
   - "Portfolio"
-tech_stack:
-  - "Figma"
-  - "Next.js"
-  - "Tailwind CSS"
+  - "UX Design"
+tech_stack: []
 description: "Visual design language, emotional goals, and layout specifications for the Command Center UI."
 parent_project: "plan-spec-build-workshop"
 stepsCompleted: [1, 2, 3, 4]

@@ -1,17 +1,13 @@
 ---
 title: "Get Shit Done (GSD)"
 date: "2026-02-24"
-status: "Live"
+status: "Concept"
 domain:
-  - "AI/ML"
-  - "Game Development"
-  - "Agile Execution"
+  - "Agentic Workflow"
+  - "Agile Workflows"
 artifact_type: "agent"
-tech_stack:
-  - "AI Agents"
-  - "Unity / Unreal / Godot"
-  - "Sprint Management"
-description: "The high-velocity execution engine for complex projects — integrating Game Design, Architecture, and QA agents into a seamless development lifecycle."
+tech_stack: []
+description: "A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code, OpenCode, Gemini CLI, and Codex."
 projects:
 external_links:
   - label: "GitHub"
@@ -20,19 +16,24 @@ external_links:
 
 # Get Shit Done (GSD)
 
-A specialized agentic suite optimized for high-velocity execution, particularly in complex domains like Game Development and large-scale system builds.
+A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code, OpenCode, Gemini CLI, and Codex.
 
-## Agents Deployed
+Solves context rot — the quality degradation that happens as Claude fills its context window.
 
-| Agent | Role | Key Output |
-|---|---|---|
-| Game Designer | Mechanic & system design | GDD / Game Brief |
-| Game Architect | Technical system blueprints | Game Architecture |
-| Game Dev | Implementation & scripting | Feature Code |
-| Game QA | Quality gate & playtesting | Test Report |
-| Scrum Master | Velocity & sprint coordination | Daily Standup / Sprint Status |
-| Tech Writer | Documentation & knowledge curation | Module Documentation |
+## Why I (TÂCHES) Built This 
 
-## Process
+I'm a solo developer. I don't write code — Claude Code does.
 
-The GSD module powers the "Build" phase of the workshop. It transforms high-level blueprints into working software through a continuous cycle of implementation, automated testing, and narrative documentation. By automating the coordination overhead of complex builds, it allows for compressed development cycles without sacrificing quality or architectural integrity.
+Other spec-driven development tools exist; BMAD, Speckit... But they all seem to make things way more complicated than they need to be (sprint ceremonies, story points, stakeholder syncs, retrospectives, Jira workflows) or lack real big picture understanding of what you're building. I'm not a 50-person software company. I don't want to play enterprise theater. I'm just a creative person trying to build great things that work.
+
+So I built GSD. The complexity is in the system, not in your workflow. Behind the scenes: context engineering, XML prompt formatting, subagent orchestration, state management. What you see: a few commands that just work.
+
+The system gives Claude everything it needs to do the work and verify it. I trust the workflow. It just does a good job.
+
+That's what this is. No enterprise roleplay bullshit. Just an incredibly effective system for building cool stuff consistently using Claude Code.
+
+— TÂCHES
+
+## Who This Is For
+
+People who want to describe what they want and have it built correctly — without pretending they're running a 50-person engineering org.

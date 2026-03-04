@@ -1,38 +1,25 @@
 ---
 title: "Spec Kit"
 date: "2026-02-24"
-status: "Live"
+status: "Concept"
 domain:
-  - "AI/ML"
-  - "Design Thinking"
-  - "Innovation Strategy"
+  - "Agentic Workflow"
+  - "Product Strategy"
 artifact_type: "agent"
-tech_stack:
-  - "AI Agents"
-  - "Design Thinking"
-  - "Strategic Foresight"
-description: "A precision-engineered toolkit for defining, designing, and validating product concepts through structured Design Thinking and Innovation Strategy agents."
+tech_stack: []
+description: "An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch."
 projects:
 external_links:
   - label: "GitHub"
     url: "https://github.com/github/spec-kit"
 ---
 
-# Spec Kit (CIS)
+# Spec Kit
 
-A comprehensive suite of innovation-focused AI agents designed to de-risk product development through rigorous design thinking and architectural validation.
+Build high-quality software faster.
 
-## Agents Deployed
+An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch.
 
-| Agent | Role | Key Output |
-|---|---|---|
-| Brainstorming Coach | Creative ideation & divergent thinking | Ideation Matrix |
-| Design Thinking Coach | User-centric problem framing | Empathy Map |
-| Innovation Strategist | Market disruption analysis | Strategy Brief |
-| Problem Solver | Critical path & risk assessment | Mitigation Plan |
-| Storyteller | Narrative & value proposition | Product Vision |
-| Presentation Master | Stakeholder communication | Pivot Deck |
+## What is Spec-Driven Development?
 
-## Process
-
-The Spec Kit is utilized during the "Think" and "Plan" phases of the workshop. It ensures that projects are not just technologically feasible, but deeply rooted in user needs and market opportunity before a single line of code is written. Each agent challenges assumptions and forces a higher level of strategic rigor.
+Spec-Driven Development flips the script on traditional software development. For decades, code has been king — specifications were just scaffolding we built and discarded once the "real work" of coding began. Spec-Driven Development changes this: specifications become executable, directly generating working implementations rather than just guiding them.

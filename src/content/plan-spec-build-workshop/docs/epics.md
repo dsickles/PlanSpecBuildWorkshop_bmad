@@ -4,13 +4,9 @@ date: "2026-02-23"
 status: "WIP"
 artifact_type: "doc"
 domain:
-  - "Developer Tooling"
   - "Portfolio"
-  - "Product Management"
-tech_stack:
-  - "Next.js"
-  - "TypeScript"
-  - "Tailwind CSS"
+  - "Agile Workflows"
+tech_stack: []
 description: "Complete epic and story breakdown for the {{PROJECT_NAME}} roadmap."
 parent_project: "plan-spec-build-workshop"
 stepsCompleted: [1]
