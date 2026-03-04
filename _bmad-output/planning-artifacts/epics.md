@@ -113,6 +113,7 @@ This document provides the complete epic and story breakdown for Plan Spec Build
 *   **Epic 10:** Interface Refinement & Flow
 *   **Epic 11:** Production Polish & Final Documentation
 *   **Epic 12:** MVP Deployment & Go-Live
+*   **Epic 13:** Visual Branding and Identity Integration
 
 ## Epic 0: Project Scaffolding & Design Foundation
 Establish the technical foundation by initializing the Next.js/Tailwind repository. Protect future feature velocity by extracting the exact color tokens ("Tinted Neutrality") and typography (Inter) from the UX HTML mockup into the `tailwind.config.ts`. Construct the global header and the empty 3-Column structural CSS Grid (`DashboardGrid`), providing a ready-made, styled skeleton for subsequent data ingestion and component development.  
@@ -702,5 +703,43 @@ So that the deployed portfolio functions cohesively without brittle UI dependenc
 *   **Then** the routing succeeds instantly without full page reloads.
 *   **And** all filtering logic accurately narrows the data, surviving simulated edge conditions or URL manipulation.
 *   **And** any test scripts rely on semantic attributes (e.g., `data-testid`) rather than brittle DOM hierarchy selectors.
+
+## Epic 13: Visual Branding and Identity Integration
+Integrating the newly designed "Layers" icon (Blue, White, Dark Gray) into the application's visual identity. This epic covers preparing the SVG and PNG assets, updating the global browser tab metadata (favicon, apple-icon), and anchoring the new logo into the persistent Global Header.
+
+### Story 13.1: Logo Asset Integration
+As a UI Developer,
+I want to add the new "Layers" icon assets to the codebase as a responsive SVG component and static PNGs,
+So that they are available for use across the application interface and metadata.
+
+**Acceptance Criteria:**
+*   **Given** the provided icon design,
+*   **When** viewing the codebase,
+*   **Then** a scalable `LogoIcon.tsx` component exists in `src/components/`.
+*   **And** crisp static PNGs (16x16, 32x32, 180x180, 512x512) are correctly deposited into the `public/` directory.
+
+### Story 13.2: Browser Tab and Metadata
+As a User,
+I want to see the new branded icon in my browser tab, bookmarks, and mobile home screen,
+So that the application has a recognizable and premium identity outside the main viewport.
+
+**Acceptance Criteria:**
+*   **Given** a browser or mobile device,
+*   **When** opening the application or saving it to the home screen,
+*   **Then** the default Next.js favicon is replaced with the new 32x32/16x16 branding.
+*   **And** an `apple-icon.png` (180x180) is provided.
+*   **And** the `metadata` object in `src/app/layout.tsx` is updated to reference these visual assets correctly.
+
+### Story 13.3: Global Header Branding
+As a User,
+I want to see the new "Layers" logo anchored perfectly next to the application title in the global navigation,
+So that the brand identity is a persistent part of my navigation experience.
+
+**Acceptance Criteria:**
+*   **Given** the application interface,
+*   **When** rendering the `GlobalHeader` component,
+*   **Then** the `<LogoIcon />` is placed in a flex-row container directly beside the "Plan Spec Build Workshop" `<h1>` title.
+*   **And** the layout includes conversational whitespace constraints (e.g., `gap-4`) to balance the icon against the typography.
+*   **And** the bottom grid layer of the SVG gracefully handles Dark Mode transitions (e.g., using `dark:fill-zinc-300` or equivalent mechanisms if it blends heavily into the background).
 
 <!-- Epic Definitions End -->

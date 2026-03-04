@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useFilterState } from "@/hooks/useFilterState";
 import { Rocket, Layers, Github, FileText, ArrowLeft } from "lucide-react";
+import { LogoIcon } from "@/components/custom/LogoIcon";
 import { ParsedArticle, ErrorFrontmatter } from "@/lib/schema";
 import { calculateMetrics } from "@/lib/metrics";
 
@@ -43,20 +44,28 @@ export function AboutModal({ allContent }: AboutModalProps) {
                 </DialogHeader>
                 {/* Header / Navigation */}
                 <div className="shrink-0 bg-background border-b border-border/50 z-20 relative">
-                    <div className="bg-background px-8 py-6 flex items-center justify-between">
+                    <div className="bg-background px-8 py-5 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            {/* h-16: matches the homepage's 1.21× icon-to-text-block ratio (53px text block × 1.21 ≈ 64px = h-16). */}
+                            <LogoIcon className="w-auto h-16 shrink-0" aria-hidden="true" />
+                            <div className="overflow-hidden">
+                                <h2 className="text-2xl font-semibold tracking-tight text-foreground leading-tight whitespace-nowrap">
+                                    Plan Spec Build Workshop
+                                </h2>
+                                <p className="text-sm text-muted-foreground mt-0.5 whitespace-nowrap">
+                                    AI-assisted product development — from concept to production.
+                                </p>
+                            </div>
+                        </div>
                         <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => setAbout(false)}
-                            className="text-muted-foreground hover:text-foreground hover:bg-accent -ml-2 px-3 flex items-center gap-2 group"
+                            className="text-muted-foreground hover:text-foreground hover:bg-accent px-3 flex items-center gap-2 group shrink-0"
                         >
                             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                             Back
                         </Button>
-                        <div className="text-[10px] font-bold tracking-[0.2em] text-muted-foreground flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            System Online // v1.0.1
-                        </div>
                     </div>
                 </div>
 

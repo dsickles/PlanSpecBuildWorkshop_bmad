@@ -4,6 +4,7 @@ import { Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useFilterState } from "@/hooks/useFilterState";
 import { useEffect, useState } from "react";
+import { LogoIcon } from "@/components/custom/LogoIcon";
 
 const iconButtonClass =
     "relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:focus-visible:ring-zinc-300 h-9 w-9";
@@ -22,13 +23,17 @@ export function GlobalHeader() {
     return (
         <header className="w-full border-b border-zinc-200 dark:border-zinc-800/60 bg-background mb-header-mb">
             <div className="container max-w-screen-2xl mx-auto px-4 md:px-8 py-6 md:py-8 flex items-start justify-between">
-                <div>
-                    <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-2">
-                        Plan Spec Build Workshop
-                    </h1>
-                    <p className="text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
-                        A collection of agentic tooling, planning documents, working software, and everything in between.
-                    </p>
+                <div className="flex items-center gap-4">
+                    {/* h-14/h-20: calibrated to match the two-line text block height at text-3xl + text-base. */}
+                    <LogoIcon className="w-auto h-14 md:h-20 shrink-0" aria-hidden="true" />
+                    <div className="overflow-hidden">
+                        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white whitespace-nowrap">
+                            Plan Spec Build Workshop
+                        </h1>
+                        <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed mt-1 whitespace-nowrap">
+                            AI-assisted product development — from concept to production.
+                        </p>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0 ml-8">

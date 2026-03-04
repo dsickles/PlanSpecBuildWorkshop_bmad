@@ -125,3 +125,9 @@ development_status:
   12-2-vercel-ci-cd-pipeline-configuration: done
   12-3-end-to-end-e2e-flow-evaluation: done
   epic-12-retrospective: optional
+
+  epic-13: in-progress
+  13-1-logo-asset-integration: done
+  13-2-browser-tab-and-metadata: done
+  13-3-global-header-branding: done
+  epic-13-retrospective: optional
