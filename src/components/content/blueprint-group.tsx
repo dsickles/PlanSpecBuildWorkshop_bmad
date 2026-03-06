@@ -181,16 +181,16 @@ export function BlueprintGroup({
                                             {doc.description}
                                         </p>
                                     )}
-                                    {doc.domain.length > 0 && (
+                                    {doc.taxonomy?.domain && doc.taxonomy.domain.length > 0 && (
                                         <div className="flex flex-wrap gap-1 mb-1.5">
-                                            {doc.domain.map((tag: string) => (
+                                            {doc.taxonomy.domain.map((tag: string) => (
                                                 <FnTag key={tag} label={tag} />
                                             ))}
                                         </div>
                                     )}
-                                    {doc.tech_stack.length > 0 && (
+                                    {doc.taxonomy?.tech_stack && doc.taxonomy.tech_stack.length > 0 && (
                                         <div className="flex flex-wrap gap-1">
-                                            {doc.tech_stack.map((tag: string) => (
+                                            {doc.taxonomy.tech_stack.map((tag: string) => (
                                                 <TechTag key={tag} label={tag} />
                                             ))}
                                         </div>

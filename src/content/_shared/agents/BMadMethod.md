@@ -1,17 +1,24 @@
 ---
+# 1. Core Identity
 title: "BMAD Method"
 date: "2026-02-23"
 status: "Live"
-domain:
-  - "Agentic Workflow"
-  - "Product Strategy"
-  - "Agile Workflows"
 artifact_type: "agent"
-tech_stack: []
 description: "The best and most comprehensive Agile AI Driven Development framework that has true scale-adaptive intelligence that adjusts from bug fixes to enterprise systems."
-projects:
-  - "plan-spec-build-workshop"
-external_links:
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "Agentic Workflow"
+    - "Product Strategy"
+    - "Agile Workflows"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects:
+    - "plan-spec-build-workshop"
+links:
   - label: "GitHub"
     url: "https://github.com/bmad-code-org/BMAD-METHOD"
 ---

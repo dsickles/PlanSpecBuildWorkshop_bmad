@@ -1,15 +1,22 @@
 ---
+# 1. Core Identity
 title: "Spec Kit"
 date: "2026-02-24"
 status: "Concept"
-domain:
-  - "Agentic Workflow"
-  - "Product Strategy"
 artifact_type: "agent"
-tech_stack: []
 description: "An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch."
-projects:
-external_links:
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "Agentic Workflow"
+    - "Product Strategy"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects: []
+links:
   - label: "GitHub"
     url: "https://github.com/github/spec-kit"
 ---

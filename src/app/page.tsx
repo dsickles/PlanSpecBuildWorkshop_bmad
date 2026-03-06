@@ -40,8 +40,8 @@ export default async function Home() {
       title: projectMap.get(slug) || slug
     }));
 
-  const domains = Array.from(new Set(validArticles.flatMap(item => item.domain))).sort();
-  const techStacks = Array.from(new Set(validArticles.flatMap(item => item.tech_stack))).sort();
+  const domains = Array.from(new Set(validArticles.flatMap(item => item.taxonomy?.domain || []))).sort();
+  const techStacks = Array.from(new Set(validArticles.flatMap(item => item.taxonomy?.tech_stack || []))).sort();
 
   return (
     <div className="container mx-auto px-4 md:px-8 py-page-pt md:py-page-pt-md max-w-screen-2xl">

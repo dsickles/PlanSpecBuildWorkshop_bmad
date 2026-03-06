@@ -13,10 +13,10 @@ const mockContent: ParsedArticle[] = [
         projectSlug: "_shared",
         artifactType: "agent",
         status: "Live",
-        domain: ["Domain A"],
-        tech_stack: ["Tech A"],
+        taxonomy: { domain: ["Domain A"], tech_stack: ["Tech A"] },
         description: "Description A",
-        projects: ["project-a"],
+        relations: { projects: ["project-a"] },
+        links: [],
         _filePath: "content/_shared/agents/agent-a.md",
         html: "<p>A</p>",
         date: "2023-01-01",
@@ -28,10 +28,10 @@ const mockContent: ParsedArticle[] = [
         projectSlug: "_shared",
         artifactType: "agent",
         status: "Live",
-        domain: ["Domain B"],
-        tech_stack: ["Tech B"],
+        taxonomy: { domain: ["Domain B"], tech_stack: ["Tech B"] },
         description: "Description B",
-        projects: ["project-b"],
+        relations: { projects: ["project-b"] },
+        links: [],
         _filePath: "content/_shared/agents/agent-b.md",
         html: "<p>B</p>",
         date: "2023-01-01",
@@ -43,10 +43,10 @@ const mockContent: ParsedArticle[] = [
         projectSlug: "project-a",
         artifactType: "doc",
         status: "Live",
-        domain: ["Domain A"],
-        tech_stack: ["Tech A"],
+        taxonomy: { domain: ["Domain A"], tech_stack: ["Tech A"] },
         description: "Description C",
-        projects: [],
+        relations: { projects: [] },
+        links: [],
         _filePath: "content/project-a/docs/doc-c.md",
         html: "<p>C</p>",
         date: "2023-01-01",
@@ -58,10 +58,10 @@ const mockContent: ParsedArticle[] = [
         projectSlug: "_shared",
         artifactType: "agent",
         status: "Live",
-        domain: ["Domain A"],
-        tech_stack: ["Tech A"],
+        taxonomy: { domain: ["Domain A"], tech_stack: ["Tech A"] },
         description: "Shared Description",
-        projects: [],
+        relations: { projects: [] },
+        links: [],
         _filePath: "content/_shared/agents/agent-shared.md",
         html: "<p>Shared</p>",
         date: "2023-01-01",
@@ -237,13 +237,13 @@ describe("DiscoveryGrid", () => {
                 title: "Project A Overview",
                 artifactType: "doc",
                 status: "Live",
-                domain: ["Logic"],
-                tech_stack: ["React"],
+                taxonomy: { domain: ["Logic"], tech_stack: ["React"] },
                 description: "Overview content",
                 html: "<h1>Overview</h1>",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
             {
                 id: "project-a:docs:spec",
@@ -253,13 +253,13 @@ describe("DiscoveryGrid", () => {
                 title: "Technical Spec",
                 artifactType: "doc",
                 status: "Live",
-                domain: ["Logic"],
-                tech_stack: ["React"],
+                taxonomy: { domain: ["Logic"], tech_stack: ["React"] },
                 description: "Spec content",
                 html: "<h1>Spec</h1>",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
         ];
 
@@ -308,12 +308,12 @@ describe("DiscoveryGrid", () => {
             artifactType: "prototype",
             title: "Proto 1",
             status: "Live",
-            domain: [],
-            tech_stack: [],
+            taxonomy: { domain: [], tech_stack: [] },
             html: "",
             date: "2023-01-01",
             toc: [],
-            projects: []
+            relations: { projects: [] },
+            links: []
         } as ParsedArticle];
 
         render(<DiscoveryGrid allContent={prototypesOnly} errors={[]} />);
@@ -332,12 +332,12 @@ describe("DiscoveryGrid", () => {
                 title: "Blueprint Overview",
                 artifactType: "doc",
                 status: "Live",
-                domain: [],
-                tech_stack: [],
+                taxonomy: { domain: [], tech_stack: [] },
                 html: "",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
             {
                 id: "project-a:docs:other",
@@ -347,12 +347,12 @@ describe("DiscoveryGrid", () => {
                 title: "Other Doc",
                 artifactType: "doc",
                 status: "Live",
-                domain: [],
-                tech_stack: [],
+                taxonomy: { domain: [], tech_stack: [] },
                 html: "",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
         ];
 
@@ -384,12 +384,12 @@ describe("DiscoveryGrid", () => {
                 title: "Project Root Overview",
                 artifactType: "doc",
                 status: "Live",
-                domain: [],
-                tech_stack: [],
+                taxonomy: { domain: [], tech_stack: [] },
                 html: "Root",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
             {
                 id: "project-a:docs:index",
@@ -399,12 +399,12 @@ describe("DiscoveryGrid", () => {
                 title: "Blueprint Doc Overview",
                 artifactType: "doc",
                 status: "Live",
-                domain: [],
-                tech_stack: [],
+                taxonomy: { domain: [], tech_stack: [] },
                 html: "Doc",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
             {
                 id: "project-a:docs:other",
@@ -414,12 +414,12 @@ describe("DiscoveryGrid", () => {
                 title: "Other Doc",
                 artifactType: "doc",
                 status: "Live",
-                domain: [],
-                tech_stack: [],
+                taxonomy: { domain: [], tech_stack: [] },
                 html: "",
                 date: "2023-01-01",
                 toc: [],
-                projects: []
+                relations: { projects: [] },
+                links: []
             } as ParsedArticle,
         ];
 

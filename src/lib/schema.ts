@@ -56,9 +56,10 @@ export type ArtifactType = (typeof ARTIFACT_TYPES)[number];
  * - `date` is kept as a string (not z.date()) because gray-matter parses YAML
  *   dates as JS Date objects in some environments. Normalizing to string here
  *   avoids downstream inconsistencies. Convert to Date only in presentation utils.
- * - `domain` and `tech_stack` strings are stored as arrays for filtering (FR10, FR11).
+ * - `taxonomy` groups `domain` and `tech_stack` arrays for filtering (FR10, FR11).
  *   Empty arrays are permitted if a document does not apply to a specific domain/tech.
- * - `parent_project` and `related_docs` enable deep linking across artifacts (FR4).
+ * - `relations` groups associations between artifacts.
+ * - `links` groups external and repository links.
  */
 export const FrontmatterSchema = z.object({
     title: z.string().min(1, "title is required"),
@@ -66,20 +67,24 @@ export const FrontmatterSchema = z.object({
     status: z.enum(STATUS_VALUES, {
         error: `status must be one of: ${STATUS_VALUES.join(", ")}`,
     }),
-    domain: z.array(z.string()).nullish().transform(v => v ?? []),
-    tech_stack: z.array(z.string()).nullish().transform(v => v ?? []),
     description: z.string().optional(),
-    parent_project: z.string().optional(),
-    related_docs: z.array(z.string()).optional(),
     artifact_type: z.enum(ARTIFACT_TYPES).optional(),
-    external_url: z.string().url("external_url must be a valid URL").optional(),
-    github_url: z.string().url("github_url must be a valid URL").optional(),
-    projects: z.array(z.string()).nullish().transform(v => v ?? []),
-    external_links: z.array(z.object({
-        label: z.string(),
-        url: z.string().url("External link must be a valid URL"),
-    })).optional(),
     source_path: z.string().optional(),
+
+    // Grouped Metadata
+    taxonomy: z.object({
+        domain: z.array(z.string()).nullish().transform(v => v ?? []),
+        tech_stack: z.array(z.string()).nullish().transform(v => v ?? []),
+    }).default({ domain: [], tech_stack: [] }),
+
+    relations: z.object({
+        projects: z.array(z.string()).nullish().transform(v => v ?? []),
+    }).default({ projects: [] }),
+
+    links: z.array(z.object({
+        label: z.string(),
+        url: z.string().url("Link must be a valid URL"),
+    })).nullish().transform(v => v ?? []),
 });
 
 /** Inferred TypeScript type for valid frontmatter data. */

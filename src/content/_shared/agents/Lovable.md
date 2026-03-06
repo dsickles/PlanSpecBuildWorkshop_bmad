@@ -1,17 +1,24 @@
 ---
+# 1. Core Identity
 title: "Lovable"
 date: "2026-02-24"
 status: "Concept"
-domain:
-  - "No-Code Builder"
-  - "UX Design"
 artifact_type: "agent"
-tech_stack: []
 description: "Build apps, websites, and digital products faster using Lovable's no-code and AI-powered platform, no deep coding skills required."
-external_links:
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "No-Code Builder"
+    - "UX Design"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects: []
+links:
   - label: "Website"
     url: "https://lovable.dev"
-projects:
 ---
 
 # Lovable

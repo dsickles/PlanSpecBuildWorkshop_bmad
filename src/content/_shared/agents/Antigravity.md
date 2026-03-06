@@ -1,15 +1,22 @@
 ---
+# 1. Core Identity
 title: "Antigravity"
 date: "2026-03-04"
 status: "Live"
-domain:
-  - "Agentic IDE"
 artifact_type: "agent"
-tech_stack: []
 description: "Google's agentic development platform, Antigravity provides a 'Mission Control' for managing autonomous agents that can plan, code, and even browse the web to help you build."
-projects:
- - "plan-spec-build-workshop"
-external_links:
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "Agentic IDE"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects:
+    - "plan-spec-build-workshop"
+links:
   - label: "Website"
     url: "https://antigravity.google/"
 ---

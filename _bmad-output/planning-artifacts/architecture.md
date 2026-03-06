@@ -286,6 +286,7 @@ Agent Studio content lives in a single shared folder (`/content/_shared/agents/`
 - Place all project content in the root `/content/` directory following the strict hierarchical path.
 - Place all Agent Studio content in `/content/_shared/agents/` — never in per-project `agents/` subfolders.
 - Never use a per-file `order` field to control display ordering — use `sort-config.yaml` exclusively.
+- **Always inject strict YAML structural comments** (`# 1. Core Identity`, `# 2. Taxonomy`, `# 3. Relations & Connectivity`) into the Frontmatter of all newly generated markdown files to maximize readability for content authors.
 
 **Documentation Enforcement:**
 - A dedicated **`/content/README.md`** (or `README-CONTENT.md` at root) file MUST be created. This file will explicitly document the Content Creator (Product Manager) end-to-end flow, including the folder structure rules, the copy-pasteable YAML frontmatter schema, and the definitions of how `actionType` controls routing behavior. 
@@ -301,20 +302,51 @@ const FrontmatterSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   status: z.enum(["Live", "WIP", "Concept", "Archived"]),
-  domain: z.array(z.string()).nullish().transform(v => v ?? []),
-  tech_stack: z.array(z.string()).nullish().transform(v => v ?? []),
-  parent_project: z.string().optional(),
-  related_docs: z.array(z.string()).optional(),
-  artifact_type: z.enum(["agent", "doc", "prototype"]).optional(),
-  // Enhancements for Epic 8/9
-  sourcePath: z.string().optional(),
-  externalLinks: z.array(z.object({
+  
+  // Grouped semantic fields
+  taxonomy: z.object({
+    domain: z.array(z.string()).nullish().transform(v => v ?? []),
+    tech_stack: z.array(z.string()).nullish().transform(v => v ?? []),
+  }).optional().default({ domain: [], tech_stack: [] }),
+  
+  relations: z.object({
+    projects: z.array(z.string()).nullish().transform(v => v ?? []),
+  }).optional().default({ projects: [] }),
+  
+  links: z.array(z.object({
     label: z.string(),
-    url: z.string().url(),
-  })).optional(),
-  associatedProjects: z.array(z.string()).optional(),
+    url: z.string().url("Link must be a valid URL"),
+  })).optional().default([]),
+
+  artifact_type: z.enum(["agent", "doc", "prototype"]).optional(),
+  source_path: z.string().optional(),
   isOverview: z.boolean().optional(),
 });
+```
+
+**Expected Markdown Output Example:**
+All AI agents generating or modifying these markdown files must construct the Frontmatter block using this exact visual layout:
+
+```yaml
+---
+# 1. Core Identity
+title: "Document Title"
+description: "A short description."
+date: 2026-03-05
+status: "Live"
+artifact_type: "doc"
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "System"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects: []
+links: []
+---
 ```
 
 > _This schema is the single source of truth for all content parsing. The `order` field has been removed — display ordering is controlled exclusively via the central `sort-config.yaml` manifest (FR20)._

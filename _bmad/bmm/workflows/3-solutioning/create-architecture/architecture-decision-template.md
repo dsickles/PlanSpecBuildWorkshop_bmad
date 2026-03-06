@@ -1,10 +1,25 @@
 ---
-stepsCompleted: []
-inputDocuments: []
-workflowType: 'architecture'
+# 1. Core Identity
+title: "Architecture Decision Document"
+status: "Live"
+date: '{{date}}'
 project_name: '{{project_name}}'
 user_name: '{{user_name}}'
-date: '{{date}}'
+
+# 2. Taxonomy
+taxonomy:
+  domain: []
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects: []
+links: []
+
+# 4. Process & Generation Meta
+workflowType: 'architecture'
+stepsCompleted: []
+inputDocuments: []
 ---
 
 # Architecture Decision Document

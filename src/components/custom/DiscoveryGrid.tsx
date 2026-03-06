@@ -37,7 +37,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
             // Project Filter: Non-agents use projectSlug; Agents use projects array
             if (activeProject) {
                 if (article.artifactType === "agent") {
-                    if (!article.projects?.includes(activeProject)) {
+                    if (!article.relations?.projects?.includes(activeProject)) {
                         return false;
                     }
                 } else if (article.projectSlug !== activeProject) {
@@ -48,8 +48,8 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
             // Domain/Tech Filter (OR logic across both)
             const hasActiveFilters = activeDomains.length > 0 || activeTech.length > 0;
             if (hasActiveFilters) {
-                const matchesDomain = article.domain?.some((d: string) => activeDomains.includes(d)) ?? false;
-                const matchesTech = article.tech_stack?.some((t: string) => activeTech.includes(t)) ?? false;
+                const matchesDomain = article.taxonomy?.domain?.some((d: string) => activeDomains.includes(d)) ?? false;
+                const matchesTech = article.taxonomy?.tech_stack?.some((t: string) => activeTech.includes(t)) ?? false;
 
                 if (!matchesDomain && !matchesTech) {
                     return false;
@@ -124,9 +124,9 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                             />
                         )}
                         {agents.map((agent) => {
-                            const targetProject = (activeProject && agent.projects?.includes(activeProject))
+                            const targetProject = (activeProject && agent.relations?.projects?.includes(activeProject))
                                 ? activeProject
-                                : (agent.projects?.[0] || "");
+                                : (agent.relations?.projects?.[0] || "");
                             const hasOverview = !!(targetProject && overviewByProject.has(targetProject));
 
                             return (
@@ -137,9 +137,8 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                         title={agent.title}
                                         status={agent.status}
                                         description={agent.description}
-                                        domain={agent.domain}
-                                        tech_stack={agent.tech_stack}
-                                        externalLinks={agent.external_links}
+                                        taxonomy={agent.taxonomy}
+                                        links={agent.links}
                                         onDocOpen={() => setDocument(agent.id)}
                                     />
                                 </div>
@@ -197,10 +196,8 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                     title={proto.title}
                                     status={proto.status}
                                     description={proto.description}
-                                    domain={proto.domain}
-                                    tech_stack={proto.tech_stack}
-                                    externalUrl={proto.external_url}
-                                    githubUrl={proto.github_url}
+                                    taxonomy={proto.taxonomy}
+                                    links={proto.links}
                                     onLayersClick={() => setProject(proto.projectSlug)}
                                 />
                             </div>

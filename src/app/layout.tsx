@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Plan Spec Build Workshop",
-  description: "A portfolio showcasing a full AI-assisted product development workflow.",
+  description: "A portfolio showcasing AI-assisted product development, context engineered from concept to production.",
   icons: {
     icon: [
       { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },

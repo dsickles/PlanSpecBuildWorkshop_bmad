@@ -34,9 +34,9 @@ function createMockArticle(
         _filePath: `/test/content/${slug}/${type}s/${fileName}.md`,
         html: "<p>Content</p>",
         toc: [],
-        domain: [],
-        tech_stack: [],
-        projects: [slug]
+        links: [],
+        taxonomy: { domain: [], tech_stack: [] },
+        relations: { projects: [slug] }
     };
 }
 
@@ -122,8 +122,9 @@ describe("parseMarkdownFile - Tokenization Logic", () => {
 title: "Doc for {{PROJECT_NAME}}"
 date: "2024-01-01"
 status: "Live"
-domain: ["{{PROJECT_NAME}} Domain"]
-tech_stack: ["Tech A"]
+taxonomy:
+  domain: ["{{PROJECT_NAME}} Domain"]
+  tech_stack: ["Tech A"]
 ---
 Welcome to {{PROJECT_NAME}}!
 `);
@@ -159,7 +160,7 @@ Welcome to {{PROJECT_NAME}}!
             "doc"
         ) as ParsedArticle;
 
-        expect(result.domain).toContain("Project Alpha Domain");
+        expect(result.taxonomy?.domain).toContain("Project Alpha Domain");
     });
 
     test("should fall back to capitalized slug if project index title is missing", async () => {
@@ -263,7 +264,8 @@ title: "Spec Kit"
 date: "2024-01-01"
 status: "Live"
 artifact_type: "agent"
-projects: ["project-a", "project-b"]
+relations:
+  projects: ["project-a", "project-b"]
 ---
 Agent body`);
             }

@@ -1,15 +1,22 @@
 ---
+# 1. Core Identity
 title: "Get Shit Done (GSD)"
 date: "2026-02-24"
 status: "Concept"
-domain:
-  - "Agentic Workflow"
-  - "Agile Workflows"
 artifact_type: "agent"
-tech_stack: []
 description: "A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code, OpenCode, Gemini CLI, and Codex."
-projects:
-external_links:
+
+# 2. Taxonomy
+taxonomy:
+  domain:
+    - "Agentic Workflow"
+    - "Agile Workflows"
+  tech_stack: []
+
+# 3. Relations & Connectivity
+relations:
+  projects: []
+links:
   - label: "GitHub"
     url: "https://github.com/gsd-build/get-shit-done/"
 ---

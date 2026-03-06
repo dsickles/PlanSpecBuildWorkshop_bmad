@@ -27,7 +27,7 @@ describe("ProjectCard - Agent External Links", () => {
         ];
         const onLayersClick = jest.fn();
 
-        render(<ProjectCard {...defaultProps} externalLinks={externalLinks} onLayersClick={onLayersClick} />);
+        render(<ProjectCard {...defaultProps} links={externalLinks} onLayersClick={onLayersClick} />);
 
         // Verify icons are rendered
         expect(screen.getByTestId("github-icon")).toBeInTheDocument();
@@ -46,11 +46,11 @@ describe("ProjectCard - Agent External Links", () => {
         expect(links[1]).toHaveAttribute("href", "https://demo.com");
     });
 
-    test("should not render icons when externalLinks is empty or undefined", () => {
+    test("should not render icons when links is empty or undefined", () => {
         const { rerender } = render(<ProjectCard {...defaultProps} />);
         expect(screen.queryByRole("link")).not.toBeInTheDocument();
 
-        rerender(<ProjectCard {...defaultProps} externalLinks={[]} />);
+        rerender(<ProjectCard {...defaultProps} links={[]} />);
         expect(screen.queryByRole("link")).not.toBeInTheDocument();
     });
 });

@@ -189,8 +189,8 @@ export async function parseMarkdownFile(
 
     // Step 6.5: Resolve Associated Projects for Agents (Story 9.2)
     const associatedProjects: { slug: string; title: string }[] = [];
-    if (artifactType === "agent" && result.data.projects && Array.isArray(result.data.projects)) {
-        for (const slug of result.data.projects) {
+    if (artifactType === "agent" && result.data.relations?.projects && Array.isArray(result.data.relations.projects)) {
+        for (const slug of result.data.relations.projects) {
             if (typeof slug === "string") {
                 const title = await resolveProjectTitle(slug);
                 associatedProjects.push({ slug, title });

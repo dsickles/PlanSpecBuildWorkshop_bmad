@@ -269,16 +269,16 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                                         </p>
                                     )}
                                     <div className="space-y-1.5 mt-1">
-                                        {activeDoc.domain && activeDoc.domain.length > 0 && (
+                                        {activeDoc.taxonomy?.domain && activeDoc.taxonomy.domain.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5">
-                                                {activeDoc.domain.map((d) => (
+                                                {activeDoc.taxonomy.domain.map((d) => (
                                                     <FnTag key={d} label={d} />
                                                 ))}
                                             </div>
                                         )}
-                                        {activeDoc.tech_stack && activeDoc.tech_stack.length > 0 && (
+                                        {activeDoc.taxonomy?.tech_stack && activeDoc.taxonomy.tech_stack.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5">
-                                                {activeDoc.tech_stack.map((t) => (
+                                                {activeDoc.taxonomy.tech_stack.map((t) => (
                                                     <TechTag key={t} label={t} />
                                                 ))}
                                             </div>

@@ -263,36 +263,28 @@ export interface ProjectCardProps {
     title: string;
     status: string;
     description?: string;
-    domain?: string[];
-    tech_stack?: string[];
+    taxonomy?: { domain?: string[]; tech_stack?: string[] };
     artifactType: ArtifactType;
     /** Optional context for semantic ARIA labels: 'agent', 'doc', 'prototype' */
     context?: "agent" | "doc" | "prototype";
-    /** For prototype cards: the live launch URL. Maps from FrontmatterData.external_url (snake_case) */
-    externalUrl?: string;
-    /** For prototype cards: the GitHub repo URL */
-    githubUrl?: string;
     /** Callback for Layers icon — triggers Focus Mode filter */
     onLayersClick?: () => void;
     /** Callback for doc card file icon — opens Document Modal */
     onDocOpen?: () => void;
-    /** For agent and other cards: optional array of external links */
-    externalLinks?: { label: string; url: string }[];
+    /** Consolidated links from frontmatter */
+    links?: { label: string; url: string }[];
 }
 
 export function ProjectCard({
     title,
     status,
     description,
-    domain,
-    tech_stack,
+    taxonomy,
     artifactType,
     context,
-    externalUrl,
-    githubUrl,
     onLayersClick,
     onDocOpen,
-    externalLinks,
+    links,
 }: ProjectCardProps) {
     const cardContext = context || (artifactType as "agent" | "doc" | "prototype");
     const testId = `${cardContext}-card`;
@@ -303,7 +295,7 @@ export function ProjectCard({
 
     // ---- Agent card — header icons for external links ----
     if (artifactType === "agent") {
-        const actions = (externalLinks && externalLinks.length > 0) || onLayersClick || onDocOpen ? (
+        const actions = (links && links.length > 0) || onLayersClick || onDocOpen ? (
             <>
                 {onLayersClick && (
                     <IconButton icon={Layers} label="Focus on this project" onClick={onLayersClick} />
@@ -311,7 +303,7 @@ export function ProjectCard({
                 {onDocOpen && (
                     <IconButton icon={FileText} label="View project overview" onClick={onDocOpen} />
                 )}
-                {externalLinks?.map((link, idx) => {
+                {links?.map((link, idx) => {
                     const label = link.label.toLowerCase();
                     const isGithub = label.includes("github");
                     const icon = isGithub ? Github : Globe;
@@ -332,13 +324,16 @@ export function ProjectCard({
             <ProjectCardRoot data-testid={testId} aria-label={ariaLabel}>
                 <ProjectCardHeader title={title} status={status} actions={actions} />
                 <ProjectCardBody description={description} />
-                <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
+                <ProjectCardMetadata domain={taxonomy?.domain} tech_stack={taxonomy?.tech_stack} />
             </ProjectCardRoot>
         );
     }
 
     // ---- Prototype card — Rocket CTA (blue) as primary action ----
     if (artifactType === "prototype") {
+        const githubLink = links?.find(l => l.label.toLowerCase().includes("github"));
+        const externalLink = links?.find(l => !l.label.toLowerCase().includes("github"));
+
         const actions = (
             <>
                 {onLayersClick && (
@@ -347,12 +342,12 @@ export function ProjectCard({
                 {onDocOpen && (
                     <IconButton icon={FileText} label="View project overview" onClick={onDocOpen} />
                 )}
-                {!isInactive && githubUrl && (
-                    <IconButton icon={Github} label="View source on GitHub" href={githubUrl} />
+                {!isInactive && githubLink && (
+                    <IconButton icon={Github} label="View source on GitHub" href={githubLink.url} />
                 )}
-                {!isInactive && externalUrl && (
+                {!isInactive && externalLink && (
                     <a
-                        href={externalUrl}
+                        href={externalLink.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Launch prototype"
@@ -368,7 +363,7 @@ export function ProjectCard({
             <ProjectCardRoot isDashed={isInactive} data-testid={testId} aria-label={ariaLabel}>
                 <ProjectCardHeader title={title} status={status} actions={actions} />
                 <ProjectCardBody description={description} />
-                <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
+                <ProjectCardMetadata domain={taxonomy?.domain} tech_stack={taxonomy?.tech_stack} />
             </ProjectCardRoot>
         );
     }
@@ -399,7 +394,7 @@ export function ProjectCard({
                 }
             />
             <ProjectCardBody description={description} />
-            <ProjectCardMetadata domain={domain} tech_stack={tech_stack} />
+            <ProjectCardMetadata domain={taxonomy?.domain} tech_stack={taxonomy?.tech_stack} />
         </ProjectCardRoot>
     );
 }
