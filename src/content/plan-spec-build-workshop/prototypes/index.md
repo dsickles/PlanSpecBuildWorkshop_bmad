@@ -25,7 +25,7 @@ links:
   - label: "GitHub"
     url: "https://github.com/dsickles/PlanSpecBuildWorkshop_bmad"
   - label: "Live Demo"
-    url: "http://localhost:3000"
+    url: "https://plan-spec-build-workshop.vercel.app/"
 ---
 
 # {{PROJECT_NAME}} Portfolio
