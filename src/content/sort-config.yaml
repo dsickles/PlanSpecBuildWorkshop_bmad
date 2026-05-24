@@ -19,7 +19,7 @@ blueprints:
     - epics
     - index
   ai-digest:
-    - index
+    - coming-soon
 
 build_lab:
   - plan-spec-build-workshop

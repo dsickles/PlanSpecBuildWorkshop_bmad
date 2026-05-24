@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Get Shit Done (GSD)"
 date: "2026-02-24"
-status: "Concept"
+status: "WIP"
 artifact_type: "agent"
 description: "A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code, OpenCode, Gemini CLI, and Codex."
 
