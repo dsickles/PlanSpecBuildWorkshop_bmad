@@ -15,7 +15,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "ai-digest"
 links:
   - label: "GitHub"
     url: "https://github.com/gsd-build/get-shit-done/"

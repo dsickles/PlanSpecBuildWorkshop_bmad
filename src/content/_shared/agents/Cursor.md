@@ -14,7 +14,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "ai-digest"
 links:
   - label: "Website"
     url: "https://cursor.com"

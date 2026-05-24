@@ -18,9 +18,13 @@ blueprints:
     - ux-design-specification
     - epics
     - index
+  ai-digest:
+    - index
 
 build_lab:
   - plan-spec-build-workshop
+  - ai-digest
 
 projects:
   - plan-spec-build-workshop
+  - ai-digest
