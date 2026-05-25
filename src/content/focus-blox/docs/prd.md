@@ -4,14 +4,12 @@ title: "PRD"
 date: "2026-05-24"
 status: "WIP"
 artifact_type: "doc"
-description: "Product Requirements Document for Focus Blocks — a calm daily planning workspace built around intentional focus."
+description: "Product Requirements Document for Focus Blox — a calm daily planning workspace built around intentional focus."
 
 # 2. Taxonomy
 taxonomy:
   domain:
     - "Productivity"
-    - "Daily Planning"
-    - "Personal Workflow"
   tech_stack:
     - "React"
     - "TypeScript"
@@ -19,11 +17,11 @@ taxonomy:
     - "Vite"
 ---
 
-# Focus Blocks — Product Requirements Document
+# Focus Blox — Product Requirements Document
 
 ## Product Overview
 
-Focus Blocks is a calm daily planning workspace designed around intentional focus rather than productivity optimization.
+Focus Blox is a calm daily planning workspace designed around intentional focus rather than productivity optimization.
 
 The product helps users answer two simple questions:
 
@@ -103,7 +101,7 @@ The layout should feel balanced, spacious, and quiet.
 
 Very minimal navigation bar.
 
-- **Left:** App name — "Focus Blocks"
+- **Left:** App name — "Focus Blox"
 - **Right:** Current date, theme toggle (dark / light)
 
 No additional navigation.
@@ -315,7 +313,7 @@ The app automatically resets at midnight local time.
 
 - Priorities clear
 - Timeline clears
-- Focus blocks clear
+- Focus blox clear
 
 Optional:
 

@@ -16,7 +16,7 @@ taxonomy:
 # 3. Relations & Connectivity
 relations:
   projects:
-    - "focus-blocks"
+    - "focus-blox"
 links:
   - label: "Website"
     url: "https://lovable.dev"

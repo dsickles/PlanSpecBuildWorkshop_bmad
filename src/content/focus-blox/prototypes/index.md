@@ -1,6 +1,6 @@
 ---
 # 1. Core Identity
-title: "Focus Blocks"
+title: "Focus Blox"
 date: "2026-05-24"
 status: "WIP"
 artifact_type: "prototype"
@@ -19,6 +19,9 @@ taxonomy:
 # 3. Relations & Connectivity
 relations:
   projects: []
+links:
+  - label: "Live Demo"
+    url: "https://focusblox.lovable.app/"
 ---
 
 A calm daily planning workspace designed around intentional focus rather than productivity optimization.
@@ -28,4 +31,4 @@ The product helps users answer two simple questions:
 - **What matters today?**
 - **When will you make time for it?**
 
-Currently in active prototyping with **Lovable**. Public link and live demo will land here once the first cut is ready to share.
+Currently in active prototyping with **Lovable** — a live preview is available via the launch link. Still WIP and evolving as the prototype matures.
