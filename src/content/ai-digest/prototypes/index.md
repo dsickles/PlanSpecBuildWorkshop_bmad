@@ -4,7 +4,7 @@ title: "AI Digest"
 date: "2026-05-24"
 status: "WIP"
 artifact_type: "prototype"
-description: "A personal weekly AI digest pipeline. Ingests RSS, YouTube, and newsletter sources; summarizes, dedups, categorizes, and ranks each item with an LLM; and publishes a dark-themed weekly dashboard with full archive."
+description: "A personal weekly AI digest pipeline. Ingests sources, then summarizes, dedups, categorizes, and ranks each item with an LLM, then publishes a weekly brief."
 
 # 2. Taxonomy
 taxonomy:

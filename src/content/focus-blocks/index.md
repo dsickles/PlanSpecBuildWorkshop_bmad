@@ -8,8 +8,6 @@ status: "WIP"
 taxonomy:
   domain:
     - "Productivity"
-    - "Daily Planning"
-    - "Personal Workflow"
   tech_stack:
     - "React"
     - "TypeScript"

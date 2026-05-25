@@ -10,8 +10,6 @@ description: "A calm daily planning workspace built around intentional focus. He
 taxonomy:
   domain:
     - "Productivity"
-    - "Daily Planning"
-    - "Personal Workflow"
   tech_stack:
     - "React"
     - "TypeScript"

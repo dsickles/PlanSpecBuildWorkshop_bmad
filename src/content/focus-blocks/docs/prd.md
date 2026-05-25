@@ -1,6 +1,6 @@
 ---
 # 1. Core Identity
-title: "Product Requirements (PRD)"
+title: "PRD"
 date: "2026-05-24"
 status: "WIP"
 artifact_type: "doc"
