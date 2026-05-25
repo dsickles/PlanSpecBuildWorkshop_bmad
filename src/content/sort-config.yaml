@@ -20,11 +20,15 @@ blueprints:
     - index
   ai-digest:
     - coming-soon
+  focus-blocks:
+    - prd
 
 build_lab:
   - plan-spec-build-workshop
   - ai-digest
+  - focus-blocks
 
 projects:
   - plan-spec-build-workshop
   - ai-digest
+  - focus-blocks

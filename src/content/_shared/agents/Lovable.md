@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Lovable"
 date: "2026-02-24"
-status: "Concept"
+status: "WIP"
 artifact_type: "agent"
 description: "Build apps, websites, and digital products faster using Lovable's no-code and AI-powered platform, no deep coding skills required."
 
@@ -15,7 +15,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "focus-blocks"
 links:
   - label: "Website"
     url: "https://lovable.dev"

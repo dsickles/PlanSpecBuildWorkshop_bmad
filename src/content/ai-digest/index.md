@@ -15,7 +15,6 @@ taxonomy:
     - "Astro"
     - "SQLite"
     - "Gemini"
-    - "uv"
 ---
 
 A personal weekly AI digest pipeline. Ingests a curated set of RSS feeds, YouTube channels, and newsletters; summarizes, dedups, categorizes, and ranks each item with Gemini; and publishes a "Sunday morning read" as a dark-themed Astro dashboard with full archive.

@@ -17,13 +17,10 @@ taxonomy:
     - "Astro"
     - "SQLite"
     - "Gemini"
-    - "uv"
 
 # 3. Relations & Connectivity
 relations:
   projects: []
 ---
 
-A personal weekly AI digest pipeline. Ingests RSS, YouTube, and newsletter sources; summarizes, dedups, categorizes, and ranks each item with an LLM; and publishes a dark-themed weekly dashboard with full archive.
-
-Repo is currently local-only — public GitHub link and live deploy will land here once published.
+A personal weekly AI digest pipeline. Ingests sources, then summarizes, dedups, categorizes, and ranks each item with an LLM, then publishes a weekly brief.
