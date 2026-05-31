@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Focus Blox"
 date: "2026-05-24"
-status: "WIP"
+status: "Live"
 
 # 2. Taxonomy
 taxonomy:

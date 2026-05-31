@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Focus Blox"
 date: "2026-05-24"
-status: "WIP"
+status: "Live"
 artifact_type: "prototype"
 description: "A calm daily planning workspace built around intentional focus. Helps users answer two simple questions: What matters today? When will you make time for it?"
 
@@ -33,4 +33,4 @@ The product helps users answer two simple questions:
 - **What matters today?**
 - **When will you make time for it?**
 
-Currently in active prototyping with **Lovable** — a live preview is available via the launch link. Still WIP and evolving as the prototype matures.
+Built with **Lovable** — a live preview is available via the launch link, and the source is on GitHub. The prototype continues to evolve as the design intent and the running app stay in lockstep.
