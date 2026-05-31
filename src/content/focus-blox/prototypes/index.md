@@ -22,6 +22,8 @@ relations:
 links:
   - label: "Live Demo"
     url: "https://focusblox.lovable.app/"
+  - label: "GitHub"
+    url: "https://github.com/dsickles/focusblox"
 ---
 
 A calm daily planning workspace designed around intentional focus rather than productivity optimization.
