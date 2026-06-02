@@ -10,7 +10,6 @@ description: "The best and most comprehensive Agile AI Driven Development framew
 taxonomy:
   domain:
     - "Spec Driven Development"
-    - "Product Strategy"
   tech_stack: []
 
 # 3. Relations & Connectivity

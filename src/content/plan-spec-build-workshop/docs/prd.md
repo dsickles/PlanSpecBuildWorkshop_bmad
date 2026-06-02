@@ -11,7 +11,6 @@ source_path: "_bmad-output/planning-artifacts/prd.md"
 taxonomy:
   domain:
     - "Portfolio"
-    - "Product Strategy"
   tech_stack: []
 
 ---

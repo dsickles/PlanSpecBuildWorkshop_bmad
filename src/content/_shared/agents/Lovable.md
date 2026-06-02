@@ -10,7 +10,6 @@ description: "Build apps, websites, and digital products faster using Lovable's 
 taxonomy:
   domain:
     - "No-Code Builder"
-    - "UX Design"
   tech_stack: []
 
 # 3. Relations & Connectivity

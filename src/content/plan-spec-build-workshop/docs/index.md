@@ -9,7 +9,6 @@ description: "This project! The complete planning and specification documentatio
 taxonomy:
   domain:
     - "Portfolio"
-    - "Product Strategy"
   tech_stack:
     - "Next.js"
     - "TypeScript"

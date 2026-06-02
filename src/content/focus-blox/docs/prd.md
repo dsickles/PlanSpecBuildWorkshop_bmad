@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "PRD"
 date: "2026-05-24"
-status: "WIP"
+status: "Live"
 artifact_type: "doc"
 description: "Product Requirements Document for Focus Blox — a calm daily planning workspace built around intentional focus."
 

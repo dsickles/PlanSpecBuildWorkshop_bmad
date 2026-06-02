@@ -10,7 +10,6 @@ description: "This project! A \"live portfolio\" showcasing AI-agent-driven prod
 taxonomy:
   domain:
     - "Portfolio"
-    - "Product Strategy"
   tech_stack:
     - "Next.js"
     - "TypeScript"
