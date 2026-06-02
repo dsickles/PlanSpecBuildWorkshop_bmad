@@ -9,7 +9,7 @@ description: "A light-weight and powerful meta-prompting, context engineering an
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Agentic Workflow"
+    - "Spec Driven Development"
     - "Agile Workflows"
   tech_stack: []
 

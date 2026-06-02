@@ -9,7 +9,7 @@ description: "An open source toolkit that allows you to focus on product scenari
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Agentic Workflow"
+    - "Spec Driven Development"
     - "Product Strategy"
   tech_stack: []
 

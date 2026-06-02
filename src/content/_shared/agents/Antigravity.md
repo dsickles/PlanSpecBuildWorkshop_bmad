@@ -9,7 +9,7 @@ description: "Google's agentic development platform, Antigravity provides a 'Mis
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Agentic IDE"
+    - "AI DevTools"
   tech_stack: []
 
 # 3. Relations & Connectivity

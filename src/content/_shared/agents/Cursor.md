@@ -9,7 +9,7 @@ description: "An AI-first code editor built on VS Code that integrates AI agents
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Agentic IDE"
+    - "AI DevTools"
   tech_stack: []
 
 # 3. Relations & Connectivity

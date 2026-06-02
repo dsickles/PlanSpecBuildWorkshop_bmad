@@ -9,7 +9,7 @@ description: "The best and most comprehensive Agile AI Driven Development framew
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Agentic Workflow"
+    - "Spec Driven Development"
     - "Product Strategy"
     - "Agile Workflows"
   tech_stack: []
