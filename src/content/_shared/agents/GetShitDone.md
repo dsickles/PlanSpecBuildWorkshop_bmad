@@ -10,7 +10,6 @@ description: "A light-weight and powerful meta-prompting, context engineering an
 taxonomy:
   domain:
     - "Spec Driven Development"
-    - "Agile Workflows"
   tech_stack: []
 
 # 3. Relations & Connectivity

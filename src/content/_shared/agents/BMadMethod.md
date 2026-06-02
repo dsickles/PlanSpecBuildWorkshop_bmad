@@ -11,7 +11,6 @@ taxonomy:
   domain:
     - "Spec Driven Development"
     - "Product Strategy"
-    - "Agile Workflows"
   tech_stack: []
 
 # 3. Relations & Connectivity

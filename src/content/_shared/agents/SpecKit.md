@@ -10,7 +10,6 @@ description: "An open source toolkit that allows you to focus on product scenari
 taxonomy:
   domain:
     - "Spec Driven Development"
-    - "Product Strategy"
   tech_stack: []
 
 # 3. Relations & Connectivity

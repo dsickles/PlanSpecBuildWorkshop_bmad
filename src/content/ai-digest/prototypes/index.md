@@ -9,9 +9,7 @@ description: "A personal weekly AI digest pipeline. Ingests sources, then summar
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Knowledge Management"
-    - "AI Agents"
-    - "Content Intelligence"
+    - "AI Content Curation"
   tech_stack:
     - "Python"
     - "Astro"

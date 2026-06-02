@@ -11,7 +11,6 @@ source_path: "_bmad-output/planning-artifacts/epics.md"
 taxonomy:
   domain:
     - "Portfolio"
-    - "Agile Workflows"
   tech_stack: []
 
 ---

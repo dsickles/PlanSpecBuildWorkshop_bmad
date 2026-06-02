@@ -9,9 +9,7 @@ description: "Blueprints for AI Digest will land here when the source repo is pu
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "Knowledge Management"
-    - "AI Agents"
-    - "Content Intelligence"
+    - "AI Content Curation"
   tech_stack: []
 ---
 
