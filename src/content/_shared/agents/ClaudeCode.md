@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Claude Code"
 date: "2026-06-02"
-status: "Live"
+status: "Concept"
 artifact_type: "agent"
 description: "Anthropic's agentic command-line coding tool that lives in your terminal, understands your codebase, and helps you code faster through natural language commands."
 
@@ -17,9 +17,7 @@ relations:
   projects: []
 links:
   - label: "Website"
-    url: "https://www.anthropic.com/claude-code"
-  - label: "Docs"
-    url: "https://docs.claude.com/en/docs/claude-code/overview"
+    url: "https://claude.com/product/claude-code"
 ---
 
 # Claude Code
