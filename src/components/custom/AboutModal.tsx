@@ -115,7 +115,7 @@ export function AboutModal({ allContent }: AboutModalProps) {
                                     <div className="space-y-6">
                                         <StructureItem
                                             title="Agent Studio"
-                                            description="Specialized AI identities with distinct context boundaries."
+                                            description="Agentic tooling used during the Plan Spec Build process."
                                         />
                                         <StructureItem
                                             title="Blueprints"
@@ -193,7 +193,7 @@ export function AboutModal({ allContent }: AboutModalProps) {
                                     {/* Metrics Grid */}
                                     <div className="grid grid-cols-2 gap-8 md:gap-12 bg-muted/30 border border-border/50 rounded-3xl p-10 md:p-12">
                                         <MetricItem label="Projects" value={metrics.totalProjects} />
-                                        <MetricItem label="Agents" value={metrics.totalAgents} />
+                                        <MetricItem label="Agentic Tools" value={metrics.totalAgents} />
                                         <MetricItem label="Blueprints" value={metrics.totalDocs} />
                                         <MetricItem label="Prototypes" value={metrics.totalPrototypes} />
                                     </div>
