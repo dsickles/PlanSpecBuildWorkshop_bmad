@@ -4,7 +4,7 @@ title: "Beads"
 date: "2026-09-24"
 status: "Concept"
 artifact_type: "agent"
-description: "Distributed graph issue tracker that provides persistent memory for coding agents, replacing markdown plans with dependency-aware task graphs powered by Dolt."
+description: "Beads is an issue tracker created by Steve Yegge specifically for AI coding agents. It functions as a persistent memory system that replaces standard text-based to-do lists with a structured database of connected tasks. Instead of losing track of complex, multi-step projects, agents use Beads to see exactly which tasks are ready to be worked on, claim assignments, and record their progress. This ensures the AI maintains context and understands task dependencies across multiple work sessions."
 
 # 2. Taxonomy
 taxonomy:
@@ -24,4 +24,4 @@ links:
 
 # Beads
 
-Distributed graph issue tracker that provides persistent memory for coding agents, replacing markdown plans with dependency-aware task graphs powered by Dolt. Created by Steve Yegge, the `bd` CLI tracks issues with first-class dependencies, ready-work detection, atomic claiming, and audit history. Agents use `bd ready`, `bd show`, `bd update --claim`, and `bd remember` to maintain context across sessions without losing track of long-horizon work.
+Beads is an issue tracker created by Steve Yegge specifically for AI coding agents. It functions as a persistent memory system that replaces standard text-based to-do lists with a structured database of connected tasks. Instead of losing track of complex, multi-step projects, agents use Beads to see exactly which tasks are ready to be worked on, claim assignments, and record their progress. This ensures the AI maintains context and understands task dependencies across multiple work sessions.
