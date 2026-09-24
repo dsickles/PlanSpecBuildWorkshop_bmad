@@ -4,7 +4,7 @@ title: "Codex"
 date: "2026-09-24"
 status: "Concept"
 artifact_type: "agent"
-description: "OpenAI's coding agent that reads, edits, runs, tests, and reviews code across ChatGPT, terminal, and IDE extensions for VS Code, Cursor, and JetBrains."
+description: "Codex is a software development agent and coding harness developed by OpenAI. It serves as an execution environment that enables OpenAI's underlying foundation models to autonomously read, edit, run, and test code."
 
 # 2. Taxonomy
 taxonomy:
@@ -24,4 +24,4 @@ links:
 
 # Codex
 
-OpenAI's coding agent that reads, edits, runs, tests, and reviews code across ChatGPT, terminal, and IDE extensions for VS Code, Cursor, and JetBrains. From routine pull requests to complex refactors, Codex reliably completes tasks end to end, powered by OpenAI's frontier coding models. With Skills, teams can teach Codex their standards and workflows, making it a consistent contributor across projects.
+Codex is a software development agent and coding harness developed by OpenAI. It serves as an execution environment that enables OpenAI's underlying foundation models to autonomously read, edit, run, and test code.
