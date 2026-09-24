@@ -9,7 +9,6 @@ description: "Complete agentic software development methodology built on composa
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "AI DevTools"
     - "Spec Driven Development"
   tech_stack: []
 

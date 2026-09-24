@@ -16,10 +16,10 @@ taxonomy:
 relations:
   projects: []
 links:
-  - label: "GitHub"
-    url: "https://github.com/gastownhall/beads"
   - label: "Website"
     url: "https://yegge.ai/essays/introducing-beads-a-coding-agent-memory-system/"
+  - label: "GitHub"
+    url: "https://github.com/gastownhall/beads"
 ---
 
 # Beads
