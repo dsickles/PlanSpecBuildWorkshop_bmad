@@ -18,6 +18,8 @@ relations:
 links:
   - label: "GitHub"
     url: "https://github.com/kunchenguid"
+  - label: "Website"
+    url: "https://linktr.ee/kunchenguid"
 ---
 
 # Kun Chen's Skills
