@@ -14,7 +14,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "family-calendar"
 links:
   - label: "GitHub"
     url: "https://github.com/github/spec-kit"

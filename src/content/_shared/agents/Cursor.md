@@ -16,6 +16,7 @@ taxonomy:
 relations:
   projects:
     - "ai-digest"
+    - "family-calendar"
 links:
   - label: "Website"
     url: "https://cursor.com"

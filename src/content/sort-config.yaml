@@ -22,13 +22,26 @@ blueprints:
     - coming-soon
   focus-blox:
     - prd
+  family-calendar:
+    - constitution
+    - project-context
+    - core-and-security
+    - calendar-engine
+    - weather-engine
+    - layout-widgets
+    - month-view
+    - week-day-views
+    - filter-bar
+    - idle-reset
 
 build_lab:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
+  - family-calendar
 
 projects:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
+  - family-calendar
