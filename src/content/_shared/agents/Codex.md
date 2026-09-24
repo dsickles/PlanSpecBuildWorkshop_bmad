@@ -14,8 +14,7 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects:
-    - "plan-spec-build-workshop"
+  projects: []
 links:
   - label: "Website"
     url: "https://openai.com/codex/"

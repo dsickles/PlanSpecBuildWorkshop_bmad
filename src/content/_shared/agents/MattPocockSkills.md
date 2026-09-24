@@ -15,8 +15,7 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects:
-    - "plan-spec-build-workshop"
+  projects: []
 links:
   - label: "GitHub"
     url: "https://github.com/mattpocock/skills"
