@@ -9,7 +9,6 @@ description: "Matt Pocock's agent skills pack for real engineering — grilling,
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "AI DevTools"
     - "Spec Driven Development"
   tech_stack: []
 

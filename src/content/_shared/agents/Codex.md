@@ -18,8 +18,6 @@ relations:
 links:
   - label: "Website"
     url: "https://openai.com/codex/"
-  - label: "GitHub"
-    url: "https://github.com/openai/codex"
 ---
 
 # Codex

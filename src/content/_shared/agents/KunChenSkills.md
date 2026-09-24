@@ -9,7 +9,7 @@ description: "L8 Principal's agent skills pack emulating architectural mindset, 
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "AI DevTools"
+    - "Spec Driven Development"
   tech_stack: []
 
 # 3. Relations & Connectivity
