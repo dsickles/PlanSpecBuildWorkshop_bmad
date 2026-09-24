@@ -16,6 +16,7 @@ taxonomy:
 relations:
   projects:
     - "ai-digest"
+    - "plan-spec-build-workshop"
 links:
   - label: "Website"
     url: "https://cursor.com"
