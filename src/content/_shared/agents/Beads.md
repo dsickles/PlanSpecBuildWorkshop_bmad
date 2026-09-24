@@ -9,7 +9,7 @@ description: "Distributed graph issue tracker that provides persistent memory fo
 # 2. Taxonomy
 taxonomy:
   domain:
-    - "AI DevTools"
+    - "Agent Infrastructure"
   tech_stack: []
 
 # 3. Relations & Connectivity
