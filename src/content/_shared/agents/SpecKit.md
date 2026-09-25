@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Spec Kit"
 date: "2026-02-24"
-status: "Concept"
+status: "WIP"
 artifact_type: "agent"
 description: "An open source toolkit that allows you to focus on product scenarios and predictable outcomes instead of vibe coding every piece from scratch."
 
