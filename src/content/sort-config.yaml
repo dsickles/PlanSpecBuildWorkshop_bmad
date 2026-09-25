@@ -10,6 +10,11 @@ agent_studio:
   - GetShitDone
   - Cursor
   - Antigravity
+  - Codex
+  - MattPocockSkills
+  - KunChenSkills
+  - Superpowers
+  - Beads
 
 blueprints:
   plan-spec-build-workshop:
