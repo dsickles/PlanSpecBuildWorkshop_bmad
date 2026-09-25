@@ -17,6 +17,7 @@ relations:
   projects:
     - "ai-digest"
     - "plan-spec-build-workshop"
+    - "family-calendar"
 links:
   - label: "Website"
     url: "https://cursor.com"

@@ -27,13 +27,20 @@ blueprints:
     - coming-soon
   focus-blox:
     - prd
+  family-calendar:
+    - constitution
+    - project-context
+    - specifications
+    - tasks
 
 build_lab:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
+  - family-calendar
 
 projects:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
+  - family-calendar
