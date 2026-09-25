@@ -25,14 +25,8 @@ blueprints:
   family-calendar:
     - constitution
     - project-context
-    - core-and-security
-    - calendar-engine
-    - weather-engine
-    - layout-widgets
-    - month-view
-    - week-day-views
-    - filter-bar
-    - idle-reset
+    - specifications
+    - tasks
 
 build_lab:
   - plan-spec-build-workshop
