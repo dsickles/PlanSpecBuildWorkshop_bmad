@@ -30,6 +30,7 @@ describe('useFilterState', () => {
       replace: mockReplace,
     });
     (usePathname as jest.Mock).mockReturnValue('/');
+    window.location.hash = '';
     jest.clearAllMocks();
   });
 
@@ -143,5 +144,19 @@ describe('useFilterState', () => {
     });
 
     expect(mockPush).toHaveBeenCalledWith('/?project=my-project', { scroll: false });
+  });
+
+  it('keeps the current hash when the document param changes', () => {
+    window.location.hash = '#reading';
+    (useSearchParams as jest.Mock).mockReturnValue(
+      createMockSearchParams({ project: 'my-project' })
+    );
+    const { result } = renderHook(() => useFilterState());
+
+    act(() => {
+      result.current.setDocument('next-doc');
+    });
+
+    expect(mockPush).toHaveBeenCalledWith('/?project=my-project&document=next-doc#reading', { scroll: false });
   });
 });

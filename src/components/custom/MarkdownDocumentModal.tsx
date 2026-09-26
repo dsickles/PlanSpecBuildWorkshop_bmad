@@ -8,24 +8,38 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { useFilterState } from "@/hooks/useFilterState";
-import { ParsedArticle, ErrorFrontmatter, isError } from "@/lib/schema";
+import { ParsedArticle, ErrorFrontmatter } from "@/lib/schema";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { PROJECT_PARAM, DOCUMENT_PARAM } from "@/lib/constants";
 import { TocEntry } from "@/lib/toc-engine";
+import {
+    findArticleById,
+    getBlueprintNav,
+} from "@/lib/blueprint-nav";
 
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 
 const DocumentSlugSchema = z.string().regex(/^[a-zA-Z0-9-_:]+$/);
 const TOC_HIGHLIGHT_THRESHOLD = 24; // Distance from top to trigger active heading
 
 interface MarkdownDocumentModalProps {
     allContent: (ParsedArticle | ErrorFrontmatter)[];
+    /**
+     * Resolves a blueprint body during Prev/Next.
+     * Defaults to the in-memory article. Tests and future fetches can override it.
+     */
+    loadBlueprint?: (id: string) => Promise<ParsedArticle | null>;
 }
 
-function TableOfContents({ toc, containerRef, activeId, onSelect, headerHeight }: { toc: TocEntry[], containerRef: React.RefObject<HTMLDivElement | null>, activeId: string | null, onSelect: (id: string) => void, headerHeight: number }) {
+type NavPending = {
+    status: "loading" | "error" | "ready";
+    doc: ParsedArticle;
+};
+
+function TableOfContents({ toc, containerRef, activeId, onSelect }: { toc: TocEntry[], containerRef: React.RefObject<HTMLDivElement | null>, activeId: string | null, onSelect: (id: string) => void, headerHeight: number }) {
     const sidebarRef = useRef<HTMLElement>(null);
 
     // AC: Active Item Centering - auto-scroll the sidebar
@@ -83,15 +97,98 @@ function TableOfContents({ toc, containerRef, activeId, onSelect, headerHeight }
     );
 }
 
-export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps) {
+export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDocumentModalProps) {
     const { activeDocument, setDocument, updateFilters } = useFilterState();
     const [scrollProgress, setScrollProgress] = React.useState(0);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const [activeToCId, setActiveToCId] = React.useState<string | null>(null);
-    const [isManualScroll, setIsManualScroll] = React.useState(false);
+    const [tocPick, setTocPick] = React.useState<{ docId: string; slug: string } | null>(null);
+    const [manualScrollDocId, setManualScrollDocId] = React.useState<string | null>(null);
     const [headerHeight, setHeaderHeight] = React.useState(280);
     const manualScrollTimer = useRef<NodeJS.Timeout>(null);
     const headerRef = useRef<HTMLDivElement>(null);
+    const [pending, setPending] = React.useState<NavPending | null>(null);
+    const [trackedUrlId, setTrackedUrlId] = React.useState(activeDocument);
+    const genRef = useRef(0);
+    const lastDocId = useRef<string | null>(null);
+
+    // Follow the URL when it catches up to a finished Prev/Next, or when the
+    // reader leaves that slot (back/forward, close). Adjusting state during
+    // render is the supported alternative to an effect.
+    if (activeDocument !== trackedUrlId) {
+        setTrackedUrlId(activeDocument);
+        if (!activeDocument) {
+            setPending(null);
+        } else if (pending?.status === "ready" && pending.doc.id === activeDocument) {
+            setPending(null);
+        } else if (pending && trackedUrlId === pending.doc.id && activeDocument !== pending.doc.id) {
+            setPending(null);
+        }
+    }
+
+    const activeDoc = useMemo(() => {
+        if (!activeDocument) return null;
+
+        const validation = DocumentSlugSchema.safeParse(activeDocument);
+        if (!validation.success) return null;
+
+        return findArticleById(allContent, activeDocument);
+    }, [activeDocument, allContent]);
+
+    const shownMeta = pending?.doc ?? activeDoc;
+    const contentDoc =
+        pending?.status === "ready" ? pending.doc : pending ? null : activeDoc;
+    const isLoading = pending?.status === "loading";
+    const isLoadError = pending?.status === "error";
+
+    const nav = useMemo(
+        () => getBlueprintNav(allContent, shownMeta),
+        [allContent, shownMeta]
+    );
+
+    const isOpen = !!activeDocument;
+    const isManualScroll = manualScrollDocId !== null && manualScrollDocId === contentDoc?.id;
+    const activeToCId = !contentDoc
+        ? null
+        : tocPick?.docId === contentDoc.id
+            ? tocPick.slug
+            : contentDoc.toc?.[0]?.slug ?? null;
+
+    const navigate = (target: ParsedArticle) => {
+        const gen = ++genRef.current;
+        setScrollProgress(0);
+        setDocument(target.id);
+        if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = 0;
+
+        // Catalog bodies are already loaded. Show the destination immediately.
+        // An override loader (slow or failing) is the fetching path: title stays
+        // up, the body shows loading, and both controls stay disabled until it settles.
+        if (!loadBlueprint) {
+            const loaded = findArticleById(allContent, target.id);
+            setPending(!loaded || loaded.id !== target.id
+                ? { status: "error", doc: target }
+                : { status: "ready", doc: loaded });
+            return;
+        }
+
+        setPending({ status: "loading", doc: target });
+        const applyLoaded = (loaded: ParsedArticle | null) => {
+            if (gen !== genRef.current) return;
+            setPending((current) => {
+                if (!current || current.status !== "loading" || current.doc.id !== target.id) return current;
+                if (!loaded || loaded.id !== target.id) return { status: "error", doc: target };
+                return { status: "ready", doc: loaded };
+            });
+            setScrollProgress(0);
+        };
+
+        loadBlueprint(target.id)
+            .then(applyLoaded)
+            .catch(() => applyLoaded(null));
+    };
+
+    const retry = () => {
+        if (pending?.status === "error") navigate(pending.doc);
+    };
 
     // AC 3: Reading Progress Bar calculation
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -105,15 +202,15 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
 
         // AC 2: Active Heading Highlighting
         // Only update automatically if not currently processing a manual click-scroll
-        if (activeDoc?.toc && activeDoc.toc.length > 0 && !isManualScroll) {
+        if (contentDoc?.toc && contentDoc.toc.length > 0 && !isManualScroll) {
             // In a fixed-header layout, the scroll container's top is the viewport top.
             // A small 24px threshold provides a nice buffer for active detection.
             const threshold = TOC_HIGHLIGHT_THRESHOLD;
 
-            let currentId = activeDoc.toc[0].slug;
+            let currentId = contentDoc.toc[0].slug;
 
             // Simple top-down check
-            for (const entry of activeDoc.toc) {
+            for (const entry of contentDoc.toc) {
                 const element = document.getElementById(entry.slug);
                 if (element) {
                     const rect = element.getBoundingClientRect();
@@ -126,8 +223,8 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                     }
                 }
             }
-            if (currentId !== activeToCId) {
-                setActiveToCId(currentId);
+            if (currentId !== activeToCId && contentDoc) {
+                setTocPick({ docId: contentDoc.id, slug: currentId });
             }
         }
     };
@@ -135,7 +232,7 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
     // AC: Manual interaction breaks the ToC lock
     const handleManualInteraction = () => {
         if (isManualScroll) {
-            setIsManualScroll(false);
+            setManualScrollDocId(null);
             if (manualScrollTimer.current) {
                 clearTimeout(manualScrollTimer.current);
             }
@@ -143,32 +240,14 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
     };
 
     const handleToCSelect = (id: string) => {
-        setActiveToCId(id);
-        setIsManualScroll(true);
+        if (!contentDoc) return;
+        setTocPick({ docId: contentDoc.id, slug: id });
+        setManualScrollDocId(contentDoc.id);
         if (manualScrollTimer.current) clearTimeout(manualScrollTimer.current);
         // Lock auto-highlighting for 1.2s to cover smooth scroll durations
-        manualScrollTimer.current = setTimeout(() => setIsManualScroll(false), 1200);
+        manualScrollTimer.current = setTimeout(() => setManualScrollDocId(null), 1200);
     };
 
-    // Find the active document in allContent
-    const activeDoc = useMemo(() => {
-        if (!activeDocument) return null;
-
-        const validation = DocumentSlugSchema.safeParse(activeDocument);
-        if (!validation.success) return null;
-
-        return allContent.find(
-            (item): item is ParsedArticle =>
-                !isError(item) && item.id === activeDocument
-        );
-    }, [activeDocument, allContent]);
-
-    // Fallback for legacy ID formats (colon-delimited doublet or filename)
-    // Removed legacy lookup as we are standardizing on path-based IDs.
-
-    const isOpen = !!activeDocument;
-
-    // AC 4: Reset scroll position when document changes
     // AC: Dynamic Header Height measurement
     useEffect(() => {
         if (!headerRef.current) return;
@@ -189,33 +268,25 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
         };
     }, [isOpen]);
 
-    const lastDocId = useRef<string | null>(null);
-
-    // Isolated Scroll Reset: Only triggers when the document ID physically changes
+    // Scroll to the top when a new blueprint body is shown, and while the next one loads.
     useEffect(() => {
+        const scroller = scrollContainerRef.current;
         if (!activeDocument) {
             lastDocId.current = null;
             return;
         }
+        if (!scroller || pending?.status === "error") return;
 
-        if (activeDocument !== lastDocId.current) {
-            lastDocId.current = activeDocument;
-
-            // Clean modal opening reset
-            if (scrollContainerRef.current) {
-                scrollContainerRef.current.scrollTop = 0;
-            }
-            if (activeDoc?.toc && activeDoc.toc.length > 0) {
-                setActiveToCId(activeDoc.toc[0].slug);
-            } else {
-                setActiveToCId(null);
-            }
-
-            // Reset locks
-            setIsManualScroll(false);
-            if (manualScrollTimer.current) clearTimeout(manualScrollTimer.current);
+        if (pending?.status === "loading") {
+            scroller.scrollTop = 0;
+            return;
         }
-    }, [activeDocument]); // Dependency on activeDocument ID ONLY
+
+        const id = contentDoc?.id ?? null;
+        if (!id || id === lastDocId.current) return;
+        lastDocId.current = id;
+        scroller.scrollTop = 0;
+    }, [activeDocument, pending, contentDoc]);
 
     // Simplified state usage
     const handleOpenChange = (open: boolean) => {
@@ -223,6 +294,9 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
             setDocument(null);
         }
     };
+
+    const prevDisabled = isLoading || !nav?.prev;
+    const nextDisabled = isLoading || !nav?.next;
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -233,52 +307,85 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                     // AC 1: Explicitly handle focus restoration
                     // Radix restores focus by default, but we provide this hook for 
                     // architectural compliance and to ensure any manual overrides are handled.
+                    void event;
                 }}
             >
-                {activeDoc && (
+                {shownMeta && (
                     <div ref={headerRef} className="shrink-0 bg-background border-b border-border/50 z-20 relative">
                         <div className="bg-background/80 backdrop-blur-md px-8 pt-6 pb-5">
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex flex-col gap-1.5">
+                            <div className="flex justify-between items-start mb-4 gap-3">
+                                <div className="flex flex-col gap-1.5 min-w-0">
                                     <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold">
-                                        {activeDoc.projectTitle || activeDoc.projectSlug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                        {shownMeta.projectTitle || shownMeta.projectSlug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                     </div>
                                     <div className="flex flex-wrap items-center gap-3">
                                         <DialogTitle className="text-2xl font-bold tracking-tight text-foreground transition-all duration-300">
-                                            {activeDoc.title}
+                                            {shownMeta.title}
                                         </DialogTitle>
-                                        <StatusPill status={activeDoc.status} />
+                                        <StatusPill status={shownMeta.status} />
                                     </div>
                                 </div>
 
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleOpenChange(false)}
-                                    className="text-muted-foreground hover:text-foreground hover:bg-accent -mr-2 px-3"
-                                >
-                                    <span className="mr-2">←</span> Back
-                                </Button>
+                                <div className="flex items-center gap-1 shrink-0">
+                                    {nav && (
+                                        <div className="flex items-center" data-testid="blueprint-nav">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                disabled={prevDisabled}
+                                                onClick={() => {
+                                                    if (prevDisabled || !nav.prev) return;
+                                                    navigate(nav.prev);
+                                                }}
+                                                aria-label="Prev"
+                                            >
+                                                <ChevronLeft aria-hidden="true" />
+                                                Prev
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                disabled={nextDisabled}
+                                                onClick={() => {
+                                                    if (nextDisabled || !nav.next) return;
+                                                    navigate(nav.next);
+                                                }}
+                                                aria-label="Next"
+                                            >
+                                                Next
+                                                <ChevronRight aria-hidden="true" />
+                                            </Button>
+                                        </div>
+                                    )}
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleOpenChange(false)}
+                                        className="text-muted-foreground hover:text-foreground hover:bg-accent -mr-2 px-3"
+                                    >
+                                        <span className="mr-2">←</span> Back
+                                    </Button>
+                                </div>
                             </div>
 
                             <DialogHeader className="space-y-0">
                                 <div className="flex flex-col gap-3">
-                                    {activeDoc.description && (
+                                    {shownMeta.description && (
                                         <p className="text-sm text-zinc-400 max-w-2xl leading-relaxed">
-                                            {activeDoc.description}
+                                            {shownMeta.description}
                                         </p>
                                     )}
                                     <div className="space-y-1.5 mt-1">
-                                        {activeDoc.taxonomy?.domain && activeDoc.taxonomy.domain.length > 0 && (
+                                        {shownMeta.taxonomy?.domain && shownMeta.taxonomy.domain.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5">
-                                                {activeDoc.taxonomy.domain.map((d) => (
+                                                {shownMeta.taxonomy.domain.map((d) => (
                                                     <FnTag key={d} label={d} />
                                                 ))}
                                             </div>
                                         )}
-                                        {activeDoc.taxonomy?.tech_stack && activeDoc.taxonomy.tech_stack.length > 0 && (
+                                        {shownMeta.taxonomy?.tech_stack && shownMeta.taxonomy.tech_stack.length > 0 && (
                                             <div className="flex flex-wrap gap-1.5">
-                                                {activeDoc.taxonomy.tech_stack.map((t) => (
+                                                {shownMeta.taxonomy.tech_stack.map((t) => (
                                                     <TechTag key={t} label={t} />
                                                 ))}
                                             </div>
@@ -306,12 +413,47 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                 <div className="flex-1 overflow-hidden relative flex flex-col lg:flex-row">
                     <div
                         ref={scrollContainerRef}
+                        data-testid="document-scroll"
                         onScroll={handleScroll}
                         onWheel={handleManualInteraction}
                         onTouchStart={handleManualInteraction}
+                        aria-busy={isLoading || undefined}
                         className="flex-1 overflow-y-auto custom-scrollbar px-8 md:px-12 py-8 md:py-12"
                     >
-                        {activeDoc ? (
+                        {isLoading ? (
+                            <div
+                                data-testid="document-loading"
+                                role="status"
+                                aria-live="polite"
+                                className="h-full min-h-[40vh] flex items-center justify-center text-sm text-muted-foreground"
+                            >
+                                Loading…
+                            </div>
+                        ) : isLoadError ? (
+                            <div className="h-full min-h-[40vh] flex items-center justify-center p-8">
+                                <div
+                                    data-testid="document-load-error"
+                                    role="alert"
+                                    className="max-w-md w-full rounded-lg border border-dashed border-border p-12 bg-muted/30 text-center shadow-lg"
+                                >
+                                    <div className="flex justify-center mb-6">
+                                        <div className="p-3 rounded-full bg-muted border border-border">
+                                            <AlertCircle className="w-8 h-8 text-muted-foreground" />
+                                        </div>
+                                    </div>
+                                    <p className="text-foreground font-medium mb-6">
+                                        This document can&apos;t be loaded
+                                    </p>
+                                    <Button
+                                        variant="outline"
+                                        onClick={retry}
+                                        className="bg-muted border-border text-muted-foreground hover:text-foreground hover:bg-accent"
+                                    >
+                                        Retry
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : contentDoc ? (
                             <div className="max-w-[70ch] mx-auto pb-12">
                                 <article
                                     className="prose prose-zinc dark:prose-invert max-w-none 
@@ -323,13 +465,13 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                                         prose-pre:bg-muted/50 prose-pre:border prose-pre:border-border prose-pre:rounded-lg
                                         prose-li:text-muted-foreground prose-li:mb-2
                                         prose-hr:border-border"
-                                    dangerouslySetInnerHTML={{ __html: activeDoc.html }}
+                                    dangerouslySetInnerHTML={{ __html: contentDoc.html }}
                                 />
-                                {activeDoc.artifactType === "agent" && activeDoc.associatedProjects && activeDoc.associatedProjects.length > 0 && (
+                                {contentDoc.artifactType === "agent" && contentDoc.associatedProjects && contentDoc.associatedProjects.length > 0 && (
                                     <div className="mt-16 pt-8 border-t border-border/50">
                                         <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Projects using this tool</h4>
                                         <div className="flex flex-wrap gap-3">
-                                            {activeDoc.associatedProjects.map((project) => (
+                                            {contentDoc.associatedProjects.map((project) => (
                                                 <Button
                                                     key={project.slug}
                                                     variant="outline"
@@ -390,9 +532,9 @@ export function MarkdownDocumentModal({ allContent }: MarkdownDocumentModalProps
                         )}
                     </div>
 
-                    {activeDoc && (
+                    {contentDoc && (
                         <TableOfContents
-                            toc={activeDoc.toc || []}
+                            toc={contentDoc.toc || []}
                             containerRef={scrollContainerRef}
                             activeId={activeToCId}
                             onSelect={handleToCSelect}

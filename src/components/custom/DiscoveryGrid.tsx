@@ -210,6 +210,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                     </>
                 }
             />
+            {/* Full unfiltered catalog, already ordered by applySortOrder. */}
             <MarkdownDocumentModal allContent={allContent} />
         </>
     );
