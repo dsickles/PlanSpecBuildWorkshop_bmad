@@ -33,7 +33,9 @@ export function useFilterState() {
 
     const updateUrl = (params: Record<string, string | string[] | null>) => {
         const queryString = createQueryString(params);
-        router.push(`${pathname}${queryString ? `?${queryString}` : ""}`, { scroll: false });
+        const hash = typeof window !== "undefined" ? window.location.hash : "";
+        const search = queryString ? `?${queryString}` : "";
+        router.push(`${pathname}${search}${hash}`, { scroll: false });
     };
 
     const setProject = (project: string | null) => {
