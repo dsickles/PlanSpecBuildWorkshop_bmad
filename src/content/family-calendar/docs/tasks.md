@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Tasks"
 date: "2026-09-21"
-status: "WIP"
+status: "Live"
 artifact_type: "doc"
 description: "Eight Spec Kit task documents (01–08) implementing the Family Wall Dashboard: core/security, calendar engine, weather engine, layout/widgets, month view, week/day views, filter bar, and idle reset."
 
