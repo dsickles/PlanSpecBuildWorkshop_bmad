@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Specifications"
 date: "2026-09-21"
-status: "WIP"
+status: "Live"
 artifact_type: "doc"
 description: "Eight Spec Kit specifications (01–08) defining the Family Wall Dashboard product: core/security, calendar engine, weather engine, layout/widgets, month view, week/day views, filter bar, and idle reset."
 
