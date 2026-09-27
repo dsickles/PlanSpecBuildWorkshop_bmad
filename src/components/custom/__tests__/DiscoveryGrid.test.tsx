@@ -444,4 +444,55 @@ describe("DiscoveryGrid", () => {
             throw new Error(`Expected ID: project-a:docs:index. Actual calls: ${JSON.stringify(setDocument.mock.calls)}`);
         }
     });
+
+    it("opens the exact row blueprint and still opens Overview when a filter hides it", () => {
+        const overview: ParsedArticle = {
+            id: "project-a:docs:index",
+            _filePath: "content/project-a/docs/index.md",
+            projectSlug: "project-a",
+            projectTitle: "Project A",
+            title: "Overview",
+            artifactType: "doc",
+            status: "Live",
+            taxonomy: { domain: ["Portfolio"], tech_stack: [] },
+            html: "<p>Overview</p>",
+            date: "2023-01-01",
+            toc: [],
+            relations: { projects: [] },
+            links: []
+        } as ParsedArticle;
+        const row: ParsedArticle = {
+            id: "project-a:docs:ux",
+            _filePath: "content/project-a/docs/ux.md",
+            projectSlug: "project-a",
+            projectTitle: "Project A",
+            title: "UX Spec",
+            artifactType: "doc",
+            status: "Live",
+            taxonomy: { domain: ["UX Design"], tech_stack: [] },
+            html: "<p>UX</p>",
+            date: "2023-01-01",
+            toc: [],
+            relations: { projects: [] },
+            links: []
+        } as ParsedArticle;
+
+        const setDocument = jest.fn();
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeProject: null,
+            activeDomains: ["UX Design"],
+            activeTech: [],
+            setProject: jest.fn(),
+            setDocument,
+        });
+
+        render(<DiscoveryGrid allContent={[overview, row]} errors={[]} />);
+
+        fireEvent.click(screen.getByLabelText("Open UX Spec"));
+        expect(setDocument).toHaveBeenCalledWith("project-a:docs:ux");
+
+        fireEvent.click(screen.getByLabelText(/Open Project A overview/i));
+        expect(setDocument).toHaveBeenCalledWith("project-a:docs:index");
+        expect(screen.queryByText("Overview")).not.toBeInTheDocument();
+    });
 });

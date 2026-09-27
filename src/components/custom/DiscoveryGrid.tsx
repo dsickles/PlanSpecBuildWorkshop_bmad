@@ -7,6 +7,7 @@ import { BlueprintGroup, BlueprintErrorRow } from "@/components/content/blueprin
 import { ParsedArticle, isError, ErrorFrontmatter } from "@/lib/schema";
 import { useFilterState } from "@/hooks/useFilterState";
 import { MarkdownDocumentModal } from "@/components/custom/MarkdownDocumentModal";
+import { projectHeaderDocument } from "@/lib/blueprint-nav";
 
 interface DiscoveryGridProps {
     allContent: (ParsedArticle | ErrorFrontmatter)[];
@@ -108,7 +109,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
         return { agents, docsByProject, prototypes, overviewByProject, blueprintOverviewByProject, studioErrors, docErrors, labErrors };
     }, [allContent, serverErrors, activeProject, activeDomains, activeTech]);
 
-    const { agents, docsByProject, prototypes, overviewByProject, blueprintOverviewByProject, studioErrors, docErrors, labErrors } = memoizedData;
+    const { agents, docsByProject, prototypes, overviewByProject, studioErrors, docErrors, labErrors } = memoizedData;
 
     return (
         <>
@@ -167,7 +168,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                 projectSlug={slug}
                                 projectTitle={groupDocs[0]?.projectTitle}
                                 docs={groupDocs}
-                                overviewDoc={blueprintOverviewByProject.get(slug) || overviewByProject.get(slug)}
+                                overviewDoc={projectHeaderDocument(allContent, slug)}
                                 isFocused={activeProject === slug}
                                 onLayersClick={() => setProject(slug)}
                                 onDocOpen={handleDocOpen}

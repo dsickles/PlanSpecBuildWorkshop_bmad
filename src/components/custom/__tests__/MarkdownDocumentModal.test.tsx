@@ -345,6 +345,39 @@ describe("MarkdownDocumentModal blueprint Prev/Next", () => {
         expect(scroller.scrollTop).toBe(0);
     });
 
+    it("starts at Overview, then follows card order, and does not wrap", async () => {
+        const overview = blueprint({
+            id: "workshop:docs:index",
+            title: "Overview",
+            projectSlug: "workshop",
+            projectTitle: "Workshop",
+            _filePath: "/content/workshop/docs/index.md",
+            html: "<p>Overview body</p>",
+        });
+        // Index sits last in the catalog, the way sort-config lists it.
+        const withOverview = [prd, architecture, epics, overview, agent];
+        const setDocument = mockDocument(overview.id);
+        const view = render(<MarkdownDocumentModal allContent={withOverview} />);
+
+        expect(screen.getByRole("heading", { name: "Overview" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Prev" })).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Next" })).toBeEnabled();
+
+        fireEvent.click(screen.getByRole("button", { name: "Next" }));
+        expect(setDocument).toHaveBeenCalledWith(prd.id);
+        expect(await screen.findByText("PRD body")).toBeInTheDocument();
+        expect(setDocument).not.toHaveBeenCalledWith(epics.id);
+
+        view.unmount();
+        const endSetDocument = mockDocument(epics.id);
+        render(<MarkdownDocumentModal allContent={withOverview} />);
+        const nextButton = screen.getByRole("button", { name: "Next" });
+        expect(nextButton).toBeDisabled();
+        fireEvent.click(nextButton);
+        expect(endSetDocument).not.toHaveBeenCalled();
+        expect(screen.getByRole("heading", { name: "Epics" })).toBeInTheDocument();
+    });
+
     it("stays on the failed slot, keeps Prev/Next usable, and retries the same target", async () => {
         const setDocument = mockDocument(architecture.id);
         const loadBlueprint = jest.fn()

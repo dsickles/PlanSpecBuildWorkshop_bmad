@@ -1,8 +1,8 @@
 import { applySortOrder } from "../sort-utils";
 import {
     getBlueprintNav,
-    isBlueprintArticle,
-    listProjectBlueprints,
+    listProjectDocumentSequence,
+    projectHeaderDocument,
 } from "../blueprint-nav";
 import { ErrorFrontmatter, ParsedArticle } from "../schema";
 
@@ -21,7 +21,7 @@ function article(
     };
 }
 
-describe("blueprint navigation list", () => {
+describe("project document sequence", () => {
     const prd = article({
         id: "p:docs:prd",
         title: "PRD",
@@ -46,6 +46,14 @@ describe("blueprint navigation list", () => {
         _filePath: "/content/p/docs/epics.md",
         taxonomy: { domain: ["UX Design"], tech_stack: [] },
     });
+    const docsIndex = article({
+        id: "p:docs:index",
+        title: "Overview",
+        projectSlug: "p",
+        artifactType: "doc",
+        _filePath: "/content/p/docs/index.md",
+        taxonomy: { domain: ["Portfolio"], tech_stack: [] },
+    });
     const rootIndex = article({
         id: "p:index",
         title: "Project overview",
@@ -59,6 +67,13 @@ describe("blueprint navigation list", () => {
         projectSlug: "q",
         artifactType: "doc",
         _filePath: "/content/q/docs/prd.md",
+    });
+    const otherRoot = article({
+        id: "q:index",
+        title: "Other overview",
+        projectSlug: "q",
+        artifactType: "doc",
+        _filePath: "/content/q/index.md",
     });
     const agent = article({
         id: "shared:agents:cursor",
@@ -75,65 +90,107 @@ describe("blueprint navigation list", () => {
 
     const sortConfig = {
         projects: ["p", "q"],
-        blueprints: { p: ["prd", "architecture", "epics"] },
+        blueprints: { p: ["prd", "architecture", "epics", "index"] },
     };
-    // applySortOrder is the source of blueprint order. Sort the docs, then
-    // append non-blueprints the way the modal receives an already-sorted catalog.
+    // sort-config lists index last. The header sequence still starts with Overview.
     const sorted = [
-        ...applySortOrder([epics, architecture, rootIndex, otherProject, prd], sortConfig),
+        ...applySortOrder(
+            [epics, architecture, docsIndex, rootIndex, otherProject, otherRoot, prd],
+            sortConfig
+        ),
         agent,
         error,
     ];
 
-    test("follows applySortOrder and ignores non-blueprints", () => {
-        expect(listProjectBlueprints(sorted, "p").map((doc) => doc.id)).toEqual([
+    test("puts Overview first, then listed blueprints in card order", () => {
+        expect(projectHeaderDocument(sorted, "p")?.id).toBe("p:docs:index");
+        expect(listProjectDocumentSequence(sorted, "p").map((doc) => doc.id)).toEqual([
+            "p:docs:index",
             "p:docs:prd",
             "p:docs:architecture",
             "p:docs:epics",
         ]);
     });
 
-    test("keeps docs a page filter would hide", () => {
-        const list = listProjectBlueprints(sorted, "p");
-        expect(list.map((doc) => doc.title)).toContain("Epics");
-        expect(list.map((doc) => doc.title)).toContain("Architecture");
+    test("uses the project root index when there is no docs/index.md", () => {
+        const familyRoot = article({
+            id: "family:index",
+            title: "Family Calendar",
+            projectSlug: "family",
+            artifactType: "doc",
+            _filePath: "/content/family/index.md",
+        });
+        const constitution = article({
+            id: "family:docs:constitution",
+            title: "Constitution",
+            projectSlug: "family",
+            artifactType: "doc",
+            _filePath: "/content/family/docs/constitution.md",
+        });
+        const tasks = article({
+            id: "family:docs:tasks",
+            title: "Tasks",
+            projectSlug: "family",
+            artifactType: "doc",
+            _filePath: "/content/family/docs/tasks.md",
+        });
+        const ordered = applySortOrder([tasks, familyRoot, constitution], {
+            blueprints: { family: ["constitution", "tasks"] },
+        });
+
+        expect(projectHeaderDocument(ordered, "family")?.id).toBe("family:index");
+        expect(listProjectDocumentSequence(ordered, "family").map((doc) => doc.id)).toEqual([
+            "family:index",
+            "family:docs:constitution",
+            "family:docs:tasks",
+        ]);
     });
 
-    test("treats docs directory files as blueprints on either slash style", () => {
-        expect(isBlueprintArticle(prd)).toBe(true);
-        expect(
-            isBlueprintArticle(
-                article({
-                    id: "p:docs:prd-win",
-                    title: "PRD",
-                    projectSlug: "p",
-                    artifactType: "doc",
-                    _filePath: "C:\\content\\p\\docs\\prd.md",
-                })
-            )
-        ).toBe(true);
+    test("keeps docs a page filter would hide, and does not wrap", () => {
+        const list = listProjectDocumentSequence(sorted, "p");
+        expect(list.map((doc) => doc.title)).toEqual([
+            "Overview",
+            "PRD",
+            "Architecture",
+            "Epics",
+        ]);
+
+        const first = getBlueprintNav(sorted, docsIndex);
+        const last = getBlueprintNav(sorted, epics);
+        expect(first?.prev).toBeNull();
+        expect(first?.next?.id).toBe("p:docs:prd");
+        expect(last?.next).toBeNull();
+        expect(last?.prev?.id).toBe("p:docs:architecture");
+        expect(last?.next).not.toBe(first?.list[0]);
     });
 
-    test("hides navigation when the open doc is not a blueprint", () => {
-        expect(isBlueprintArticle(agent)).toBe(false);
-        expect(isBlueprintArticle(rootIndex)).toBe(false);
-        expect(getBlueprintNav(sorted, agent)).toBeNull();
-        expect(getBlueprintNav(sorted, rootIndex)).toBeNull();
-    });
-
-    test("disables both ends when the project has one blueprint", () => {
-        const only = article({
-            id: "solo:docs:only",
-            title: "Only",
+    test("disables both ends when the only document is Overview", () => {
+        const onlyDocs = article({
+            id: "solo:docs:index",
+            title: "Overview",
             projectSlug: "solo",
             artifactType: "doc",
-            _filePath: "/content/solo/docs/only.md",
+            _filePath: "/content/solo/docs/index.md",
         });
-        const nav = getBlueprintNav([only], only);
-        expect(nav).not.toBeNull();
-        expect(nav?.prev).toBeNull();
-        expect(nav?.next).toBeNull();
-        expect(nav?.index).toBe(0);
+        const onlyRoot = article({
+            id: "bare:index",
+            title: "Bare",
+            projectSlug: "bare",
+            artifactType: "doc",
+            _filePath: "/content/bare/index.md",
+        });
+
+        for (const only of [onlyDocs, onlyRoot]) {
+            const nav = getBlueprintNav([only], only);
+            expect(nav?.list).toHaveLength(1);
+            expect(nav?.prev).toBeNull();
+            expect(nav?.next).toBeNull();
+        }
+    });
+
+    test("hides navigation for agents and for the root index when docs/index is the header doc", () => {
+        expect(getBlueprintNav(sorted, agent)).toBeNull();
+        expect(getBlueprintNav(sorted, rootIndex)).toBeNull();
     });
 
     test("prev and next stay inside the same project", () => {
@@ -141,5 +198,25 @@ describe("blueprint navigation list", () => {
         expect(nav?.prev?.id).toBe("p:docs:prd");
         expect(nav?.next?.id).toBe("p:docs:epics");
         expect(nav?.list.some((doc) => doc.projectSlug !== "p")).toBe(false);
+        expect(projectHeaderDocument(sorted, "q")?.id).toBe("q:index");
+        expect(listProjectDocumentSequence(sorted, "q").map((doc) => doc.id)).toEqual([
+            "q:index",
+            "q:docs:prd",
+        ]);
+    });
+
+    test("recognizes a docs index written with backslashes", () => {
+        const win = article({
+            id: "p:docs:index-win",
+            title: "Overview",
+            projectSlug: "p",
+            artifactType: "doc",
+            _filePath: "C:\\content\\p\\docs\\index.md",
+        });
+        expect(projectHeaderDocument([win, prd], "p")?.id).toBe("p:docs:index-win");
+        expect(listProjectDocumentSequence([win, prd], "p").map((doc) => doc.id)).toEqual([
+            "p:docs:index-win",
+            "p:docs:prd",
+        ]);
     });
 });
