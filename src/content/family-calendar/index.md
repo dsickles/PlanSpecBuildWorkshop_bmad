@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Family Calendar"
 date: "2026-09-21"
-status: "WIP"
+status: "Live"
 
 # 2. Taxonomy
 taxonomy:
@@ -23,4 +23,4 @@ This isn't a SaaS product or a general website. It's a wall appliance. A public 
 
 Built with **Spec Kit** planning artifacts and developed with **Cursor**, the project is specified before it's coded. Core shell, PWA packaging, PIN-gate, demo data, health check, and Docker deployment are shipped. Calendar engine, weather engine, and the ambient month/week/day UI are still landing.
 
-Source of truth is the [public GitHub repository](https://github.com/dsickles/FamilyCalendar). No live dashboard URL is linked from here by design — this is a private family kiosk, not a public demo.
+Source of truth is the [public GitHub repository](https://github.com/dsickles/FamilyCalendar). A [public portfolio demo](https://familycalendar-demo.vercel.app) shows sample events with no PIN. The real family kiosk stays private.

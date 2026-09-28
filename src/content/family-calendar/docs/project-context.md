@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Project Context"
 date: "2026-09-21"
-status: "WIP"
+status: "Live"
 artifact_type: "doc"
 description: "Vision, hardware, deployment architecture, and locked tech stack for the Family Wall Dashboard — a zero-subscription family kiosk appliance."
 

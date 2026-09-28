@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Constitution"
 date: "2026-09-21"
-status: "WIP"
+status: "Live"
 artifact_type: "doc"
 description: "Core principles and non-negotiable invariants for the Family Wall Dashboard — hardware-bound viewport, security & privacy isolation, and appliance-grade runtime."
 
