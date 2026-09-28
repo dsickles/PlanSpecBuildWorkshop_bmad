@@ -2,7 +2,7 @@
 # 1. Core Identity
 title: "Overview"
 date: "2026-02-23"
-status: "WIP"
+status: "Live"
 description: "This project! The complete planning and specification documentation for the {{PROJECT_NAME}} — PRD, Architecture, UX Specification, and Epics."
 
 # 2. Taxonomy
