@@ -13,13 +13,13 @@ const mockContent: ParsedArticle[] = [
         projectSlug: "test-project",
         artifactType: "doc",
         status: "Live",
-        domain: ["Domain A"],
-        tech_stack: ["Tech A"],
+        taxonomy: { domain: ["Domain A"], tech_stack: ["Tech A"] },
         description: "Test Description",
         date: "2023-01-01",
         html: "<p>Test Content</p>",
         toc: [],
-        projects: [],
+        relations: { projects: [] },
+        links: [],
         _filePath: "content/test-project/docs/test-doc.md"
     }
 ];

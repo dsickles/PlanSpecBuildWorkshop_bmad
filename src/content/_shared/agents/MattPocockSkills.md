@@ -14,7 +14,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "threshold"
 links:
   - label: "GitHub"
     url: "https://github.com/mattpocock/skills"

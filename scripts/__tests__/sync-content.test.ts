@@ -7,6 +7,7 @@
 
 import path from "path";
 import fs from "fs";
+import grayMatter from "gray-matter";
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
@@ -18,8 +19,12 @@ jest.mock("fs", () => ({
 }));
 
 jest.mock("gray-matter", () =>
-    jest.fn((_raw: unknown) => ({ data: {}, content: "" }))
+    jest.fn(() => ({ data: {}, content: "" }))
 );
+
+const matter = grayMatter as unknown as jest.MockedFunction<
+    (s: unknown) => { data: Record<string, unknown>; content: string }
+>;
 
 // ─── Import under test ────────────────────────────────────────────────────────
 
@@ -59,7 +64,6 @@ describe("isSourcePathSafe", () => {
 
 describe("extractSourcePaths", () => {
     const fsMock = fs as jest.Mocked<typeof fs>;
-    const matter = require("gray-matter") as jest.MockedFunction<(s: unknown) => { data: Record<string, unknown>; content: string }>;
     const CONTENT_ROOT = path.join(process.cwd(), "src", "content");
 
     beforeEach(() => jest.clearAllMocks());
@@ -155,7 +159,6 @@ describe("extractSourcePaths", () => {
 
 describe("runSync", () => {
     const fsMock = fs as jest.Mocked<typeof fs>;
-    const matter = require("gray-matter") as jest.MockedFunction<(s: unknown) => { data: Record<string, unknown>; content: string }>;
 
     beforeEach(() => jest.clearAllMocks());
 

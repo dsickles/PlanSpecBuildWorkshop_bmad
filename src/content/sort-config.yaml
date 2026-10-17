@@ -32,15 +32,19 @@ blueprints:
     - project-context
     - specifications
     - tasks
+  threshold:
+    - coming-soon
 
 build_lab:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
   - family-calendar
+  - threshold
 
 projects:
   - plan-spec-build-workshop
   - ai-digest
   - focus-blox
   - family-calendar
+  - threshold

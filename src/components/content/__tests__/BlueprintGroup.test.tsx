@@ -9,13 +9,13 @@ const mockDocs: ParsedArticle[] = [
         projectSlug: "project-a",
         artifactType: "doc",
         status: "Live",
-        domain: ["Domain A"],
-        tech_stack: ["Tech A"],
+        taxonomy: { domain: ["Domain A"], tech_stack: ["Tech A"] },
         description: "Description 1",
         date: "2023-01-01",
         html: "<p>1</p>",
         toc: [],
-        projects: [],
+        relations: { projects: [] },
+        links: [],
         _filePath: "content/project-a/docs/doc-1.md"
     },
     {
@@ -24,13 +24,13 @@ const mockDocs: ParsedArticle[] = [
         projectSlug: "project-a",
         artifactType: "doc",
         status: "Live",
-        domain: ["Domain B"],
-        tech_stack: ["Tech B"],
+        taxonomy: { domain: ["Domain B"], tech_stack: ["Tech B"] },
         description: "Description 2",
         date: "2023-01-02",
         html: "<p>2</p>",
         toc: [],
-        projects: [],
+        relations: { projects: [] },
+        links: [],
         _filePath: "content/project-a/docs/doc-2.md"
     }
 ];
