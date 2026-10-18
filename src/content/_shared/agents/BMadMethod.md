@@ -16,6 +16,7 @@ taxonomy:
 relations:
   projects:
     - "plan-spec-build-workshop"
+    - "threshold"
 links:
   - label: "GitHub"
     url: "https://github.com/bmad-code-org/BMAD-METHOD"

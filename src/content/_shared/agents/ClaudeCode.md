@@ -14,7 +14,8 @@ taxonomy:
 
 # 3. Relations & Connectivity
 relations:
-  projects: []
+  projects:
+    - "threshold"
 links:
   - label: "Website"
     url: "https://claude.com/product/claude-code"
