@@ -18,6 +18,7 @@ relations:
     - "ai-digest"
     - "plan-spec-build-workshop"
     - "family-calendar"
+    - "threshold"
 links:
   - label: "Website"
     url: "https://cursor.com"
