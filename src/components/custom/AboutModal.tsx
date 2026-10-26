@@ -24,7 +24,7 @@ export function AboutModal({ allContent }: AboutModalProps) {
     const metrics = React.useMemo(() => {
         try {
             return calculateMetrics(allContent);
-        } catch (e) {
+        } catch {
             return { totalProjects: 0, totalAgents: 0, totalDocs: 0, totalPrototypes: 0 };
         }
     }, [allContent]);
