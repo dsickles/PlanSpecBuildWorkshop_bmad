@@ -119,7 +119,7 @@ This specification covers only the server-side weather pipeline: a 30-minute in-
 
 ### Overview
 
-An operator or a demo-mode clone requests `GET /api/weather`. The server calls Open-Meteo with the configured latitude and longitude (defaults: Scarsdale, NY), transforms the forecast into `WeatherData`, and returns current conditions plus a daily forecast. No weather API key exists.
+An operator or a demo-mode clone requests `GET /api/weather`. The server calls Open-Meteo with the configured latitude and longitude (defaults: New York, NY, a placeholder), transforms the forecast into `WeatherData`, and returns current conditions plus a daily forecast. No weather API key exists.
 
 The forecast host times out, returns a non-OK status, or returns a body that cannot be mapped. The appliance returns the last successful `WeatherData` even if the 30-minute TTL has expired. With no prior success, it still returns HTTP 200 and an empty weather slot plus an error reason.
 

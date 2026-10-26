@@ -156,7 +156,7 @@ export async function parseMarkdownFile(
         try {
             // Security: Prevent path traversal (Adversarial Review Finding 1)
             const normalizedSource = path.normalize(result.data.source_path);
-            if (normalizedSource.startsWith("..") || path.isAbsolute(normalizedSource)) {
+            if (normalizedSource.startsWith("..") || path.posix.isAbsolute(normalizedSource) || path.win32.isAbsolute(normalizedSource)) {
                 throw new Error("Security: Direct absolute paths or parent-directory traversal (..) are not permitted in source_path.");
             }
 

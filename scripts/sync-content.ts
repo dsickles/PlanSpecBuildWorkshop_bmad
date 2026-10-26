@@ -55,7 +55,8 @@ export const CONTENT_ROOT = path.join(process.cwd(), "src", "content");
 export function isSourcePathSafe(sourcePath: string): boolean {
     const normalized = path.normalize(sourcePath);
     if (normalized.startsWith("..")) return false;
-    if (path.isAbsolute(normalized)) return false;
+    // path.isAbsolute only recognizes the host OS's style, so check both explicitly.
+    if (path.posix.isAbsolute(normalized) || path.win32.isAbsolute(normalized)) return false;
     return true;
 }
 
