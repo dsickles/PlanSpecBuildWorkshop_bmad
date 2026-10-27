@@ -109,7 +109,7 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
         return { agents, docsByProject, prototypes, overviewByProject, blueprintOverviewByProject, studioErrors, docErrors, labErrors };
     }, [allContent, serverErrors, activeProject, activeDomains, activeTech]);
 
-    const { agents, docsByProject, prototypes, overviewByProject, studioErrors, docErrors, labErrors } = memoizedData;
+    const { agents, docsByProject, prototypes, studioErrors, docErrors, labErrors } = memoizedData;
 
     return (
         <>
@@ -125,11 +125,6 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                             />
                         )}
                         {agents.map((agent) => {
-                            const targetProject = (activeProject && agent.relations?.projects?.includes(activeProject))
-                                ? activeProject
-                                : (agent.relations?.projects?.[0] || "");
-                            const hasOverview = !!(targetProject && overviewByProject.has(targetProject));
-
                             return (
                                 <div key={agent._filePath} className="mb-4">
                                     <ProjectCard

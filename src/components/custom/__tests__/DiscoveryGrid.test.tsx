@@ -440,7 +440,7 @@ describe("DiscoveryGrid", () => {
         // Should have called setDocument with the ID for the docs/index.md file
         try {
             expect(setDocument).toHaveBeenCalledWith("project-a:docs:index");
-        } catch (e) {
+        } catch {
             throw new Error(`Expected ID: project-a:docs:index. Actual calls: ${JSON.stringify(setDocument.mock.calls)}`);
         }
     });

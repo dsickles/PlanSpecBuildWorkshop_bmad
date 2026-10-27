@@ -62,7 +62,7 @@ Resolved locale defaults (overridable via env, never hardcoded as secrets):
 
 | Preference | Default |
 |------------|---------|
-| Location | Scarsdale, NY 10583 — `40.9892°N, 73.7944°W` |
+| Location | New York, NY (placeholder) — `40.7128°N, 74.0060°W`; set your own via env |
 | Timezone | `America/New_York` |
 | Time format | 12-hour (AM/PM) |
 | Temperature | Fahrenheit |
