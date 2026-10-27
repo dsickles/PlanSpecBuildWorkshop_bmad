@@ -2,7 +2,7 @@
 
 Plan Spec Build Workshop is a static Next.js portfolio that shows Dan's agentic development work in three columns: **Agent Studio** (tools), **Blueprints** (planning docs), and **Build Lab** (prototypes). Content is markdown in the repo; there is no database or CMS.
 
-The site was planned and built with the BMad Method. The planning docs in `_bmad-output/planning-artifacts/` (PRD, architecture, UX spec, epics) are the "why". Where they disagree with the code, the code is current; see "Where the docs have drifted" below.
+The site was originally planned and built with the BMad Method. That process is no longer followed: don't run BMAD workflows, write story files, or update `sprint-status.yaml`. Work is tracked in Linear. The docs in `_bmad-output/` are historical background only, and the code is the source of truth wherever they disagree (see "Where the old docs have drifted" below).
 
 ## Commands
 
@@ -68,15 +68,15 @@ CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and build on every P
 - If a layout needs more than two magic-number offsets to line up, stop and raise it instead of stacking more.
 - Tests sit in `__tests__/` next to the code. Every change ships with tests, and never report tests as passing without running them.
 
-## Where the docs have drifted
+## Where the old docs have drifted
 
-The architecture doc predates some refactors. Trust the code on these:
+The BMAD architecture doc predates some refactors. Follow the code on these:
 
 - Content lives in `src/content/`, not a root `/content/`.
 - Frontmatter keys are the snake_case ones in `schema.ts`, even though the architecture doc says camelCase.
 - Composed components are split across `custom/`, `content/`, and `layout/`, not only `custom/`. The parser is `content-parser.ts`, not `parser.ts`.
 
-If you find another mismatch, update the doc or say so in the PR. Don't silently follow either side.
+If you find another mismatch, follow the code. There's no need to update the old doc.
 
 ## Handing work off for review
 
