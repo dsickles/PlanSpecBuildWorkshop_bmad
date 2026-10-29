@@ -31,6 +31,9 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      - name: Publish check
+        run: npm run publish-check
+
       - name: Test
         run: npm test -- --ci
 

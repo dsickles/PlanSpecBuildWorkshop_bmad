@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "publish-check": "ts-node --project scripts/tsconfig.json scripts/publish-check.ts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
