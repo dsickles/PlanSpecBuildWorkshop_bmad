@@ -4,6 +4,8 @@ import { useState } from "react";
 import { ChevronDown, FileText, Layers } from "lucide-react";
 import { StatusPill, FnTag, TechTag } from "@/components/content/project-card";
 import { ParsedArticle } from "@/lib/schema";
+import { ProjectStatus } from "@/lib/status-schema";
+import { PlanPanel } from "@/components/content/plan-panel";
 
 interface BlueprintGroupProps {
     projectSlug: string;
@@ -17,6 +19,10 @@ interface BlueprintGroupProps {
     isFocused?: boolean;
     /** Called when the Layers icon is clicked to establish Focus Mode */
     onLayersClick?: () => void;
+    /** Published plan and week notes, when the project publishes any */
+    status?: ProjectStatus;
+    /** Opens the changelog focused on this project */
+    onChangelogOpen?: () => void;
 }
 
 export function BlueprintGroup({
@@ -26,7 +32,9 @@ export function BlueprintGroup({
     overviewDoc,
     onDocOpen,
     isFocused = false,
-    onLayersClick
+    onLayersClick,
+    status,
+    onChangelogOpen
 }: BlueprintGroupProps) {
     const [expandedDocs, setExpandedDocs] = useState<Set<string>>(() => {
         return isFocused ? new Set(docs.map(d => d.title)) : new Set();
@@ -121,6 +129,8 @@ export function BlueprintGroup({
                     )}
                 </div>
             </div>
+
+            {status && <PlanPanel status={status} onChangelogOpen={onChangelogOpen} />}
 
             {/* Document rows */}
             <ul className="divide-y divide-zinc-100 dark:divide-zinc-800/60">

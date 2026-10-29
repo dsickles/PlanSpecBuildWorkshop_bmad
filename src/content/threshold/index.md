@@ -3,6 +3,7 @@
 title: "Threshold"
 date: "2026-10-17"
 status: "WIP"
+publish: "none"
 
 # 2. Taxonomy
 taxonomy:

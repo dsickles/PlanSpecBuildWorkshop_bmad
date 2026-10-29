@@ -22,6 +22,11 @@ export type ParsedArticle = FrontmatterData & {
     projectTitle?: string;
     /** The original file path, used for unique React keys. */
     _filePath: string;
+    /**
+     * Set when `source_path` points at a file that is missing or not allowed.
+     * The body then falls back to the local stub, and the viewer says so.
+     */
+    sourceMissing?: string;
 };
 
 /** Reserved directory for shared agents and cross-project items. */
@@ -50,6 +55,18 @@ export const ARTIFACT_TYPES = ["agent", "doc", "prototype"] as const;
 export type ArtifactType = (typeof ARTIFACT_TYPES)[number];
 
 /**
+ * How much generated status content (plan, week notes, changelog) a project
+ * publishes. Set only in a project's root index.md, and only by Dan.
+ *   full   — plan, week notes and changelog entries
+ *   status — milestone names, states and dates only
+ *   none   — nothing generated is shown (the default when unset)
+ * Hand-written docs and prototypes are not affected by this setting.
+ */
+export const PUBLISH_LEVELS = ["full", "status", "none"] as const;
+export type PublishLevel = (typeof PUBLISH_LEVELS)[number];
+export const DEFAULT_PUBLISH_LEVEL: PublishLevel = "none";
+
+/**
  * Primary Zod schema for all Markdown frontmatter in the /content directory.
  *
  * Design notes:
@@ -70,6 +87,9 @@ export const FrontmatterSchema = z.object({
     description: z.string().optional(),
     artifact_type: z.enum(ARTIFACT_TYPES).optional(),
     source_path: z.string().optional(),
+    publish: z.enum(PUBLISH_LEVELS, {
+        error: `publish must be one of: ${PUBLISH_LEVELS.join(", ")}`,
+    }).optional(),
 
     // Grouped Metadata
     taxonomy: z.object({

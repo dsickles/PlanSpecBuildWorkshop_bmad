@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM, DOCUMENT_PARAM, ABOUT_PARAM } from "@/lib/constants";
+import { PROJECT_PARAM, DOMAIN_PARAM, TECH_PARAM, DOCUMENT_PARAM, ABOUT_PARAM, CHANGELOG_PARAM } from "@/lib/constants";
 
 export function useFilterState() {
     const router = useRouter();
@@ -14,6 +14,7 @@ export function useFilterState() {
     const activeTech = searchParams.get(TECH_PARAM)?.split(",").filter(Boolean) || [];
     const activeDocument = searchParams.get(DOCUMENT_PARAM);
     const activeAbout = searchParams.get(ABOUT_PARAM) === "true";
+    const activeChangelog = searchParams.get(CHANGELOG_PARAM) === "true";
 
     const createQueryString = (params: Record<string, string | string[] | null>) => {
         const newParams = new URLSearchParams(searchParams.toString());
@@ -50,6 +51,10 @@ export function useFilterState() {
         updateUrl({ [ABOUT_PARAM]: open ? "true" : null });
     };
 
+    const setChangelog = (open: boolean) => {
+        updateUrl({ [CHANGELOG_PARAM]: open ? "true" : null });
+    };
+
     const toggleDomain = (domain: string) => {
         let newDomains = [...activeDomains];
         if (newDomains.includes(domain)) {
@@ -80,9 +85,11 @@ export function useFilterState() {
         activeTech,
         activeDocument,
         activeAbout,
+        activeChangelog,
         setProject,
         setDocument,
         setAbout,
+        setChangelog,
         toggleDomain,
         toggleTech,
         updateFilters: updateUrl,

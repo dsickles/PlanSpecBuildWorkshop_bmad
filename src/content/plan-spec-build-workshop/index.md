@@ -3,6 +3,7 @@
 title: "Plan Spec Build Workshop"
 date: "2026-02-28"
 status: "Live"
+publish: "full"
 
 # 2. Taxonomy
 taxonomy:

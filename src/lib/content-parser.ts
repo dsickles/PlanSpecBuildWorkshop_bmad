@@ -152,6 +152,7 @@ export async function parseMarkdownFile(
 
     // Step 5.5: Handle source_path redirection (Story 9.1)
     let finalContent = content;
+    let sourceMissing: string | undefined;
     if (result.data.source_path) {
         try {
             // Security: Prevent path traversal (Adversarial Review Finding 1)
@@ -166,9 +167,12 @@ export async function parseMarkdownFile(
                 const remoteParsed = matter(remoteRaw);
                 finalContent = remoteParsed.content; // Strip remote frontmatter
             } else {
+                // DAS-17: keep the local stub, but flag it so the viewer can say the source is missing.
+                sourceMissing = result.data.source_path;
                 console.warn(`[Story 9.1] source_path not found: ${absoluteSourcePath}. Falling back to local content.`);
             }
         } catch (err: unknown) {
+            sourceMissing = result.data.source_path;
             console.error(`[Story 9.1] Failed to read source_path: ${result.data.source_path}`, err instanceof Error ? err.message : String(err));
         }
     }
@@ -214,6 +218,7 @@ export async function parseMarkdownFile(
         artifactType,
         projectTitle: titleToUse,
         _filePath: filePath,
+        ...(sourceMissing ? { sourceMissing } : {}),
     } as ParsedArticle;
 }
 

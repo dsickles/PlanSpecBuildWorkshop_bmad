@@ -4,11 +4,14 @@ import { isError, ErrorFrontmatter, ParsedArticle } from "@/lib/schema";
 import { FilterBar } from "@/components/custom/FilterBar";
 import { DiscoveryGrid } from "@/components/custom/DiscoveryGrid";
 import { AboutModal } from "@/components/custom/AboutModal";
+import { ChangelogModal } from "@/components/custom/ChangelogModal";
+import { getProjectStatuses } from "@/lib/status-parser";
 import { Suspense } from "react";
 
 export default async function Home() {
   const allContent = await getSortedParsedContent();
   const sortConfig = await loadSortConfig();
+  const statuses = await getProjectStatuses();
 
   const errors: ErrorFrontmatter[] = [];
   const validArticles: ParsedArticle[] = [];
@@ -49,10 +52,13 @@ export default async function Home() {
         <FilterBar projects={projects} domains={domains} techStacks={techStacks} />
       </Suspense>
       <Suspense fallback={null}>
-        <DiscoveryGrid allContent={allContent} errors={errors} />
+        <DiscoveryGrid allContent={allContent} errors={errors} statuses={statuses} />
       </Suspense>
       <Suspense fallback={null}>
         <AboutModal allContent={allContent} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ChangelogModal statuses={statuses} />
       </Suspense>
     </div>
   );
