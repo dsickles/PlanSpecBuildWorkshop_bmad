@@ -12,13 +12,19 @@ npm run lint
 npx tsc --noEmit
 npm test        # Jest + Testing Library (jsdom)
 npm run build   # runs scripts/sync-content.ts first, then next build
+npm run publish-check   # private data + publish settings in src/content
+npm run e2e     # Playwright smoke tests + axe scan; needs a build first
+npm run new-project -- <slug> [--title "Title"]
 ```
 
-CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and build on every PR. Run all four locally before calling work done. Node 20.
+CI (`.github/workflows/ci.yml`) runs lint, typecheck, publish check, test, and build, plus a separate job for the e2e smoke tests and accessibility scan. Run them locally before calling work done. A nightly workflow (`demo-check.yml`) checks every Live prototype link. Node 20.
+
+`docs/AUTHORING.md` is the author-facing guide. Keep it current when content rules change.
 
 ## Where things live
 
-- `src/content/<project-slug>/index.md` is the project overview. `docs/` feeds Blueprints, `prototypes/` feeds Build Lab.
+- `src/content/<project-slug>/index.md` is the project overview. `docs/` feeds Blueprints, `prototypes/` feeds Build Lab, `status/` (`plan.md`, `week-YYYY-MM-DD.md`) feeds the plan panel and the changelog.
+- `src/lib/status-schema.ts` (client-safe) and `src/lib/status-parser.ts` (server) own the status files. `src/lib/routes.ts` and `src/lib/page-data.ts` own the shareable pages at `/<project>`, `/<project>/<blueprint>` and `/tools/<tool>`.
 - `src/content/_shared/agents/*.md` feeds Agent Studio. `_shared` is reserved and is not a project. Never add per-project `agents/` folders.
 - `src/content/sort-config.yaml` controls all display order (agents, blueprints per project, build lab, project pills). Entries are filename stems. Never add an `order` field to frontmatter.
 - `src/lib/schema.ts` is the Zod frontmatter schema and the single authority on content shape.
@@ -55,18 +61,22 @@ CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and build on every P
 - Use `{{PROJECT_NAME}}` instead of hardcoding a project's title in its docs.
 - Adding a project means new markdown plus a `sort-config.yaml` entry. It should never need React or CSS changes. If it does, stop and flag it.
 - `source_path` points a content file at a doc elsewhere in the repo (usually `_bmad-output/`). Paths are relative to the repo root; absolute paths and `..` are rejected.
+- `publish` goes only on a project's root `index.md`: `full` (plan + week notes), `status` (milestones only), or `none` (default, nothing). The repo is public, so a `none` project must not have status files committed at all; the publish check fails if it does. Threshold stays `none`.
+- Content is public the moment it's committed. No personal emails, keys, calendar feed links or real PINs; use demo data. If the publish check flags a true false positive, add the exact text to `scripts/publish-check.allow`.
+- Linear issue IDs appear as plain text, never as links (the workspace is private).
 - **Author-first metadata:** don't change a project's title, status, or `projects` associations unless the ticket asks for it or Dan confirms. If a test fails because a field looks "missing", check whether Dan removed it on purpose before "fixing" it.
 
 ## Code rules
 
 - Filter state lives in URL params (`?project=`, `?domain=`, `?tech=`, `?document=`, multi-select comma-separated). `page.tsx` reads `searchParams` as a server prop; client components use `useSearchParams`. Card expand/collapse is the only local `useState` exception.
+- Filter params also include `?about=true` and `?changelog=true` for the global modals.
 - New global utility views follow the `AboutModal` pattern: a URL-synced modal layered on the grid that never clears filter state.
 - One bad file must never break the site. Invalid frontmatter renders an `[Error]` card; missing folders render the dashed `[Concept]` empty state. Build logs warnings and keeps going.
 - Fallback and error rows get a `data-testid` and a context-specific `aria-label` (for example `aria-label="agent content unavailable"`) so tests don't collide across columns.
 - Markdown HTML must stay sanitized through `rehype-sanitize`.
 - Use the semantic theme variables in `globals.css`, not hardcoded zinc/neutral classes.
 - If a layout needs more than two magic-number offsets to line up, stop and raise it instead of stacking more.
-- Tests sit in `__tests__/` next to the code. Every change ships with tests, and never report tests as passing without running them.
+- Tests sit in `__tests__/` next to the code. Browser tests sit in `e2e/` and run with Playwright, not Jest. Every change ships with tests, and never report tests as passing without running them.
 
 ## Where the old docs have drifted
 

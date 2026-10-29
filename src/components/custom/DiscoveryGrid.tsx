@@ -8,14 +8,23 @@ import { ParsedArticle, isError, ErrorFrontmatter } from "@/lib/schema";
 import { useFilterState } from "@/hooks/useFilterState";
 import { MarkdownDocumentModal } from "@/components/custom/MarkdownDocumentModal";
 import { projectHeaderDocument } from "@/lib/blueprint-nav";
+import { ProjectStatus } from "@/lib/status-schema";
+import { PROJECT_PARAM, CHANGELOG_PARAM } from "@/lib/constants";
 
 interface DiscoveryGridProps {
     allContent: (ParsedArticle | ErrorFrontmatter)[];
     errors: ErrorFrontmatter[];
+    /** Published status per project (already filtered by each project's publish level). */
+    statuses?: ProjectStatus[];
 }
 
-export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGridProps) {
-    const { activeProject, activeDomains, activeTech, setProject, setDocument } = useFilterState();
+export function DiscoveryGrid({ allContent, errors: serverErrors, statuses = [] }: DiscoveryGridProps) {
+    const { activeProject, activeDomains, activeTech, setProject, setDocument, updateFilters } = useFilterState();
+
+    const statusBySlug = useMemo(
+        () => new Map(statuses.map((status) => [status.slug, status])),
+        [statuses]
+    );
 
     const handleDocOpen = useMemo(() => (doc: ParsedArticle) => {
         setDocument(doc.id);
@@ -167,6 +176,8 @@ export function DiscoveryGrid({ allContent, errors: serverErrors }: DiscoveryGri
                                 isFocused={activeProject === slug}
                                 onLayersClick={() => setProject(slug)}
                                 onDocOpen={handleDocOpen}
+                                status={statusBySlug.get(slug)}
+                                onChangelogOpen={() => updateFilters({ [PROJECT_PARAM]: slug, [CHANGELOG_PARAM]: "true" })}
                             />
                         ))}
                         {docErrors.map((e) => (

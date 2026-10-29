@@ -6,7 +6,7 @@ interface DashboardGridProps {
 }
 
 const columnHeaderClass =
-    "text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-zinc-500 dark:text-zinc-500 mb-3 pb-2 border-b border-zinc-200 dark:border-zinc-800";
+    "text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground mb-3 pb-2 border-b border-zinc-200 dark:border-zinc-800";
 
 function ColumnHeader({ label }: { label: string }) {
     return <div className={columnHeaderClass}>{label}</div>;

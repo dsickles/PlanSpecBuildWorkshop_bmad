@@ -13,5 +13,4 @@ taxonomy:
     - "Portfolio"
     - "UX Design"
   tech_stack: []
-
 ---

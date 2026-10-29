@@ -3,6 +3,7 @@
 title: "Family Calendar"
 date: "2026-09-21"
 status: "Live"
+description: "An ad-free, zero-subscription family wall calendar built for a touch-first full-screen kiosk."
 
 # 2. Taxonomy
 taxonomy:

@@ -40,7 +40,6 @@ export function FilterBar({ projects, domains, techStacks }: FilterBarProps) {
                             MUTED_GHOST_BUTTON_STYLES
                         )}
                         title="Clear all filters and return to browse mode"
-                        aria-label="Clear all filters"
                         aria-controls="discovery-grid"
                     >
                         <X className="w-3 h-3" />

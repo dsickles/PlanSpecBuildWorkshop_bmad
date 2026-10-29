@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { GlobalHeader } from "@/components/layout/global-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { siteUrl } from "@/lib/routes";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: "Plan Spec Build Workshop",
   description: "A portfolio showcasing AI-assisted product development, context engineered from concept to production.",
   icons: {

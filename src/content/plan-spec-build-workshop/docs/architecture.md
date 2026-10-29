@@ -17,5 +17,4 @@ taxonomy:
     - "TypeScript"
     - "React"
     - "Tailwind CSS"
-
 ---

@@ -14,13 +14,16 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { PROJECT_PARAM, DOCUMENT_PARAM } from "@/lib/constants";
 import { TocEntry } from "@/lib/toc-engine";
+import { ARTICLE_PROSE_CLASSES } from "@/lib/prose";
+import { SourceMissingNotice } from "@/components/content/source-missing-notice";
 import {
     findArticleById,
     getBlueprintNav,
 } from "@/lib/blueprint-nav";
 
 import { Button } from "@/components/ui/button";
-import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight, Link2 } from "lucide-react";
+import { articlePath } from "@/lib/routes";
 
 const DocumentSlugSchema = z.string().regex(/^[a-zA-Z0-9-_:]+$/);
 const TOC_HIGHLIGHT_THRESHOLD = 24; // Distance from top to trigger active heading
@@ -71,7 +74,7 @@ function TableOfContents({ toc, containerRef, activeId, onSelect }: { toc: TocEn
                 top: 0
             }}
         >
-            <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Contents</h4>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-6">Contents</h4>
             <ul className="space-y-4">
                 {toc.map((entry, i) => (
                     <li
@@ -84,8 +87,8 @@ function TableOfContents({ toc, containerRef, activeId, onSelect }: { toc: TocEn
                             className={cn(
                                 "text-left text-xs transition-all duration-300 leading-relaxed w-full",
                                 activeId === entry.slug
-                                    ? "text-blue-500 font-bold translate-x-1"
-                                    : "text-zinc-500 hover:text-white"
+                                    ? "text-blue-600 dark:text-blue-400 font-bold translate-x-1"
+                                    : "text-muted-foreground hover:text-foreground"
                             )}
                         >
                             {entry.text}
@@ -295,6 +298,8 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
         }
     };
 
+    const sharePath = shownMeta ? articlePath(shownMeta, allContent) : null;
+
     const prevDisabled = isLoading || !nav?.prev;
     const nextDisabled = isLoading || !nav?.next;
 
@@ -315,7 +320,7 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                         <div className="bg-background/80 backdrop-blur-md px-8 pt-6 pb-5">
                             <div className="flex justify-between items-start mb-4 gap-3">
                                 <div className="flex flex-col gap-1.5 min-w-0">
-                                    <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold">
+                                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
                                         {shownMeta.projectTitle || shownMeta.projectSlug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                     </div>
                                     <div className="flex flex-wrap items-center gap-3">
@@ -356,6 +361,18 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                                                 <ChevronRight aria-hidden="true" />
                                             </Button>
                                         </div>
+                                    )}
+                                    {sharePath && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            asChild
+                                            className="text-muted-foreground hover:text-foreground hover:bg-accent px-2"
+                                        >
+                                            <a href={sharePath} aria-label="Open as a shareable page" title="Open as a shareable page">
+                                                <Link2 aria-hidden="true" />
+                                            </a>
+                                        </Button>
                                     )}
                                     <Button
                                         variant="ghost"
@@ -455,21 +472,14 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                             </div>
                         ) : contentDoc ? (
                             <div className="max-w-[70ch] mx-auto pb-12">
+                                {contentDoc.sourceMissing && <SourceMissingNotice sourcePath={contentDoc.sourceMissing} />}
                                 <article
-                                    className="prose prose-zinc dark:prose-invert max-w-none 
-                                        prose-headings:text-foreground prose-headings:font-bold prose-headings:tracking-tight
-                                        prose-headings:mt-16 first:prose-headings:mt-0
-                                        prose-p:text-foreground/80 dark:prose-p:text-muted-foreground prose-p:leading-loose prose-p:mb-10
-                                        prose-strong:text-foreground prose-strong:font-semibold
-                                        prose-code:text-foreground prose-code:bg-muted dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-                                        prose-pre:bg-muted/50 prose-pre:border prose-pre:border-border prose-pre:rounded-lg
-                                        prose-li:text-muted-foreground prose-li:mb-2
-                                        prose-hr:border-border"
+                                    className={ARTICLE_PROSE_CLASSES}
                                     dangerouslySetInnerHTML={{ __html: contentDoc.html }}
                                 />
                                 {contentDoc.artifactType === "agent" && contentDoc.associatedProjects && contentDoc.associatedProjects.length > 0 && (
                                     <div className="mt-16 pt-8 border-t border-border/50">
-                                        <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Projects using this tool</h4>
+                                        <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-6">Projects using this tool</h4>
                                         <div className="flex flex-wrap gap-3">
                                             {contentDoc.associatedProjects.map((project) => (
                                                 <Button
@@ -517,7 +527,7 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                                             Document Not Found
                                         </DialogTitle>
                                         <p className="text-zinc-400 mb-8 leading-relaxed text-center">
-                                            The requested document could not be located or has been moved from its original sector.
+                                            We couldn&apos;t find that document. The link may be out of date, or the document was renamed or removed.
                                         </p>
                                     </DialogHeader>
                                     <Button
@@ -525,7 +535,7 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                                         onClick={() => handleOpenChange(false)}
                                         className="bg-muted border-border text-muted-foreground hover:text-foreground hover:bg-accent"
                                     >
-                                        Return to Command Center
+                                        Back to the workshop
                                     </Button>
                                 </div>
                             </div>

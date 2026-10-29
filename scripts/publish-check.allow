@@ -1,0 +1,5 @@
+# Publish check allow list (scripts/publish-check.ts)
+#
+# Exact text the check flagged that is safe to publish, one entry per line.
+# Add an entry only after confirming the match is a placeholder or public
+# information. Lines starting with # are comments.

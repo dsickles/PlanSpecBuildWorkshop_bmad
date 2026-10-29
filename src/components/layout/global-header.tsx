@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, Moon, Sun } from "lucide-react";
+import { History, Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useFilterState } from "@/hooks/useFilterState";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ const iconButtonClass =
 
 export function GlobalHeader() {
     const { setTheme, resolvedTheme } = useTheme();
-    const { setAbout } = useFilterState();
+    const { setAbout, setChangelog } = useFilterState();
     const [mounted, setMounted] = useState(false);
 
     // Prevent hydration mismatch by only rendering the toggle after mounting
@@ -52,6 +52,15 @@ export function GlobalHeader() {
                         ) : (
                             <div className={`${iconButtonClass} opacity-0 pointer-events-none`} aria-hidden="true" />
                         )}
+                        <button
+                            onClick={() => setChangelog(true)}
+                            className={iconButtonClass}
+                            aria-label="Changelog"
+                            title="Changelog"
+                            type="button"
+                        >
+                            <History className="h-4 w-4" />
+                        </button>
                         <button
                             onClick={() => setAbout(true)}
                             className={iconButtonClass}

@@ -13,7 +13,7 @@ import { getDocIdFromPath } from "@/lib/utils";
 
 type StatusValue = "Live" | "WIP" | "Concept" | "Archived";
 
-const STATUS_STYLES: Record<
+export const STATUS_STYLES: Record<
     StatusValue,
     { background: string; color: string; border: string }
 > = {

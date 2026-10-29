@@ -159,4 +159,30 @@ describe('useFilterState', () => {
 
     expect(mockPush).toHaveBeenCalledWith('/?project=my-project&document=next-doc#reading', { scroll: false });
   });
+
+  it('opens and closes the changelog on the home grid', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(createMockSearchParams({ project: 'psb' }));
+    const { result } = renderHook(() => useFilterState());
+
+    act(() => result.current.setChangelog(true));
+    expect(mockPush).toHaveBeenLastCalledWith('/?project=psb&changelog=true', { scroll: false });
+  });
+
+  it('reads the changelog flag from the URL', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(createMockSearchParams({ changelog: 'true' }));
+    const { result } = renderHook(() => useFilterState());
+    expect(result.current.activeChangelog).toBe(true);
+  });
+
+  it('goes back to the grid to open a global view from a standalone page', () => {
+    (usePathname as jest.Mock).mockReturnValue('/family-calendar/specifications');
+    (useSearchParams as jest.Mock).mockReturnValue(createMockSearchParams({}));
+    const { result } = renderHook(() => useFilterState());
+
+    act(() => result.current.setChangelog(true));
+    expect(mockPush).toHaveBeenLastCalledWith('/?changelog=true');
+
+    act(() => result.current.setAbout(true));
+    expect(mockPush).toHaveBeenLastCalledWith('/?about=true');
+  });
 });
