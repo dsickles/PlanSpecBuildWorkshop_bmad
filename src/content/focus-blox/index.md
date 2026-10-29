@@ -3,6 +3,7 @@
 title: "Focus Blox"
 date: "2026-05-24"
 status: "Live"
+description: "A calm daily planning workspace designed around intentional focus rather than productivity optimization."
 
 # 2. Taxonomy
 taxonomy:

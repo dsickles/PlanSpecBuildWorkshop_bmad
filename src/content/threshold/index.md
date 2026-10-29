@@ -3,6 +3,7 @@
 title: "Threshold"
 date: "2026-10-17"
 status: "WIP"
+description: "Threshold is a multi-genre narrative anthology that explores the emotional complexity of becoming a father, built in Godot 4 (GDScript) for the browser first, then phone, then PC and Steam."
 publish: "none"
 
 # 2. Taxonomy

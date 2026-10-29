@@ -3,6 +3,7 @@
 title: "Overview"
 date: "2026-02-23"
 status: "Live"
+artifact_type: "doc"
 description: "This project! The complete planning and specification documentation for the {{PROJECT_NAME}} — PRD, Architecture, UX Specification, and Epics."
 
 # 2. Taxonomy
@@ -14,7 +15,6 @@ taxonomy:
     - "TypeScript"
     - "React"
     - "Tailwind CSS"
-
 ---
 
 # {{PROJECT_NAME}} — Portfolio Design System

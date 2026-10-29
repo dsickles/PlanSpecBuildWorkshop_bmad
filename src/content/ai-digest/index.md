@@ -3,6 +3,7 @@
 title: "AI Digest"
 date: "2026-05-24"
 status: "WIP"
+description: "A personal weekly AI digest pipeline."
 
 # 2. Taxonomy
 taxonomy:

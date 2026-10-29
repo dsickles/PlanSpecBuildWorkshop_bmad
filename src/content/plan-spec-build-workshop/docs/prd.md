@@ -12,5 +12,4 @@ taxonomy:
   domain:
     - "Portfolio"
   tech_stack: []
-
 ---
