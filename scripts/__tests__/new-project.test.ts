@@ -76,6 +76,11 @@ describe("addToSortConfig", () => {
         expect(parsed.agent_studio).toEqual(["Cursor"]);
     });
 
+    it("finds section headers with trailing spaces or comments", () => {
+        const parsed = parseYaml(addToSortConfig("projects:  # order\n  - a\n", "b"));
+        expect(parsed.projects).toEqual(["a", "b"]);
+    });
+
     it("adds missing sections", () => {
         const parsed = parseYaml(addToSortConfig("agent_studio:\n  - Cursor\n", "x"));
         expect(parsed).toMatchObject({ blueprints: { x: ["coming-soon"] }, build_lab: ["x"], projects: ["x"] });
@@ -110,6 +115,22 @@ describe("createProject", () => {
         expect(data.title).toBe('The "Quoted" One');
     });
 
+    it("leaves nothing behind when a write fails", () => {
+        const configPath = path.join(root, "sort-config.yaml");
+        const realWrite = fs.writeFileSync;
+        const spy = jest.spyOn(fs, "writeFileSync").mockImplementation((file, ...rest) => {
+            if (file === configPath && String(rest[0]).includes("new-thing")) throw new Error("disk full");
+            return realWrite(file, ...(rest as [string]));
+        });
+        try {
+            expect(() => createProject({ slug: "new-thing", contentRoot: root })).toThrow("disk full");
+        } finally {
+            spy.mockRestore();
+        }
+        expect(fs.existsSync(path.join(root, "new-thing"))).toBe(false);
+        expect(fs.readFileSync(configPath, "utf-8")).toBe(CONFIG);
+    });
+
     it("refuses an invalid slug without writing anything", () => {
         expect(() => createProject({ slug: "Bad Slug", contentRoot: root })).toThrow();
         expect(fs.readFileSync(path.join(root, "sort-config.yaml"), "utf-8")).toBe(CONFIG);
@@ -121,5 +142,13 @@ describe("parseArgs", () => {
         expect(parseArgs(["x", "--title", "Ex"])).toEqual({ slug: "x", title: "Ex" });
         expect(parseArgs(["--title", "Ex", "x"])).toEqual({ slug: "x", title: "Ex" });
         expect(parseArgs([])).toEqual({ slug: undefined, title: undefined });
+    });
+
+    it("reads the slug when --title is left out", () => {
+        expect(parseArgs(["x"])).toEqual({ slug: "x", title: undefined });
+    });
+
+    it("ignores --title with no value", () => {
+        expect(parseArgs(["x", "--title"])).toEqual({ slug: "x", title: undefined });
     });
 });

@@ -124,7 +124,8 @@ export function addToSortConfig(yaml: string, slug: string): string {
     const lines = yaml.replace(/\n+$/, "").split("\n");
 
     const sectionEnd = (key: string): number => {
-        const start = lines.findIndex((line) => line === `${key}:`);
+        const header = new RegExp(`^${key}:\\s*(#.*)?$`);
+        const start = lines.findIndex((line) => header.test(line));
         if (start === -1) return -1;
         let end = start;
         for (let i = start + 1; i < lines.length; i++) {
@@ -162,23 +163,34 @@ export function createProject({ slug, title, date, contentRoot = CONTENT_ROOT }:
         [path.join(slug, "prototypes", "index.md"), prototypeFile(name, day)],
     ];
 
-    for (const [rel, body] of files) {
-        const full = path.join(contentRoot, rel);
-        fs.mkdirSync(path.dirname(full), { recursive: true });
-        fs.writeFileSync(full, body);
-    }
-
     const configPath = path.join(contentRoot, SORT_CONFIG);
     const config = fs.existsSync(configPath) ? fs.readFileSync(configPath, "utf-8") : "";
-    fs.writeFileSync(configPath, addToSortConfig(config, slug));
+    const nextConfig = addToSortConfig(config, slug);
+
+    // Write everything or nothing, so a failed run never leaves a folder
+    // behind that makes the next run refuse the slug.
+    try {
+        for (const [rel, body] of files) {
+            const full = path.join(contentRoot, rel);
+            fs.mkdirSync(path.dirname(full), { recursive: true });
+            fs.writeFileSync(full, body);
+        }
+        fs.writeFileSync(configPath, nextConfig);
+    } catch (err) {
+        fs.rmSync(path.join(contentRoot, slug), { recursive: true, force: true });
+        if (fs.existsSync(configPath)) fs.writeFileSync(configPath, config);
+        throw err;
+    }
 
     return [...files.map(([rel]) => rel), SORT_CONFIG];
 }
 
 export function parseArgs(argv: string[]): { slug?: string; title?: string } {
     const titleIndex = argv.indexOf("--title");
-    const title = titleIndex >= 0 ? argv[titleIndex + 1] : undefined;
-    const slug = argv.find((arg, i) => !arg.startsWith("--") && i !== titleIndex + 1);
+    const next = titleIndex >= 0 ? argv[titleIndex + 1] : undefined;
+    const title = next !== undefined && !next.startsWith("--") ? next : undefined;
+    const titleValueIndex = title !== undefined ? titleIndex + 1 : -1;
+    const slug = argv.find((arg, i) => !arg.startsWith("--") && i !== titleValueIndex);
     return { slug, title };
 }
 
