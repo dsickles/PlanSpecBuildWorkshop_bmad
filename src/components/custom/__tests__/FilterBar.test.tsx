@@ -47,7 +47,7 @@ describe('FilterBar - Clear Filter Visibility', () => {
         });
 
         render(<FilterBar {...defaultProps} />);
-        const button = screen.getByRole('button', { name: /clear all filters/i });
+        const button = screen.getByRole('button', { name: /clear filter/i });
         expect(button).toBeInTheDocument();
         expect(button).toHaveAttribute('data-testid', 'clear-filter-button');
     });
@@ -158,7 +158,7 @@ describe('FilterBar - Clear Filter Visibility', () => {
 
         it('has correct accessibility attributes', () => {
             render(<FilterBar {...defaultProps} />);
-            const button = screen.getByLabelText('Clear all filters');
+            const button = screen.getByRole('button', { name: 'Clear Filter' });
 
             expect(button).toHaveAttribute('aria-controls', 'discovery-grid');
 

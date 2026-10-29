@@ -1,0 +1,27 @@
+name: Demo check
+
+# Opens every link on every Live prototype each night and fails when one
+# doesn't answer. It reports only: a prototype's status changes by hand.
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  demos:
+    name: Live prototype links answer
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check demos
+        run: npm run check-demos

@@ -50,7 +50,7 @@ export function ArticlePage({ article, eyebrow, eyebrowHref, workshopHref, prev,
                 </div>
 
                 <header className="mb-10 pb-8 border-b border-border/50">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2">{eyebrow}</div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold mb-2">{eyebrow}</div>
                     <div className="flex flex-wrap items-center gap-3">
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">{article.title}</h1>
                         <StatusPill status={article.status} />

@@ -74,7 +74,7 @@ function TableOfContents({ toc, containerRef, activeId, onSelect }: { toc: TocEn
                 top: 0
             }}
         >
-            <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Contents</h4>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-6">Contents</h4>
             <ul className="space-y-4">
                 {toc.map((entry, i) => (
                     <li
@@ -87,8 +87,8 @@ function TableOfContents({ toc, containerRef, activeId, onSelect }: { toc: TocEn
                             className={cn(
                                 "text-left text-xs transition-all duration-300 leading-relaxed w-full",
                                 activeId === entry.slug
-                                    ? "text-blue-500 font-bold translate-x-1"
-                                    : "text-zinc-500 hover:text-white"
+                                    ? "text-blue-600 dark:text-blue-400 font-bold translate-x-1"
+                                    : "text-muted-foreground hover:text-foreground"
                             )}
                         >
                             {entry.text}
@@ -320,7 +320,7 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                         <div className="bg-background/80 backdrop-blur-md px-8 pt-6 pb-5">
                             <div className="flex justify-between items-start mb-4 gap-3">
                                 <div className="flex flex-col gap-1.5 min-w-0">
-                                    <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold">
+                                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
                                         {shownMeta.projectTitle || shownMeta.projectSlug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                     </div>
                                     <div className="flex flex-wrap items-center gap-3">
@@ -479,7 +479,7 @@ export function MarkdownDocumentModal({ allContent, loadBlueprint }: MarkdownDoc
                                 />
                                 {contentDoc.artifactType === "agent" && contentDoc.associatedProjects && contentDoc.associatedProjects.length > 0 && (
                                     <div className="mt-16 pt-8 border-t border-border/50">
-                                        <h4 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-6">Projects using this tool</h4>
+                                        <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-6">Projects using this tool</h4>
                                         <div className="flex flex-wrap gap-3">
                                             {contentDoc.associatedProjects.map((project) => (
                                                 <Button

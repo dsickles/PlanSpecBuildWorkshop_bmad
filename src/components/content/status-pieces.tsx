@@ -51,7 +51,7 @@ const KIND_LABEL: Record<ChangeKind, string> = {
 
 export function ChangeKindLabel({ kind }: { kind: ChangeKind }) {
     return (
-        <span className="inline-flex items-center rounded px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider bg-muted text-muted-foreground">
+        <span className="inline-flex items-center rounded px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider bg-muted text-foreground/75">
             {KIND_LABEL[kind]}
         </span>
     );
