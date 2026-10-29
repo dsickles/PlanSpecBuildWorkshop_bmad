@@ -12,7 +12,8 @@
     "generate-icons": "node scripts/generate-icons.js",
     "publish-check": "ts-node --project scripts/tsconfig.json scripts/publish-check.ts",
     "e2e": "playwright test",
-    "check-demos": "ts-node --project scripts/tsconfig.json scripts/check-demos.ts"
+    "check-demos": "ts-node --project scripts/tsconfig.json scripts/check-demos.ts",
+    "new-project": "ts-node --project scripts/tsconfig.json scripts/new-project.ts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",

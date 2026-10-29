@@ -1,0 +1,50 @@
+name: Feedback on the workshop
+description: You looked at the site or copied the setup and have thoughts. All of it is welcome.
+title: "Feedback: "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking a look. This repo is public, so please leave out anything private: no personal email addresses, keys, or links to private calendars or docs.
+  - type: dropdown
+    id: about
+    attributes:
+      label: What is this about?
+      options:
+        - The site itself (how it reads, what's unclear)
+        - A project's plan, blueprints or changelog
+        - Copying the setup for my own work
+        - Something else
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: What's your role?
+      description: Optional. Helps me understand who the site works for.
+      options:
+        - Product manager
+        - Engineer
+        - Designer
+        - Hiring manager or recruiter
+        - Founder
+        - Other
+  - type: input
+    id: where
+    attributes:
+      label: Where on the site?
+      description: A link to the page, if there is one.
+      placeholder: https://plan-spec-build-workshop.vercel.app/...
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Your feedback
+      description: What worked, what didn't, what you expected to find.
+    validations:
+      required: true
+  - type: textarea
+    id: copied
+    attributes:
+      label: If you copied the setup, how far did you get?
+      description: Which step slowed you down, and what would have helped.

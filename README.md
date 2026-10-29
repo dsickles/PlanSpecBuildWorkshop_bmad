@@ -13,7 +13,9 @@ The portfolio itself is **Project #1** (the "Meta-Blueprint"): it was planned, s
 - **Build Lab** — links/embeds for the working prototypes
 - **Tri-modal filtering** by Project, Domain, and Tech Stack — applied across all three columns
 - **Git-based CMS** — adding a project means dropping markdown files into `src/content/<project-slug>/` and updating `sort-config.yaml`. No CMS, no database, no UI code.
-- **Dark/Light mode**, WCAG 2.1 AA target, Lighthouse 90+ goals
+- **Plan and changelog** — each project can publish its milestones and a weekly changelog of what shipped, what changed direction and what got cut, with the issue, tool and PR behind each change
+- **Shareable pages** — every project, blueprint and tool has its own URL with a link preview
+- **Dark/Light mode**, with an automated WCAG 2.1 AA scan on every PR
 
 ## Tech Stack
 
@@ -55,6 +57,10 @@ npm run build            # Runs prebuild sync + next build (SSG)
 npm run start            # Serve the production build
 npm run lint             # ESLint
 npm test                 # Jest (jsdom)
+npm run publish-check    # Fails on private data or status files a project hasn't opted to publish
+npm run e2e              # Playwright smoke tests + accessibility scan (run after a build)
+npm run check-demos      # Checks every Live prototype link answers
+npm run new-project -- <slug> --title "Title"   # Scaffold a new project
 npm run generate-icons   # Regenerate favicons/app icons from source
 ```
 
@@ -87,17 +93,17 @@ _bmad-output/                # Planning + implementation artifacts (the "why")
 public/                      # Static assets and generated icons
 ```
 
-## Adding a New Project (the Author workflow)
+## Adding a New Project
 
-1. **Create a project folder:** `src/content/<your-project-slug>/`
-2. **Add an overview:** `index.md` with frontmatter (`title`, `date`, `status`, `taxonomy.domain`, `taxonomy.tech_stack`).
-3. **Add Blueprint docs** under `src/content/<your-project-slug>/docs/` (e.g. `prd.md`, `architecture.md`, `ux-design-specification.md`, `epics.md`).
-4. **Add Build Lab entries** under `src/content/<your-project-slug>/prototypes/` (link out or embed).
-5. **Associate shared agents** by adding your project slug to the `projects:` array in the relevant `src/content/_shared/agents/*.md` frontmatter.
-6. **Update `src/content/sort-config.yaml`** so your project, its docs, and its prototypes appear in the order you want. Anything not listed appears after listed items, sorted alphabetically.
-7. **Commit and push.** Vercel rebuilds; the new project shows up in the dashboard with no React or CSS changes.
+```bash
+npm run new-project -- my-project --title "My Project"
+```
 
-The frontmatter schema is enforced by Zod (`src/lib/schema.ts`) — invalid files surface as errors at build time and in dev.
+That creates the overview, a first Blueprints row and a Build Lab card, and adds the project to `sort-config.yaml`. Fill in the frontmatter, add docs under `docs/`, and open a PR. No React or CSS changes needed.
+
+The full guide, including the frontmatter reference, how to publish a plan and weekly changelog, and what must never be committed to a public repo, is in [`docs/AUTHORING.md`](docs/AUTHORING.md).
+
+Copied the setup and have thoughts? [Open a feedback issue](https://github.com/dsickles/PlanSpecBuildWorkshop_bmad/issues/new?template=feedback.yml).
 
 ## Deploying
 

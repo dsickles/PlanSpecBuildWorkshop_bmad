@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Authoring guide
+    url: https://github.com/dsickles/PlanSpecBuildWorkshop_bmad/blob/main/docs/AUTHORING.md
+    about: How to add a project, publish progress, and run the checks.
