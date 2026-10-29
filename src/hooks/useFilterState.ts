@@ -39,6 +39,16 @@ export function useFilterState() {
         router.push(`${pathname}${search}${hash}`, { scroll: false });
     };
 
+    // The About and Changelog modals live on the home grid. From a standalone
+    // page, opening one goes back to the grid with that modal open.
+    const openGlobalView = (param: string, open: boolean) => {
+        if (pathname !== "/" && open) {
+            router.push(`/?${param}=true`);
+            return;
+        }
+        updateUrl({ [param]: open ? "true" : null });
+    };
+
     const setProject = (project: string | null) => {
         updateUrl({ [PROJECT_PARAM]: project });
     };
@@ -48,11 +58,11 @@ export function useFilterState() {
     };
 
     const setAbout = (open: boolean) => {
-        updateUrl({ [ABOUT_PARAM]: open ? "true" : null });
+        openGlobalView(ABOUT_PARAM, open);
     };
 
     const setChangelog = (open: boolean) => {
-        updateUrl({ [CHANGELOG_PARAM]: open ? "true" : null });
+        openGlobalView(CHANGELOG_PARAM, open);
     };
 
     const toggleDomain = (domain: string) => {

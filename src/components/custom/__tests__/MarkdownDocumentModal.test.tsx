@@ -101,7 +101,7 @@ describe("MarkdownDocumentModal", () => {
 
         expect(screen.getByText("Document Not Found")).toBeInTheDocument();
 
-        const returnButton = screen.getByRole("button", { name: /return to command center/i });
+        const returnButton = screen.getByRole("button", { name: /back to the workshop/i });
         expect(returnButton).toBeInTheDocument();
 
         fireEvent.click(returnButton);
@@ -402,5 +402,20 @@ describe("MarkdownDocumentModal blueprint Prev/Next", () => {
         expect(loadBlueprint).toHaveBeenLastCalledWith(epics.id);
         expect(loadBlueprint).toHaveBeenCalledTimes(2);
         expect(screen.queryByTestId("document-load-error")).not.toBeInTheDocument();
+    });
+
+    it("flags a document whose source file is missing (DAS-17) and links to its page", () => {
+        (useFilterState as jest.Mock).mockReturnValue({
+            activeDocument: "test-doc",
+            setDocument: jest.fn()
+        });
+
+        render(<MarkdownDocumentModal allContent={[{ ...mockContent[0], sourceMissing: "_bmad-output/gone.md" }]} />);
+
+        const notice = screen.getByTestId("source-missing-notice");
+        expect(notice).toHaveTextContent("This document's source file can't be found");
+        expect(notice).toHaveTextContent("_bmad-output/gone.md");
+        expect(screen.getByText("Test Content")).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Open as a shareable page" })).toHaveAttribute("href", "/test-project/test-doc");
     });
 });
