@@ -34,6 +34,8 @@ blueprints:
     - tasks
   threshold:
     - coming-soon
+  evalsim:
+    - coming-soon
 
 build_lab:
   - plan-spec-build-workshop
@@ -41,6 +43,7 @@ build_lab:
   - focus-blox
   - family-calendar
   - threshold
+  - evalsim
 
 projects:
   - plan-spec-build-workshop
@@ -48,3 +51,4 @@ projects:
   - focus-blox
   - family-calendar
   - threshold
+  - evalsim
