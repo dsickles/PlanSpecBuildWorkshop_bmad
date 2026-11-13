@@ -16,6 +16,7 @@ taxonomy:
 relations:
   projects:
     - "threshold"
+    - "evalsim"
 links:
   - label: "GitHub"
     url: "https://github.com/mattpocock/skills"

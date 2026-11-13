@@ -16,6 +16,7 @@ taxonomy:
 relations:
   projects:
     - "threshold"
+    - "evalsim"
 links:
   - label: "Website"
     url: "https://claude.com/product/claude-code"
